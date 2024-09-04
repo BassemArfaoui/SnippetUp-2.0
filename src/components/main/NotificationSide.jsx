@@ -9,11 +9,13 @@ export default function NotificationSide() {
       <div class="notification-side ps-2">
         <div className="h-100 bg-light shadow-lg z-50">
           <div className="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-            <h2 className="h3 fw-bold mb-0">Notifications</h2>
+            <h2 className="h2 fw-bold mb-0 text-center">Notifications</h2>
           </div>
           <div className="p-4 overflow-auto" style={{ maxHeight: 'calc(100% - 58px)' }}>
              <Notification type='like'/>
              <Notification type='comment'/>
+             <Notification type='like'/>
+             <Notification type='intrested'/>
              <Notification type='like'/>
              <Notification type='like'/>
              <Notification type='like'/>
