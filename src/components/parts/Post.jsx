@@ -10,11 +10,14 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import CommentIcon from '@mui/icons-material/Comment';
 import ShareIcon from '@mui/icons-material/Share';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 export default function Post() {
   //states
   const [isSaved,setIsSaved]=useState(false);
   const [isCopied,setIsCopied]=useState(false);
+  const [isIntrested,setIsIntrested]=useState(false);
   // Random numbers for demonstration
   const likeCount = '456M';
   const dislikeCount = 10;
@@ -39,6 +42,17 @@ export default function Post() {
     setIsCopied(false);
   }
 
+  const becomeIntrested=()=>{
+    setIsIntrested(true);
+  }
+
+  
+  const becomeUnintrested=()=>{
+    setIsIntrested(false);
+  }
+
+  
+
   return (
     <div className="bg-black rounded-4 p-4">
       <div className="d-flex align-items-center justify-content-between mb-3">
@@ -52,7 +66,17 @@ export default function Post() {
             />
           </div>
           <div>
-            <div className="text-white fs-4 fw-bolder">Bassem Arfaoui</div>
+            <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
+              <span className='p-0 m-0'>Bassem Arfaoui</span> 
+             {!isIntrested ?
+              <span className='text-light p-0 mb-1 ms-2 intrested-icon' onClick={becomeIntrested}>
+                <StarBorderIcon style={{fontSize:'30px'}}/>
+              </span> :
+              <span className='text-primary p-0 mb-1 ms-2 intrested-icon' onClick={becomeUnintrested}>
+                <StarIcon style={{fontSize:'30px'}}/>
+              </span> 
+              }
+            </div>
             <div className="text-secondary fs-5">@arfBassem</div>
           </div>
         </div>
