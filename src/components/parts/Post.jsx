@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import profile_pic from '../../imgs/profile_pic.jpg'
 import './styles/Post.css'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DoneIcon from '@mui/icons-material/Done';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -10,11 +12,32 @@ import CommentIcon from '@mui/icons-material/Comment';
 import ShareIcon from '@mui/icons-material/Share';
 
 export default function Post() {
+  //states
+  const [isSaved,setIsSaved]=useState(false);
+  const [isCopied,setIsCopied]=useState(false);
   // Random numbers for demonstration
   const likeCount = '456M';
   const dislikeCount = 10;
   const commentCount = 30;
   const shareCount = 15;
+
+  //buttons functions
+  const saveSnippet=()=>{
+    setIsSaved(true);
+  }
+
+  const unsaveSnippet=()=>{
+    setIsSaved(false);
+  }
+
+  const copyCode=()=>{
+    setIsCopied(true);
+    setTimeout(()=>{setIsCopied(false)},1600)
+  }
+
+  const uncopyCode=()=>{
+    setIsCopied(false);
+  }
 
   return (
     <div className="bg-black rounded-4 p-4">
@@ -38,8 +61,14 @@ export default function Post() {
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h3 className="text-primary fw-bold fs-2">Snippet Title</h3>
         <div className="buttons d-flex gap-3 align-items-center">
-          <button className="btn btn-outline-light post-btn"><BookmarkAddIcon style={{ fontSize: '28px' }} /></button>
-          <button className="btn btn-outline-light post-btn"><ContentCopyIcon /></button>
+          <div class="save-btn">
+            {/* save button */}
+              {isSaved ? <button className="btn btn-outline-light post-btn" onClick={unsaveSnippet}><BookmarkAddedIcon style={{ fontSize: '28px' }} /></button>
+              : <button className="btn btn-outline-light post-btn" onClick={saveSnippet}><BookmarkAddIcon style={{ fontSize: '28px' }} /></button>}
+          </div>
+            {/* copy button */}
+              {isCopied ? <button className="btn btn-outline-light post-btn" onClick={uncopyCode}><DoneIcon /></button>
+              : <button className="btn btn-outline-light post-btn" onClick={copyCode}><ContentCopyIcon /></button>}
           <button className="btn btn-outline-light post-btn"><FullscreenIcon style={{ fontSize: '34px' }} /></button>
         </div>
       </div>
