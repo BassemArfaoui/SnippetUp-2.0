@@ -1,7 +1,6 @@
 import React from 'react'
 import './styles/Feed.css'
 import Post from '../parts/Post'
-
 function FeedSide() {
   return (
     <div className="col-lg-9 p-0">
