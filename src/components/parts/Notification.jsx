@@ -1,5 +1,6 @@
 import React from 'react'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import StarIcon from '@mui/icons-material/Star';
 import './styles/Notification.css'
@@ -18,6 +19,18 @@ function Notification(props) {
               </div>
               <div className='w-100'>
                 <p className="text-muted mb-0 fw-bold"><strong className='text-black'>{userName}</strong> liked your Snippet : <strong className='text-black'>{SnippetTitle}</strong></p>
+              </div>
+            </div>
+        }
+
+        {
+            props.type==='dislike' && 
+            <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
+              <div className="noti-btn bg-danger text-light rounded-circle d-flex align-items-center justify-content-center px-2" style={{width:'40px',height:'40px'}}>
+                <ThumbDownAltIcon />
+              </div>
+              <div className='w-100'>
+                <p className="text-muted mb-0 fw-bold"><strong className='text-black'>{userName}</strong> disliked your Snippet : <strong className='text-black'>{SnippetTitle}</strong></p>
               </div>
             </div>
         }
