@@ -13,7 +13,7 @@ export default function NotificationSide() {
           </div>
           <div className="p-4 overflow-auto" style={{ maxHeight: 'calc(100% - 58px)' }}>
              <Notification type='like'/>
-             <Notification type='like'/>
+             <Notification type='comment'/>
              <Notification type='like'/>
              <Notification type='like'/>
              <Notification type='like'/>
