@@ -17,9 +17,12 @@ export default function NotificationSide() {
             <Notification type='comment'/>
             <Notification type='like'/>
             <Notification type='dislike'/>
+            <Notification type='like'/>
             <Notification type='intrested'/>
             <Notification type='like'/>
             <Notification type='like'/>
+            <Notification type='share'/>
+            <Notification type='intrested'/>
           </div>
         </div>
       </div>

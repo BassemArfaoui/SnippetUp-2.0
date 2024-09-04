@@ -3,6 +3,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import StarIcon from '@mui/icons-material/Star';
+import ShareIcon from '@mui/icons-material/Share';
 import './styles/Notification.css'
 
 
@@ -56,6 +57,18 @@ function Notification(props) {
               </div>
               <div className='w-100'>
                 <p className="text-muted mb-0 fw-bold"><strong className='text-black'>{userName}</strong> is now intrested in your Snippets</p>
+              </div>
+            </div>
+        }
+
+        {
+            props.type==='share' && 
+            <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
+              <div className="noti-btn text-light bg-secondary rounded-circle d-flex align-items-center justify-content-center px-2" style={{width:'40px',height:'40px',backgroundColor:'rgb(255, 98, 0)'}}>
+                <ShareIcon  />
+              </div>
+              <div className='w-100'>
+                <p className="text-muted mb-0 fw-bold"><strong className='text-black'>{userName}</strong> shared your Snippet : <strong className='text-black'>{SnippetTitle}</strong></p>
               </div>
             </div>
         }
