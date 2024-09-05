@@ -6,7 +6,7 @@ function MainPageContainer(props) {
   return (
     <div>
         
-        <div class="container-fluid page-content">
+        <div class="main-page container-fluid page-content">
             <div class="row min-vh-100">
                 {props.children}
             </div>

@@ -54,7 +54,7 @@ export default function Post() {
   
 
   return (
-    <div className="bg-black rounded-4 p-4">
+    <div className="post rounded-4 p-4">
       <div className="d-flex align-items-center justify-content-between mb-3">
         <div className="d-flex align-items-center gap-3">
           <div className="avatar">

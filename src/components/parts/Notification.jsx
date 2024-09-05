@@ -5,6 +5,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import StarIcon from '@mui/icons-material/Star';
 import ShareIcon from '@mui/icons-material/Share';
 import './styles/Notification.css'
+import { Divider } from '@mui/material';
 
 
 function Notification(props) {
@@ -117,6 +118,8 @@ function Notification(props) {
           </div>
         </div>
       )}
+
+      <Divider/>
     </div>
   );
 }

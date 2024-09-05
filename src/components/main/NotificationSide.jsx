@@ -3,12 +3,9 @@ import Notification from '../parts/Notification';
 
 export default function NotificationSide() {
   return (
-    <div className="col-lg-3 p-0 d-none d-lg-block">
+    <div className="p-0 pt-2">
       <div className="ps-2">
-        <div className="bg-light shadow-lg">
-          <div className="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-            <h2 className="h2 fw-bold mb-0 text-center">Notifications</h2>
-          </div>
+  
           <div 
             className="p-4 notification-side" 
             style={{ maxHeight: 'calc(100vh - 150px)', overflowY: 'auto' }} 
@@ -24,7 +21,6 @@ export default function NotificationSide() {
             <Notification type='share'/>
             <Notification type='intrested'/>
           </div>
-        </div>
       </div>
     </div>
   );

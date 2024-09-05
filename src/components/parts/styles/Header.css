@@ -1,4 +1,18 @@
 header
 {
-    height: 13vh;
+    background-color: rgba(211, 211, 211, 0.382);
+        height: 15vh;
+    box-shadow: 0 1px 7px rgb(129, 129, 129)
+}
+
+.menu-btn
+{
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.menu-btn.active
+{
+    color: rgb(255, 153, 0) !important;
+    border-bottom: 3px solid rgb(255, 153, 0)  !important;
 }
