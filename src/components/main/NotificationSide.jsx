@@ -3,9 +3,8 @@ import Notification from '../parts/Notification';
 
 export default function NotificationSide() {
   return (
-    <div className="p-0 pt-2">
+    <div className="p-0">
       <div className="ps-2">
-  
           <div 
             className="p-4 notification-side" 
             style={{ maxHeight: 'calc(100vh - 150px)', overflowY: 'auto' }} 

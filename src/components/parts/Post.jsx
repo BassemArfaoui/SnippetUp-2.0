@@ -82,8 +82,8 @@ export default function Post() {
         </div>
         <div className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">JavaScript</div>
       </div>
-      <div className="d-flex flex-column gap-2 align-items-center justify-content-between mb-3">
-        <h3 className="snippet-title fw-bold fs-2 text-center">Snippet Title</h3>
+      <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
+        <h3 className="snippet-title fw-bold text-center">Snippet Title</h3>
         <div className="buttons align-self-end d-flex gap-3 align-items-center">
           <div class="save-btn">
             {/* save button */}
