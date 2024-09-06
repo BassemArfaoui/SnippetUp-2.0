@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import Notification from '../parts/Notification';
 
 export default function NotificationSide() {
@@ -6,7 +6,7 @@ export default function NotificationSide() {
     <div className="p-0">
       <div className="ps-2">
           <div 
-            className="p-4 notification-side" 
+            className="p-4 notification-side primary-scrollbar" 
             style={{ maxHeight: 'calc(100vh - 150px)', overflowY: 'auto' }} 
           >
             <Notification type='like'/>
