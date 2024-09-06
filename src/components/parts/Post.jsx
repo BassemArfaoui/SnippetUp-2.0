@@ -82,16 +82,16 @@ export default function Post() {
         </div>
         <div className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">JavaScript</div>
       </div>
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <h3 className="snippet-title fw-bold fs-2">Snippet Title</h3>
-        <div className="buttons d-flex gap-3 align-items-center">
+      <div className="d-flex flex-column gap-2 align-items-center justify-content-between mb-3">
+        <h3 className="snippet-title fw-bold fs-2 text-center">Snippet Title</h3>
+        <div className="buttons align-self-end d-flex gap-3 align-items-center">
           <div class="save-btn">
             {/* save button */}
-              {isSaved ? <button className="btn btn-outline-light post-btn" onClick={unsaveSnippet}><BookmarkAddedIcon style={{ fontSize: '28px' }} /></button>
+              {isSaved ? <button className="btn btn-outline-primary post-btn" onClick={unsaveSnippet}><BookmarkAddedIcon className='' style={{ fontSize: '28px' }} /></button>
               : <button className="btn btn-outline-light post-btn" onClick={saveSnippet}><BookmarkAddIcon style={{ fontSize: '28px' }} /></button>}
           </div>
             {/* copy button */}
-              {isCopied ? <button className="btn btn-outline-light post-btn" onClick={uncopyCode}><DoneIcon /></button>
+              {isCopied ? <button className="btn btn-outline-primary post-btn" onClick={uncopyCode}><DoneIcon /></button>
               : <button className="btn btn-outline-light post-btn" onClick={copyCode}><ContentCopyIcon /></button>}
           <button className="btn btn-outline-light post-btn"><FullscreenIcon style={{ fontSize: '34px' }} /></button>
         </div>
