@@ -22,15 +22,13 @@ function menuButtonClicked(e)
 }
 
 function handleIconClick(e) {
-    e.preventDefault(); // Prevent the default behavior
+    e.preventDefault(); 
   
-    // Remove the 'active' class from all menu buttons
     const btn = document.querySelectorAll('.menu-btn');
     btn.forEach(element => {
       element.classList.remove('active');
     });
   
-    // Add the 'active' class to the clicked menu button
     const clickedMenuBtn = e.target.closest('.menu-btn');
     if (clickedMenuBtn) {
       clickedMenuBtn.classList.add('active');
@@ -40,7 +38,7 @@ function handleIconClick(e) {
 
 return (
         <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative">
-                <h1 className="ms-4  fw-bolder position-absolute" style={{color: '#eb9532',fontSize:'48px'}}>SnippetApp</h1>
+                <h1 className="ms-4  fw-bolder position-absolute text-primary" style={{fontSize:'48px'}}>SnippetApp</h1>
                 <div className="d-flex gap-4 me-5 align-items-center position-absolute end-0">
                     <h4><SearchIcon className="mt-1 text-primary" style={{fontSize:'47px'}}/></h4>
                     <h4><LogoutIcon className="mt-1 text-primary" style={{fontSize:'39px'}} /></h4>

@@ -11,6 +11,11 @@
     align-items: center;
 }
 
+.snippet-title
+{
+    color: rgba(255, 179, 0, 0.773);
+}
+
 
 
 .like-btn

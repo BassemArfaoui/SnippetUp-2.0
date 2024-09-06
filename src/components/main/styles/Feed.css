@@ -1,7 +1,10 @@
 
+/* todo :add media queries */
 
 .feed-side
 {
     height: 87vh;
     overflow-y: auto;
+    padding:10px 60px;
 }
+
