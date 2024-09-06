@@ -11,29 +11,19 @@ import AddIcon from '@mui/icons-material/Add';
 function Header()
 {
      
-function menuButtonClicked(e)
-{
+  function menuButtonClicked(e) {
     e.preventDefault();
-    const btn=document.querySelectorAll('.menu-btn');
+    const btn = document.querySelectorAll('.menu-btn');
+    
     btn.forEach(element => {
         element.classList.remove('active');
     });
-    e.target.classList.add('active');
+    
+    e.currentTarget.classList.add('active');
 }
 
-function handleIconClick(e) {
-    e.preventDefault(); 
-  
-    const btn = document.querySelectorAll('.menu-btn');
-    btn.forEach(element => {
-      element.classList.remove('active');
-    });
-  
-    const clickedMenuBtn = e.target.closest('.menu-btn');
-    if (clickedMenuBtn) {
-      clickedMenuBtn.classList.add('active');
-    }
-  }
+
+
   
 
 return (
@@ -46,11 +36,11 @@ return (
                 <div className="d-flex justify-content-center w-100 gap-5">
 
                         <ul className="d-flex gap-4 m-0">
-                            <li className="btn ms-3 menu-btn  d-flex align-items-center active" onClick={menuButtonClicked}><HomeIcon style={{fontSize:'44px'}}  onClick={handleIconClick}/></li>
-                            <li className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><BookmarkIcon style={{fontSize:'41px'}} onClick={handleIconClick}/></li>
-                            <li className="btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 " style={{width:'70px',height:'70px'}} onClick={handleIconClick}><AddIcon style={{fontSize:'65px'}} onClick={menuButtonClicked}/></li>
-                            <li className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><PersonIcon style={{fontSize:'41px'}} onClick={handleIconClick}/></li>
-                            <li className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><SettingsIcon style={{fontSize:'41px'}} onClick={handleIconClick}/></li>
+                            <li className="btn ms-3 menu-btn  d-flex align-items-center active" onClick={menuButtonClicked}><HomeIcon style={{fontSize:'44px'}} /></li>
+                            <li className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><BookmarkIcon style={{fontSize:'41px'}} /></li>
+                            <li className="btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 " style={{width:'70px',height:'70px'}}><AddIcon style={{fontSize:'65px'}}/></li>
+                            <li className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><PersonIcon style={{fontSize:'41px'}}/></li>
+                            <li className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><SettingsIcon style={{fontSize:'41px'}}/></li>
                         </ul>
                 </div>
 
