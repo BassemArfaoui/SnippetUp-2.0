@@ -6,9 +6,7 @@ import Header from '../components/parts/Header'
 
 function MainPage() {
   return (
-    <div className='main-page'>
-       <Header/>
-       
+    <div className='main-page'>       
        <MainPageContainer>
           <FeedSide/>
        </MainPageContainer>
