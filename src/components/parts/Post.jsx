@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useRef } from 'react';
 import profile_pic from '../../imgs/profile_pic.jpg'
 import './styles/Post.css'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -18,11 +18,13 @@ export default function Post() {
   const [isSaved,setIsSaved]=useState(false);
   const [isCopied,setIsCopied]=useState(false);
   const [isIntrested,setIsIntrested]=useState(false);
-  // Random numbers for demonstration
-  const likeCount = '456M';
-  const dislikeCount = 10;
-  const commentCount = 30;
-  const shareCount = 15;
+  //reactions counts
+  const [react, setReact] = useState('none');
+  const [likeCount, setLikeCount] = useState(456);
+  const [dislikeCount, setDislikeCount] = useState(10);
+  const [commentCount, setCommentCount] = useState(30);
+  const [shareCount, setShareCount] = useState(15);
+ 
 
   //buttons functions
   const saveSnippet=()=>{
@@ -51,7 +53,33 @@ export default function Post() {
     setIsIntrested(false);
   }
 
+  const likeSnippet = () => {
+    if(react==='dislike')
+    {
+      setDislikeCount(prev => (prev -1));
+    }
+    setReact('like');
+    setLikeCount(prev => (prev +1));
+  };
+
+  const dislikeSnippet = () => {
+    if(react==='like')
+    {
+      setLikeCount(prev => (prev -1));
+    }
+    setReact('dislike');
+    setDislikeCount(prev => (prev +1));
+  };
+
+  const unlikeSnippet = () => {
+    setReact('none');
+    setLikeCount(prev => (prev -1));
+  };
   
+  const undislikeSnippet = () => {
+    setReact('none');
+    setDislikeCount(prev => (prev -1));
+  };
 
   return (
     <div className="post rounded-4 p-4">
@@ -130,11 +158,17 @@ export default function Post() {
       </div>
       <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
         <div className="text-center">
-          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn"><ThumbUpIcon /></button>
+          { react === 'like' ?
+             <button  className="btn btn-primary p-2 px-3 fw-bolder fs-5 like-btn" onClick={unlikeSnippet}><ThumbUpIcon /></button>
+            :<button  className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={likeSnippet}><ThumbUpIcon /></button>
+          }
           <div className="text-light mt-1">{likeCount}</div>
         </div>
         <div className="text-center">
-          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn"><ThumbDownIcon /></button>
+          {
+            react==='dislike' ? <button className="btn btn-danger p-2 px-3 fw-bolder fs-5 like-btn" onClick={undislikeSnippet}><ThumbDownIcon /></button>
+            : <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={dislikeSnippet}> <ThumbDownIcon /></button>
+          }
           <div className="text-light mt-1">{dislikeCount}</div>
         </div>
         <div className="text-center">
