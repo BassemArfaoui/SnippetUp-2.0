@@ -5,7 +5,7 @@ import SavedPage from "../pages/SavedPage";
 import ProfilePage from "../pages/ProfilePage";
 import SettingsPage from "../pages/SettingsPage";
 import NotificationBell from "../components/parts/NotificationsBell";
-import CustomTooltip from "../components/tools/CustomTooltip";
+import CustomToaster from "../components/tools/CustomToaster";
 
 
 function App()
@@ -14,6 +14,7 @@ return (
     <div>
        <Router>
       <div>
+        <CustomToaster/>
         <NotificationBell/>
         
         <Header/>
