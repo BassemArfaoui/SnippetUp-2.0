@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useEffect} from "react";
 import './styles/Header.css'
 import HomeIcon from '@mui/icons-material/Home';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -7,20 +7,29 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
-import { Link } from "react-router-dom";
+import { Link , useLocation } from "react-router-dom";
 
 function Header()
 {
-     
-  function menuButtonClicked(e) {
+  const location = useLocation();
+
+  useEffect(() => {
+    updateMenuButton();
+  }, [location.pathname]);
+
+  function updateMenuButton() {
     const btn = document.querySelectorAll('.menu-btn');
-    
+
     btn.forEach(element => {
-        element.classList.remove('active');
+        if (element.name === location.pathname) {
+            element.classList.add('active');
+        } else {
+            element.classList.remove('active');
+        }
     });
-    
-    e.currentTarget.classList.add('active');
-}
+   }
+ 
+
 
 
 
@@ -36,11 +45,11 @@ return (
                 <div className="d-flex justify-content-center w-100 gap-5">
 
                         <ul className="d-flex gap-4 m-0">
-                            <Link to="/" className="btn ms-3 menu-btn  d-flex align-items-center active" onClick={menuButtonClicked}><HomeIcon style={{fontSize:'44px'}} /></Link>
-                            <Link to='/saved' className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><BookmarkIcon style={{fontSize:'41px'}} /></Link>
+                            <Link to="/" className="btn ms-3 menu-btn  d-flex align-items-center active"  name='/' ><HomeIcon style={{fontSize:'44px'}} /></Link>
+                            <Link to='/saved' className="btn menu-btn  d-flex align-items-center"  name='/saved'><BookmarkIcon style={{fontSize:'41px'}} /></Link>
                             <li className="add-btn btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 " style={{width:'70px',height:'70px'}}><AddIcon style={{fontSize:'65px'}}/></li>
-                            <Link to='/profile' className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><PersonIcon style={{fontSize:'41px'}}/></Link>
-                            <Link to='/settings'  className="btn menu-btn  d-flex align-items-center" onClick={menuButtonClicked}><SettingsIcon style={{fontSize:'41px'}}/></Link>
+                            <Link to='/profile' className="btn menu-btn  d-flex align-items-center" name='/profile'><PersonIcon style={{fontSize:'41px'}}/></Link>
+                            <Link to='/settings'  className="btn menu-btn  d-flex align-items-center" name='/settings'><SettingsIcon style={{fontSize:'41px'}}/></Link>
                         </ul>
                 </div>
 
