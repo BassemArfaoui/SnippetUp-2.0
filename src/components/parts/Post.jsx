@@ -16,6 +16,7 @@ import { Modal, Box, IconButton } from '@mui/material'; // Added IconButton comp
 import CloseIcon from '@mui/icons-material/Close'; // Close icon
 import CustomTooltip from '../tools/CustomTooltip';
 import { successNotify , notify } from '../tools/CustomToaster';
+import CodeHighlighter from '../saved/CodeHighliter';
 
 export default function Post() {
   //bool states
@@ -24,34 +25,53 @@ export default function Post() {
   const [isIntrested, setIsIntrested] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false); // state to handle modal
 
+
+
   //post states
   const [snippetCode,setSnippetCode]=useState(
-        `function greet(name) {
-              console.log(\`Hello, \${name}!\`);
-            }
+  `# Python example: A more complex script with functions, loops, and conditionals
 
-            greet('World');
-
-            function calculateArea(length, width) {
-              return length * width;
-            }
-
-            const area = calculateArea(10, 20);
-            console.log(\`The area is \${area} square units.\`);
-
-            class Person {
-              constructor(name, age) {
-                this.name = name;
-                this.age = age;
-              }
-
-              introduce() {
-                console.log(\`Hi, my name is \${this.name} and I'm \${this.age} years old.\`);
-              }
-            }
-
-            const john = new Person('John', 30);
-            john.introduce();`)
+  def greet_user(name, age):
+      """
+      Generates a greeting message based on the user's name and age.
+      
+      Parameters:
+      name (str): The name of the user.
+      age (int): The age of the user.
+      
+      Returns:
+      str: A greeting message.
+      """
+      if age < 18:
+          age_group = "young"
+      elif age < 60:
+          age_group = "adult"
+      else:
+          age_group = "senior"
+  
+      # Return a formatted message
+      return f"Hello, {name}! You are a {age_group} who is {age} years old."
+  
+  def main():
+      users = [
+          {"name": "Alice", "age": 25},
+          {"name": "Bob", "age": 17},
+          {"name": "Charlie", "age": 65}
+      ]
+      
+      for user in users:
+          message = greet_user(user["name"], user["age"])
+          print(message)
+  
+  if __name__ == "__main__":
+      main()
+  
+  # Output:
+  # Hello, Alice! You are a adult who is 25 years old.
+  # Hello, Bob! You are a young who is 17 years old.
+  # Hello, Charlie! You are a senior who is 65 years old.
+  
+  `)
   const [snippetTitle,setSnippetTitle]=useState('JavaScript Basics')
   const [snippetPoster,setSnippetPoster]=useState('Bassem Arfaoui');
 
@@ -225,11 +245,13 @@ export default function Post() {
         </div>
       </div>
       <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
-        <pre className="text-white">
+        <pre className="text-white " style={{fontSize:'22px'}}>
           <code>
-            {snippetCode}
+            <CodeHighlighter codeSnippet={snippetCode} /> 
           </code>
         </pre>
+
+        
       </div>
 
       <Modal
@@ -271,8 +293,8 @@ export default function Post() {
 
           <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">{snippetTitle}</h2>
           <pre id="modal-description" style={{ whiteSpace: 'pre-wrap' }}>
-            <code>
-              {snippetCode}
+            <code style={{fontSize:'25px'}}>
+              <CodeHighlighter codeSnippet={snippetCode} />
             </code>
           </pre>
         </Box>
