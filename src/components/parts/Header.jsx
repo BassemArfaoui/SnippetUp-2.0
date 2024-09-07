@@ -8,16 +8,52 @@ import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import { Link , useLocation } from "react-router-dom";
+import {useNavigate} from 'react-router-dom'
 import CustomTooltip from "../tools/CustomTooltip";
 
 function Header()
 {
   const location = useLocation();
+  const navigate = useNavigate();
 
+  //key event useeffect
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.altKey) {
+        switch (event.key) {
+          case "h":
+            navigate("/");
+            break;
+          case "s":
+            navigate("/saved");
+            break;
+          case "p":
+            navigate("/profile");
+            break;
+          case "t":
+            navigate("/settings");
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [navigate]); 
+
+
+  //menu buttons useEffect
   useEffect(() => {
     updateMenuButton();
   }, [location.pathname]);
 
+
+  //menu buttons func
   function updateMenuButton() {
     const btn = document.querySelectorAll('.menu-btn');
 
@@ -31,10 +67,6 @@ function Header()
    }
  
 
-
-
-
-  
 
 return (
         <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative">
