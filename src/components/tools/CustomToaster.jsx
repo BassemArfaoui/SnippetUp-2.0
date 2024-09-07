@@ -10,7 +10,7 @@ function CustomToaster() {
     const toastOptions=
     {
       duration: 2100,
-      position: 'bottom-center',
+      position: 'bottom-left',
       icon: <ErrorIcon style={{fontSize:'40px'}}/>,
       style: {
         background: 'rgb(244, 67, 54)',
@@ -20,7 +20,9 @@ function CustomToaster() {
         fontWeight: 'bold',
         borderRadius: '10px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-        textAlign: 'center'
+        textAlign: 'center',
+        margin:'0 10px  10px 10px',
+        padding:'15px 20px'
       }     
       }
 
@@ -44,7 +46,7 @@ function CustomToaster() {
 const successOptions=
 {
   duration: 2100,
-  position: 'bottom-center',
+  position: 'bottom-left',
   style: {
     background: 'rgb(67, 160, 71)',
     color: 'white',
@@ -54,7 +56,9 @@ const successOptions=
     borderRadius: '10px',
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
     textAlign: 'center',
-    lineHeight: '1.5'
+    lineHeight: '1.5',
+    margin:'0 10px  10px 10px',
+    padding:'15px 20px'
   },
   icon: <CheckCircleOutlineIcon style={{fontSize:'40px'}}/>
   }
@@ -67,7 +71,7 @@ const successNotify = (success) => toast.success(success,successOptions);
 const processOptions=
 {
   duration: 1500,
-  position: 'bottom-center',
+  position: 'bottom-left',
   style: {
     background: 'rgb(255, 153, 51)',
     color: 'white',
@@ -78,6 +82,8 @@ const processOptions=
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
     textAlign: 'center',
     lineHeight: '1.5',
+    margin:'0 5px  10px 10px',
+    padding:'15px 20px'
   },
   icon: <CachedIcon style={{fontSize:'40px'}}/>
 }

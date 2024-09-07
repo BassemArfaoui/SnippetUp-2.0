@@ -15,6 +15,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Modal, Box, IconButton } from '@mui/material'; // Added IconButton component
 import CloseIcon from '@mui/icons-material/Close'; // Close icon
 import CustomTooltip from '../tools/CustomTooltip';
+import { successNotify , notify } from '../tools/CustomToaster';
 
 export default function Post() {
   //bool states
@@ -52,6 +53,7 @@ export default function Post() {
             const john = new Person('John', 30);
             john.introduce();`)
   const [snippetTitle,setSnippetTitle]=useState('JavaScript Basics')
+  const [snippetPoster,setSnippetPoster]=useState('Bassem Arfaoui');
 
   //reactions counts
   const [react, setReact] = useState('none');
@@ -63,9 +65,11 @@ export default function Post() {
   //buttons functions
   const saveSnippet = () => {
     setIsSaved(true);
+    successNotify('Snippet Saved');
   };
 
   const unsaveSnippet = () => {
+    successNotify('Snippet is no longer Saved');
     setIsSaved(false);
   };
 
@@ -74,6 +78,7 @@ export default function Post() {
     {
       await navigator.clipboard.writeText(snippetCode);
       setIsCopied(true);
+      successNotify('Snippet Copied')
       setTimeout(() => {
         setIsCopied(false);
       }, 1600);
@@ -81,6 +86,7 @@ export default function Post() {
     catch(err)
     {
       console.log(err);
+      notify("Couldn't Copy");
     }
 
   };
@@ -91,10 +97,12 @@ export default function Post() {
 
   const becomeIntrested = () => {
     setIsIntrested(true);
+    successNotify(`You are now intrested in ${snippetPoster}'s Snippets`);
   };
 
   const becomeUnintrested = () => {
     setIsIntrested(false);
+    successNotify(`No longer intrested in ${snippetPoster}'s Snippets`);
   };
 
   const likeSnippet = () => {
@@ -146,7 +154,7 @@ export default function Post() {
           </div>
           <div>
             <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
-              <span className="p-0 m-0">Bassem Arfaoui</span>
+              <span className="p-0 m-0">{snippetPoster}</span>
               {!isIntrested ? (
                 <span
                   className="text-light p-0 mb-1 ms-2 intrested-icon"
