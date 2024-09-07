@@ -32,7 +32,7 @@ function CustomTooltip(props) {
   return (
     <>
         <ThemeProvider theme={theme}>
-            <Tooltip title={props.title} placement={props.placement} >
+            <Tooltip title={props.title} placement={props.placement} enterDelay={600}   >
                 {props.children}
             </Tooltip>
         </ThemeProvider>
