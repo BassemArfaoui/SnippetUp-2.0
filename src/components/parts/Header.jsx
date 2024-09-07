@@ -8,6 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import { Link , useLocation } from "react-router-dom";
+import CustomTooltip from "../tools/CustomTooltip";
 
 function Header()
 {
@@ -39,8 +40,12 @@ return (
         <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative">
                 <h1 className="ms-4  fw-bolder position-absolute text-primary" style={{fontSize:'48px'}}>SnippetApp</h1>
                 <div className="d-flex gap-4 me-5 align-items-center position-absolute end-0">
-                    <h4><SearchIcon className="mt-1 text-primary" style={{fontSize:'47px'}}/></h4>
-                    <h4><LogoutIcon className="mt-1 text-primary" style={{fontSize:'39px'}} /></h4>
+                    <CustomTooltip title='Search'>
+                      <h4><SearchIcon className="mt-1 text-primary" style={{fontSize:'47px'}}/></h4>
+                    </CustomTooltip> 
+                    <CustomTooltip title='Logout'>
+                      <h4><LogoutIcon className="mt-1 text-primary" style={{fontSize:'39px'}} /></h4>
+                    </CustomTooltip> 
                 </div>
                 <div className="d-flex justify-content-center w-100 gap-5">
 

@@ -14,6 +14,7 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Modal, Box, IconButton } from '@mui/material'; // Added IconButton component
 import CloseIcon from '@mui/icons-material/Close'; // Close icon
+import CustomTooltip from '../tools/CustomTooltip';
 
 export default function Post() {
   //bool states
@@ -151,7 +152,9 @@ export default function Post() {
                   className="text-light p-0 mb-1 ms-2 intrested-icon"
                   onClick={becomeIntrested}
                 >
+                <CustomTooltip title='Intrested' placement='top'>
                   <StarBorderIcon style={{ fontSize: '30px' }} />
+                </CustomTooltip>
                 </span>
               ) : (
                 <span
@@ -182,12 +185,14 @@ export default function Post() {
                 <BookmarkAddedIcon className="" style={{ fontSize: '28px' }} />
               </button>
             ) : (
+              <CustomTooltip title='Save Snippet' placement='top'>
               <button
-                className="btn btn-outline-light post-btn"
-                onClick={saveSnippet}
-              >
-                <BookmarkAddIcon style={{ fontSize: '28px' }} />
-              </button>
+                  className="btn btn-outline-light post-btn"
+                  onClick={saveSnippet}
+                >
+                  <BookmarkAddIcon style={{ fontSize: '28px' }} />
+                </button>
+              </CustomTooltip>
             )}
           </div>
           {/* copy button */}
@@ -196,14 +201,19 @@ export default function Post() {
               <DoneIcon />
             </button>
           ) : (
-            <button className="btn btn-outline-light post-btn" onClick={copyCode}>
-              <ContentCopyIcon />
-            </button>
+            <CustomTooltip title='Copy Snippet' placement='top'>
+              <button className="btn btn-outline-light post-btn" onClick={copyCode}>
+                  <ContentCopyIcon />
+              </button>
+            </CustomTooltip>
           )}
           {/* fullscreen button */}
-          <button className="btn btn-outline-light post-btn" onClick={openModal}>
-            <FullscreenIcon style={{ fontSize: '34px' }} />
-          </button>
+          <CustomTooltip title='Full Screen' placement='top'>
+            <button className="btn btn-outline-light post-btn" onClick={openModal}>
+              <FullscreenIcon style={{ fontSize: '34px' }} />
+            </button>
+          </CustomTooltip>
+
         </div>
       </div>
       <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>

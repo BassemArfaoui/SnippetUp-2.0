@@ -5,6 +5,7 @@ import SavedPage from "../pages/SavedPage";
 import ProfilePage from "../pages/ProfilePage";
 import SettingsPage from "../pages/SettingsPage";
 import NotificationBell from "../components/parts/NotificationsBell";
+import CustomTooltip from "../components/tools/CustomTooltip";
 
 
 function App()
@@ -14,6 +15,7 @@ return (
        <Router>
       <div>
         <NotificationBell/>
+        
         <Header/>
         <Routes>
           <Route path="/" element={<MainPage/>} />
