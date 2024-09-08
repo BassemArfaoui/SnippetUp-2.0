@@ -8,15 +8,16 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; // Material-U
 function FeedSide() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const feedSideRef = useRef(null); // Ref for the scrolling container
-  const limit = 10; // Number of posts to load per batch
+  const feedSideRef = useRef(null); 
+  const limit = 10; 
 
   const fetchPosts = useCallback(async () => {
     if (loading) return;
 
     setLoading(true);
     try {
-      // Fetch random posts without worrying about offset
+
+      // Fetch random posts
       const response = await axios.get('http://localhost:4000/posts', {
         params: { limit }
       });
@@ -31,15 +32,17 @@ function FeedSide() {
     }
   }, [loading]);
 
+
+  //first mount
   useEffect(() => {
-    fetchPosts(); // Initial fetch on component mount
+    fetchPosts(); 
   }, [fetchPosts]);
 
-  // Handle scroll event for the .feed-side div
+  // Handle scroll event
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = feedSideRef.current;
 
-    // Check if the user is near the bottom of the container and not currently loading
+    // Check if the user is near the bottom + not currently loading
     if (scrollTop + clientHeight >= scrollHeight - 50 && !loading) {
       fetchPosts();
     }
@@ -58,7 +61,7 @@ function FeedSide() {
     };
   }, [handleScroll]);
 
-  // Function to scroll to the bottom of the feed-side container
+  // Function to scroll down
   const scrollToEnd = () => {
     if (feedSideRef.current) {
       feedSideRef.current.scrollTop = feedSideRef.current.scrollHeight;
@@ -69,12 +72,12 @@ function FeedSide() {
     <div className="col-lg-12 p-0">
       <div 
         className="feed-side d-flex flex-column gap-2" 
-        ref={feedSideRef} // Attach the ref to the .feed-side div for scrolling
+        ref={feedSideRef} 
       >
         <div className="pt-3"></div>
         {posts.map((post) => (
           <Post
-            key={post.id} // Use a unique key for each post (assuming `id` is unique)
+            key={post.id} 
             title={post.title}
             snippet={post.snippet}
             description={post.description}
@@ -88,7 +91,6 @@ function FeedSide() {
         ))}
         {loading && (
           <div className="d-flex justify-content-center my-3">
-            {/* Bootstrap Spinner */}
             <div className="spinner-border text-primary" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
@@ -96,14 +98,13 @@ function FeedSide() {
         )}
       </div>
 
-      {/* Scroll to End Button using Material-UI IconButton */}
       <IconButton
-        onClick={scrollToEnd} // Call scrollToEnd function when clicked
+        onClick={scrollToEnd} 
         aria-label="Scroll to End"
-        className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning" // Bootstrap classes for position
-        style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} // Custom styles
+        className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning" 
+        style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} 
       >
-        <ArrowDownwardIcon fontSize="large" className="text-dark" /> {/* Material-UI Icon */}
+        <ArrowDownwardIcon fontSize="large" className="text-dark" /> 
       </IconButton>
     </div>
   );
