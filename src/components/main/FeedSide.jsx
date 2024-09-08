@@ -8,16 +8,15 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; // Material-U
 function FeedSide() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const feedSideRef = useRef(null); 
-  const limit = 10; 
+  const [initialLoading, setInitialLoading] = useState(true); // Track initial loading
+  const feedSideRef = useRef(null); // Ref for the scrolling container
+  const limit = 10; // Number of posts to load per batch
 
   const fetchPosts = useCallback(async () => {
     if (loading) return;
 
     setLoading(true);
     try {
-
-      // Fetch random posts
       const response = await axios.get('http://localhost:4000/posts', {
         params: { limit }
       });
@@ -29,20 +28,19 @@ function FeedSide() {
       console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
+      setInitialLoading(false); // Set to false after the first load
     }
   }, [loading]);
 
-
-  //first mount
   useEffect(() => {
-    fetchPosts(); 
+    fetchPosts(); // Initial fetch on component mount
   }, [fetchPosts]);
 
-  // Handle scroll event
+  // Handle scroll event for the .feed-side div
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = feedSideRef.current;
 
-    // Check if the user is near the bottom + not currently loading
+    // Check if the user is near the bottom of the container and not currently loading
     if (scrollTop + clientHeight >= scrollHeight - 50 && !loading) {
       fetchPosts();
     }
@@ -61,50 +59,63 @@ function FeedSide() {
     };
   }, [handleScroll]);
 
-  // Function to scroll down
-  const scrollToEnd = () => {
+  // Function to scroll to the bottom of the feed-side container
+  const scroll = () => {
     if (feedSideRef.current) {
-      feedSideRef.current.scrollTop = feedSideRef.current.scrollHeight;
+      const { scrollTop, clientHeight } = feedSideRef.current;
+      // Scroll down by a fraction of the client height, e.g., half the visible height
+      feedSideRef.current.scrollTop = scrollTop + clientHeight / 2;
     }
   };
 
   return (
     <div className="col-lg-12 p-0">
-      <div 
-        className="feed-side d-flex flex-column gap-2" 
-        ref={feedSideRef} 
-      >
-        <div className="pt-3"></div>
-        {posts.map((post) => (
-          <Post
-            key={post.id} 
-            title={post.title}
-            snippet={post.snippet}
-            description={post.description}
-            posterId={post.poster_id}
-            language={post.language}
-            likeCount={post.like_count}
-            dislikeCount={post.dislike_count}
-            commentCount={post.comment_count}
-            shareCount={post.share_count}
-          />
-        ))}
-        {loading && (
-          <div className="d-flex justify-content-center my-3">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
+      {initialLoading ? (
+        // Centered spinner for the initial loading
+        <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div 
+          className="feed-side d-flex flex-column gap-2" 
+          ref={feedSideRef} // Attach the ref to the .feed-side div for scrolling
+        >
+          <div className="pt-3"></div>
+          {posts.map((post) => (
+            <Post
+              key={post.id} // Use a unique key for each post (assuming `id` is unique)
+              title={post.title}
+              snippet={post.snippet}
+              description={post.description}
+              posterId={post.poster_id}
+              language={post.language}
+              likeCount={post.like_count}
+              dislikeCount={post.dislike_count}
+              commentCount={post.comment_count}
+              shareCount={post.share_count}
+            />
+          ))}
+          {loading && (
+            <div className="d-flex justify-content-center my-3">
+              {/* Bootstrap Spinner */}
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
+      {/* Scroll to End Button using Material-UI IconButton */}
       <IconButton
-        onClick={scrollToEnd} 
+        onClick={scroll} // Call scrollToEnd function when clicked
         aria-label="Scroll to End"
-        className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning" 
-        style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} 
+        className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning" // Bootstrap classes for position
+        style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} // Custom styles
       >
-        <ArrowDownwardIcon fontSize="large" className="text-dark" /> 
+        <ArrowDownwardIcon fontSize="large" className="text-dark" /> {/* Material-UI Icon */}
       </IconButton>
     </div>
   );

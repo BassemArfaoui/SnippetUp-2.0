@@ -10,7 +10,7 @@ function CustomToaster() {
     const toastOptions=
     {
       duration: 2100,
-      position: 'bottom-left',
+      position: 'bottom-center',
       icon: <ErrorIcon style={{fontSize:'40px'}}/>,
       style: {
         background: 'rgb(244, 67, 54)',
@@ -46,7 +46,7 @@ function CustomToaster() {
 const successOptions=
 {
   duration: 2100,
-  position: 'bottom-left',
+  position: 'bottom-center',
   style: {
     background: 'rgb(67, 160, 71)',
     color: 'white',
@@ -71,7 +71,7 @@ const successNotify = (success) => toast.success(success,successOptions);
 const processOptions=
 {
   duration: 1500,
-  position: 'bottom-left',
+  position: 'bottom-center',
   style: {
     background: 'rgb(255, 153, 51)',
     color: 'white',
