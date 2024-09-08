@@ -7,7 +7,7 @@ function MainPageContainer(props) {
     <div>
         
         <div class="main-page container-fluid page-content">
-            <div class="row min-vh-100">
+            <div class="">
                 {props.children}
             </div>
         </div>

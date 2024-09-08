@@ -15,32 +15,33 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Modal, Box, IconButton } from '@mui/material'; // Added IconButton component
 import CloseIcon from '@mui/icons-material/Close'; // Close icon
 import CustomTooltip from '../tools/CustomTooltip';
-import { successNotify , notify } from '../tools/CustomToaster';
+import { successNotify, notify } from '../tools/CustomToaster';
 import CodeHighlighter from '../saved/CodeHighliter';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 export default function Post(props) {
-  //bool states
+  // bool states
   const [isSaved, setIsSaved] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isIntrested, setIsIntrested] = useState(false);
-  const [isFullScreen, setisFullScreen] = useState(false); // state to handle modal
+  const [isFullScreen, setisFullScreen] = useState(false); // state to handle fullscreen modal
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false); // state to handle description modal
 
+  // post states
+  const [snippetCode, setSnippetCode] = useState(props.snippet);
+  const [snippetTitle, setSnippetTitle] = useState(props.title);
+  const [snippetPoster, setSnippetPoster] = useState('Bassem Arfaoui');
+  const [snippetDescription, setSnippetDescription] = useState(props.description);
 
-
-  //post states
-  const [snippetCode,setSnippetCode]=useState(props.snippet)
-  const [snippetTitle,setSnippetTitle]=useState(props.title)
-  const [snippetPoster,setSnippetPoster]=useState('Bassem Arfaoui');
-
-  //reactions counts
+  // reactions counts
   const [react, setReact] = useState('none');
   const [likeCount, setLikeCount] = useState(props.likeCount);
   const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
   const [commentCount, setCommentCount] = useState(props.commentCount);
   const [shareCount, setShareCount] = useState(props.shareCount);
-  const [language,setLanguage]=useState(props.language)
+  const [language, setLanguage] = useState(props.language);
 
-  //buttons functions
+  // buttons functions
   const saveSnippet = () => {
     setIsSaved(true);
     successNotify('Snippet Saved');
@@ -51,26 +52,18 @@ export default function Post(props) {
     setIsSaved(false);
   };
 
-  const copyCode =async () => {
-    try
-    {
+  const copyCode = async () => {
+    try {
       await navigator.clipboard.writeText(snippetCode);
       setIsCopied(true);
-      successNotify('Snippet Copied')
+      successNotify('Snippet Copied');
       setTimeout(() => {
         setIsCopied(false);
       }, 1600);
-    }
-    catch(err)
-    {
+    } catch (err) {
       console.log(err);
       notify("Couldn't Copy");
     }
-
-  };
-
-  const uncopyCode = () => {
-    setIsCopied(false);
   };
 
   const becomeIntrested = () => {
@@ -109,17 +102,26 @@ export default function Post(props) {
     setDislikeCount((prev) => parseInt(prev) - 1);
   };
 
-  // modal control functions
-  const openModal = () => {
+  const openFullScreen = () => {
     setisFullScreen(true);
   };
 
-  const closeModal = () => {
+  const closeFullScreen = () => {
     setisFullScreen(false);
+  };
+
+  // Description modal control
+  const openDescription = () => {
+    setIsDescriptionOpen(true);
+  };
+
+  const closeDescription = () => {
+    setIsDescriptionOpen(false);
   };
 
   return (
     <div className="post rounded-4 p-4">
+      {/* Post Header */}
       <div className="d-flex align-items-center justify-content-between mb-3">
         <div className="d-flex align-items-center gap-3">
           <div className="avatar">
@@ -138,9 +140,9 @@ export default function Post(props) {
                   className="text-light p-0 mb-1 ms-2 intrested-icon"
                   onClick={becomeIntrested}
                 >
-                <CustomTooltip title='Intrested' placement='top'>
-                  <StarBorderIcon style={{ fontSize: '30px' }} />
-                </CustomTooltip>
+                  <CustomTooltip title='Intrested' placement='top'>
+                    <StarBorderIcon style={{ fontSize: '30px' }} />
+                  </CustomTooltip>
                 </span>
               ) : (
                 <span
@@ -158,63 +160,70 @@ export default function Post(props) {
           {language}
         </div>
       </div>
+
+      {/* Snippet Title and Buttons */}
       <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
         <h3 className="snippet-title fw-bold text-center">{snippetTitle}</h3>
         <div className="buttons align-self-end d-flex gap-3 align-items-center">
-          <div className="save-btn">
-            {/* save button */}
-            {isSaved ? (
+          {/* Description Button */}
+          <CustomTooltip title='Description' placement='top'>
+            <button className="btn btn-outline-light post-btn" onClick={openDescription}>
+              <DescriptionIcon style={{ fontSize: '27px' }} />
+            </button>
+          </CustomTooltip>
+
+          {/* Save, Copy, and Fullscreen Buttons */}
+          {isSaved ? (
+            <button
+              className="btn btn-outline-primary post-btn"
+              onClick={unsaveSnippet}
+            >
+              <BookmarkAddedIcon style={{ fontSize: '28px' }} />
+            </button>
+          ) : (
+            <CustomTooltip title='Save Snippet' placement='top'>
               <button
-                className="btn btn-outline-primary post-btn"
-                onClick={unsaveSnippet}
+                className="btn btn-outline-light post-btn"
+                onClick={saveSnippet}
               >
-                <BookmarkAddedIcon className="" style={{ fontSize: '28px' }} />
+                <BookmarkAddIcon style={{ fontSize: '28px' }} />
               </button>
-            ) : (
-              <CustomTooltip title='Save Snippet' placement='top'>
-              <button
-                  className="btn btn-outline-light post-btn"
-                  onClick={saveSnippet}
-                >
-                  <BookmarkAddIcon style={{ fontSize: '28px' }} />
-                </button>
-              </CustomTooltip>
-            )}
-          </div>
-          {/* copy button */}
+            </CustomTooltip>
+          )}
+
           {isCopied ? (
-            <button className="btn btn-outline-primary post-btn" onClick={uncopyCode}>
+            <button className="btn btn-outline-primary post-btn">
               <DoneIcon />
             </button>
           ) : (
             <CustomTooltip title='Copy Snippet' placement='top'>
               <button className="btn btn-outline-light post-btn" onClick={copyCode}>
-                  <ContentCopyIcon />
+                <ContentCopyIcon />
               </button>
             </CustomTooltip>
           )}
-          {/* fullscreen button */}
+
           <CustomTooltip title='Full Screen' placement='top'>
-            <button className="btn btn-outline-light post-btn" onClick={openModal}>
+            <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
               <FullscreenIcon style={{ fontSize: '34px' }} />
             </button>
           </CustomTooltip>
-
         </div>
       </div>
+
+      {/* Code Block */}
       <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
         <pre className="text-white " style={{fontSize:'22px'}}>
           <code>
             <CodeHighlighter codeSnippet={snippetCode} /> 
           </code>
         </pre>
-
-        
       </div>
 
+      {/* Fullscreen Modal */}
       <Modal
         open={isFullScreen}
-        onClose={closeModal}
+        onClose={closeFullScreen}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -235,10 +244,9 @@ export default function Post(props) {
             color: 'white',
           }}
         >
-          {/* Close icon in the top-right corner */}
           <IconButton
             aria-label="close"
-            onClick={closeModal}
+            onClick={closeFullScreen}
             sx={{
               position: 'absolute',
               top: '10px',
@@ -258,6 +266,51 @@ export default function Post(props) {
         </Box>
       </Modal>
 
+      {/* Description Modal */}
+      <Modal
+        open={isDescriptionOpen}
+        onClose={closeDescription}
+        aria-labelledby="description-modal-title"
+        aria-describedby="description-modal-content"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '8px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            width: '50%',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeDescription}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h3 id="description-modal-title" className="fw-bold mb-5 text-center text-warning">{snippetTitle}</h3>
+          <div id="description-modal-content " className="fs-5 text-center mt-4" style={{ whiteSpace: 'pre-wrap' }}>
+            {snippetDescription}
+          </div>
+        </Box>
+      </Modal>
+
+      {/* Reactions */}
       <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
         <div className="text-center">
           {react === 'like' ? (

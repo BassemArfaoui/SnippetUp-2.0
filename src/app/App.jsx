@@ -12,7 +12,6 @@ function App() {
   
   return (
     <Router>
-        <div>
         <CustomToaster />
         <NotificationBell />
         <Header />
@@ -22,7 +21,6 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
         </Routes>
-        </div>
     </Router>
 
   );

@@ -45,7 +45,7 @@ export default function NotificationBell() {
         variant="contained"
         onClick={toggleDrawer(true)}
         aria-label="Toggle notifications"
-        className="position-fixed bottom-0 end-0 m-4 bg-warning "
+        className="position-fixed bottom-0 end-0 m-3 mx-4 bg-warning "
         style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} 
       >
         <NotificationsIcon  fontSize="large" className='text-dark'/>
