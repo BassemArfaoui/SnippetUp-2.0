@@ -18,7 +18,7 @@ import CustomTooltip from '../tools/CustomTooltip';
 import { successNotify , notify } from '../tools/CustomToaster';
 import CodeHighlighter from '../saved/CodeHighliter';
 
-export default function Post() {
+export default function Post(props) {
   //bool states
   const [isSaved, setIsSaved] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -28,59 +28,17 @@ export default function Post() {
 
 
   //post states
-  const [snippetCode,setSnippetCode]=useState(
-  `# Python example: A more complex script with functions, loops, and conditionals
-
-  def greet_user(name, age):
-      """
-      Generates a greeting message based on the user's name and age.
-      
-      Parameters:
-      name (str): The name of the user.
-      age (int): The age of the user.
-      
-      Returns:
-      str: A greeting message.
-      """
-      if age < 18:
-          age_group = "young"
-      elif age < 60:
-          age_group = "adult"
-      else:
-          age_group = "senior"
-  
-      # Return a formatted message
-      return f"Hello, {name}! You are a {age_group} who is {age} years old."
-  
-  def main():
-      users = [
-          {"name": "Alice", "age": 25},
-          {"name": "Bob", "age": 17},
-          {"name": "Charlie", "age": 65}
-      ]
-      
-      for user in users:
-          message = greet_user(user["name"], user["age"])
-          print(message)
-  
-  if __name__ == "__main__":
-      main()
-  
-  # Output:
-  # Hello, Alice! You are a adult who is 25 years old.
-  # Hello, Bob! You are a young who is 17 years old.
-  # Hello, Charlie! You are a senior who is 65 years old.
-  
-  `)
-  const [snippetTitle,setSnippetTitle]=useState('JavaScript Basics')
+  const [snippetCode,setSnippetCode]=useState(props.snippet)
+  const [snippetTitle,setSnippetTitle]=useState(props.title)
   const [snippetPoster,setSnippetPoster]=useState('Bassem Arfaoui');
 
   //reactions counts
   const [react, setReact] = useState('none');
-  const [likeCount, setLikeCount] = useState(456);
-  const [dislikeCount, setDislikeCount] = useState(10);
-  const [commentCount, setCommentCount] = useState(30);
-  const [shareCount, setShareCount] = useState(15);
+  const [likeCount, setLikeCount] = useState(props.likeCount);
+  const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
+  const [commentCount, setCommentCount] = useState(props.commentCount);
+  const [shareCount, setShareCount] = useState(props.shareCount);
+  const [language,setLanguage]=useState(props.language)
 
   //buttons functions
   const saveSnippet = () => {
@@ -127,28 +85,28 @@ export default function Post() {
 
   const likeSnippet = () => {
     if (react === 'dislike') {
-      setDislikeCount((prev) => prev - 1);
+      setDislikeCount((prev) => parseInt(prev) - 1);
     }
     setReact('like');
-    setLikeCount((prev) => prev + 1);
+    setLikeCount((prev) => parseInt(prev) + 1);
   };
 
   const dislikeSnippet = () => {
     if (react === 'like') {
-      setLikeCount((prev) => prev - 1);
+      setLikeCount((prev) => parseInt(prev) - 1);
     }
     setReact('dislike');
-    setDislikeCount((prev) => prev + 1);
+    setDislikeCount((prev) => parseInt(prev) + 1);
   };
 
   const unlikeSnippet = () => {
     setReact('none');
-    setLikeCount((prev) => prev - 1);
+    setLikeCount((prev) => parseInt(prev) - 1);
   };
 
   const undislikeSnippet = () => {
     setReact('none');
-    setDislikeCount((prev) => prev - 1);
+    setDislikeCount((prev) => parseInt(prev) - 1);
   };
 
   // modal control functions
@@ -197,7 +155,7 @@ export default function Post() {
           </div>
         </div>
         <div className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
-          JavaScript
+          {language}
         </div>
       </div>
       <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
