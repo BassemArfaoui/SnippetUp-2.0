@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,  { useState } from 'react'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import CommentIcon from '@mui/icons-material/Comment';
@@ -9,8 +9,8 @@ import { Divider } from '@mui/material';
 
 
 function Notification(props) {
-    const userName='John Doe';
-    const SnippetTitle='Fibonaci function'
+    const [from,setFrom]=useState("Jhon Doe");
+    const [SnippetTitle,setSnippetTitle]=useState(props.title);
   return (
     <div>
       {props.type === "like" && (
@@ -20,13 +20,13 @@ function Notification(props) {
             style={{ width: "40px", height: "40px" }}
           >
             <ThumbUpAltIcon />
-          </div>
+          </div>      
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{userName} </strong>
+              <strong className="text-black">{from} </strong>
               liked your Snippet :
               <strong className="text-black"> {SnippetTitle}</strong>
-              <span className="small ms-2"> (2min)</span>
+              <span className="small ms-2"> {props.time}</span>
             </p>
           </div>
         </div>
@@ -42,10 +42,10 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{userName} </strong>
+              <strong className="text-black">{from} </strong>
               disliked yourSnippet :
               <strong className="text-black"> {SnippetTitle}</strong>
-              <span className="small ms-2"> (2min)</span>
+              <span className="small ms-2"> {props.time}</span>
             </p>
           </div>
         </div>
@@ -65,16 +65,16 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{userName}</strong> Commented on
+              <strong className="text-black">{from}</strong> Commented on
               your Snippet :
               <strong className="text-black"> {SnippetTitle}</strong>
-              <span className="small ms-2"> (2min)</span>
+              <span className="small ms-2"> {props.time}</span>
             </p>
           </div>
         </div>
       )}
 
-      {props.type === "intrested" && (
+      {props.type === "interested" && (
         <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
           <div
             className="noti-btn text-light bg-success rounded-circle d-flex align-items-center justify-content-center px-2"
@@ -88,9 +88,9 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{userName} </strong>
-               is now intrested in your Snippets
-               <span className='small ms-2'> (2min)</span>
+              <strong className="text-black">{from} </strong>
+               is now interested in your Snippets
+               <span className='small ms-2'> {props.time}</span>
             </p>
           </div>
         </div>
@@ -110,10 +110,10 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{userName} </strong>
+              <strong className="text-black">{from} </strong>
                shared your Snippet : 
                <strong className="text-black"> {SnippetTitle}</strong>
-               <span className='small ms-2'> (2min)</span>
+               <span className='small ms-2'> {props.time}</span>
             </p>
           </div>
         </div>
