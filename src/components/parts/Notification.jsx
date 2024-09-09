@@ -26,7 +26,7 @@ function Notification(props) {
               <strong className="text-black">{from} </strong>
               liked your Snippet :
               <strong className="text-black"> {SnippetTitle}</strong>
-              <span className="small ms-2"> {props.time}</span>
+              <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
         </div>
@@ -45,7 +45,7 @@ function Notification(props) {
               <strong className="text-black">{from} </strong>
               disliked yourSnippet :
               <strong className="text-black"> {SnippetTitle}</strong>
-              <span className="small ms-2"> {props.time}</span>
+              <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
         </div>
@@ -68,7 +68,7 @@ function Notification(props) {
               <strong className="text-black">{from}</strong> Commented on
               your Snippet :
               <strong className="text-black"> {SnippetTitle}</strong>
-              <span className="small ms-2"> {props.time}</span>
+              <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
         </div>
@@ -90,7 +90,7 @@ function Notification(props) {
             <p className="text-muted mb-0 fw-bold">
               <strong className="text-black">{from} </strong>
                is now interested in your Snippets
-               <span className='small ms-2'> {props.time}</span>
+               <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
         </div>
@@ -113,7 +113,7 @@ function Notification(props) {
               <strong className="text-black">{from} </strong>
                shared your Snippet : 
                <strong className="text-black"> {SnippetTitle}</strong>
-               <span className='small ms-2'> {props.time}</span>
+               <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
         </div>

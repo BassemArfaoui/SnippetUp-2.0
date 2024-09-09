@@ -104,9 +104,9 @@ export default function NotificationSide() {
           )}
 
           {hasMore && !loading && (
-            <div className="d-flex justify-content-center my-3">
+            <div className="d-flex justify-content-center my-0">
               <IconButton onClick={fetchNotifications} aria-label="Load More">
-                <ExpandMoreIcon fontSize="large" />
+                <ExpandMoreIcon  className='text-primary ' style={{fontSize:'62px'}} />
               </IconButton>
             </div>
           )}
