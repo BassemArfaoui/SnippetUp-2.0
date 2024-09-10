@@ -53,18 +53,29 @@ export default function Post(props) {
     {
       setReact('like');
     }
-    if(props.isDisliked)
+    else if(props.isDisliked)
     {
       setReact('dislike');
     }
-    },[props.isLiked])
+
+    if(props.isSaved)
+    {
+      setIsSaved(true);
+    }
+    },[props.isLiked,props.isDisliked,props.isSaved])
 
 
-  // buttons functions
-  const saveSnippet = () => {
-    setIsSaved(true);
-    successNotify('Snippet Saved');
+  const saveSnippet = async () => {
+    try {
+      await axios.get(`http://localhost:4000/save/${userId}/${props.id}`);
+      
+      setIsSaved(true);
+      successNotify('Snippet Saved');
+    } catch (err) {
+      notify("Couldn't save the Snippet");
+    }
   };
+  
 
   const unsaveSnippet = () => {
     successNotify('Snippet is no longer Saved');
