@@ -27,7 +27,7 @@ export default function Post(props) {
   // bool states
   const [isSaved, setIsSaved] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const [isIntrested, setIsIntrested] = useState(false);
+  const [isInterested, setisInterested] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false); 
 
@@ -62,7 +62,12 @@ export default function Post(props) {
     {
       setIsSaved(true);
     }
-    },[props.isLiked,props.isDisliked,props.isSaved])
+
+    if(props.isInterested)
+    {
+      setisInterested(true);
+    }
+    },[props.isLiked,props.isDisliked,props.isSaved,props.isInterested])
 
 
   const saveSnippet = async () => {
@@ -100,16 +105,33 @@ export default function Post(props) {
       notify("Couldn't Copy");
     }
   };
-
-  const becomeIntrested = () => {
-    setIsIntrested(true);
-    successNotify(`You are now intrested in ${snippetPoster}'s Snippets`);
+  
+  const becomeInterested = async () => {
+    try
+    {
+      await axios.get(`http://localhost:4000/interested/${userId}/${props.posterId}`);
+      setisInterested(true);
+      successNotify(`You are now Interested in ${props.firstname + ' '+props.lastname }'s Snippets`)
+    }
+    catch(err)
+    {
+      notify(`Couldn't add interest`)
+    }
+  };
+  
+  const becomeUninterested = async () => {
+    try
+    {
+      await axios.get(`http://localhost:4000/uninterested/${userId}/${props.posterId}`);
+      setisInterested(false);
+      successNotify(`No Longer Interested in ${props.firstname + ' '+props.lastname }'s Snippets`)
+    }
+    catch(err)
+    {
+      notify(`Couldn't delete interest`)
+    }
   };
 
-  const becomeUnintrested = () => {
-    setIsIntrested(false);
-    successNotify(`No longer intrested in ${snippetPoster}'s Snippets`);
-  };
 
   const likeSnippet =async () => {
     try
@@ -197,10 +219,10 @@ export default function Post(props) {
           <div>
             <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
               <span className="p-0 m-0">{props.firstname +' '+props.lastname}</span>
-              {!isIntrested ? (
+              {!isInterested ? (
                 <span
                   className="text-light p-0 mb-1 ms-2 intrested-icon"
-                  onClick={becomeIntrested}
+                  onClick={becomeInterested}
                 >
                   <CustomTooltip title='Intrested' placement='top'>
                     <StarBorderIcon style={{ fontSize: '30px' }} />
@@ -209,7 +231,7 @@ export default function Post(props) {
               ) : (
                 <span
                   className="text-primary p-0 mb-1 ms-2 intrested-icon"
-                  onClick={becomeUnintrested}
+                  onClick={becomeUninterested}
                 >
                   <StarIcon style={{ fontSize: '30px' }} />
                 </span>
