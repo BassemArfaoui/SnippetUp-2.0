@@ -106,6 +106,7 @@ function FeedSide() {
               commentCount={post.comment_count}
               shareCount={post.share_count}
               isLiked={post.isLiked}
+              isDisliked={post.isDisliked}
             />
           ))}
           {loading && (

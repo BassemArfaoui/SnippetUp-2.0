@@ -53,6 +53,10 @@ export default function Post(props) {
     {
       setReact('like');
     }
+    if(props.isDisliked)
+    {
+      setReact('dislike');
+    }
     },[props.isLiked])
 
 
@@ -96,7 +100,7 @@ export default function Post(props) {
   const likeSnippet =async () => {
     try
     {if (react === 'dislike') {
-      setDislikeCount((prev) => parseInt(prev) - 1);
+      await undislikeSnippet();
     }
     const result=await axios.get(`http://localhost:4000/like/${userId}/${props.id}`)
     setReact('like');
@@ -121,19 +125,36 @@ export default function Post(props) {
     };
 
 
-  const dislikeSnippet = () => {
-    if (react === 'like') {
-      setLikeCount((prev) => parseInt(prev) - 1);
-    }
-    setReact('dislike');
-    setDislikeCount((prev) => parseInt(prev) + 1);
-  };
+    const dislikeSnippet = async () => {
+      try {
+        if (react === 'like') {
+          await unlikeSnippet();
+        }
+        
+        const result = await axios.get(`http://localhost:4000/dislike/${userId}/${props.id}`);
+        
+        setReact('dislike');
+        setDislikeCount((prev) => parseInt(prev) + 1);
+      } catch (err) {
+        notify("Couldn't dislike the Post");
+      }
+    };
+    
 
 
-  const undislikeSnippet = () => {
-    setReact('none');
-    setDislikeCount((prev) => parseInt(prev) - 1);
-  };
+    const undislikeSnippet = async () => {
+      try {
+      
+        // Call the undislike route
+        const result = await axios.get(`http://localhost:4000/undislike/${userId}/${props.id}`);
+        
+        setReact('none'); 
+        setDislikeCount((prev) => parseInt(prev) - 1);
+      } catch (err) {
+        notify("Couldn't undislike the Post");
+      }
+    };
+    
 
   const openFullScreen = () => {
     setisFullScreen(true);
