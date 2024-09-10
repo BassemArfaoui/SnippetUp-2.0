@@ -77,10 +77,17 @@ export default function Post(props) {
   };
   
 
-  const unsaveSnippet = () => {
-    successNotify('Snippet is no longer Saved');
-    setIsSaved(false);
+  const unsaveSnippet = async () => {
+    try {
+      await axios.get(`http://localhost:4000/unsave/${userId}/${props.id}`);
+      
+      setIsSaved(false);
+      successNotify('Snippet Unsaved');
+    } catch (err) {
+      notify("Couldn't unsave the Snippet");
+    }
   };
+  
 
   const copyCode = async () => {
     try {
