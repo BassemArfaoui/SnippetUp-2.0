@@ -28,8 +28,8 @@ export default function Post(props) {
   const [isSaved, setIsSaved] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isIntrested, setIsIntrested] = useState(false);
-  const [isFullScreen, setisFullScreen] = useState(false); // state to handle fullscreen modal
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false); // state to handle description modal
+  const [isFullScreen, setisFullScreen] = useState(false);
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false); 
 
   // post states
   const [snippetCode, setSnippetCode] = useState(props.snippet);
@@ -76,7 +76,6 @@ export default function Post(props) {
     }
   };
   
-
   const unsaveSnippet = async () => {
     try {
       await axios.get(`http://localhost:4000/unsave/${userId}/${props.id}`);
@@ -88,7 +87,6 @@ export default function Post(props) {
     }
   };
   
-
   const copyCode = async () => {
     try {
       await navigator.clipboard.writeText(snippetCode);
@@ -113,8 +111,6 @@ export default function Post(props) {
     successNotify(`No longer intrested in ${snippetPoster}'s Snippets`);
   };
 
-
-
   const likeSnippet =async () => {
     try
     {if (react === 'dislike') {
@@ -129,7 +125,6 @@ export default function Post(props) {
    }
   };
   
-
   const unlikeSnippet = async () => {
     try
       {
@@ -140,40 +135,36 @@ export default function Post(props) {
       {
         notify("Couldn't unlike the Post");
       }
-    };
+  };
 
-
-    const dislikeSnippet = async () => {
-      try {
-        if (react === 'like') {
-          await unlikeSnippet();
-        }
-        
-        const result = await axios.get(`http://localhost:4000/dislike/${userId}/${props.id}`);
-        
-        setReact('dislike');
-        setDislikeCount((prev) => parseInt(prev) + 1);
-      } catch (err) {
-        notify("Couldn't dislike the Post");
+  const dislikeSnippet = async () => {
+    try {
+      if (react === 'like') {
+        await unlikeSnippet();
       }
-    };
-    
-
-
-    const undislikeSnippet = async () => {
-      try {
       
-        // Call the undislike route
-        const result = await axios.get(`http://localhost:4000/undislike/${userId}/${props.id}`);
-        
-        setReact('none'); 
-        setDislikeCount((prev) => parseInt(prev) - 1);
-      } catch (err) {
-        notify("Couldn't undislike the Post");
-      }
-    };
+      const result = await axios.get(`http://localhost:4000/dislike/${userId}/${props.id}`);
+      
+      setReact('dislike');
+      setDislikeCount((prev) => parseInt(prev) + 1);
+    } catch (err) {
+      notify("Couldn't dislike the Post");
+    }
+  };
     
-
+  const undislikeSnippet = async () => {
+    try {
+    
+      // Call the undislike route
+      const result = await axios.get(`http://localhost:4000/undislike/${userId}/${props.id}`);
+      
+      setReact('none'); 
+      setDislikeCount((prev) => parseInt(prev) - 1);
+    } catch (err) {
+      notify("Couldn't undislike the Post");
+    }
+  };
+    
   const openFullScreen = () => {
     setisFullScreen(true);
   };
@@ -182,7 +173,6 @@ export default function Post(props) {
     setisFullScreen(false);
   };
 
-  // Description modal control
   const openDescription = () => {
     setIsDescriptionOpen(true);
   };
@@ -206,7 +196,7 @@ export default function Post(props) {
           </div>
           <div>
             <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
-              <span className="p-0 m-0">{snippetPoster}</span>
+              <span className="p-0 m-0">{props.firstname +' '+props.lastname}</span>
               {!isIntrested ? (
                 <span
                   className="text-light p-0 mb-1 ms-2 intrested-icon"
@@ -225,7 +215,7 @@ export default function Post(props) {
                 </span>
               )}
             </div>
-            <div className="text-secondary fs-5">@arfBassem</div>
+            <div className="text-secondary fs-5">@{props.username}</div>
           </div>
         </div>
         <div className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
