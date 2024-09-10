@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import profile_pic from '../../imgs/profile_pic.jpg';
 import './styles/Post.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -18,8 +18,12 @@ import CustomTooltip from '../tools/CustomTooltip';
 import { successNotify, notify } from '../tools/CustomToaster';
 import CodeHighlighter from '../saved/CodeHighliter';
 import DescriptionIcon from '@mui/icons-material/Description';
+import axios from 'axios';
+
+
 
 export default function Post(props) {
+  const userId=1;
   // bool states
   const [isSaved, setIsSaved] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -40,6 +44,17 @@ export default function Post(props) {
   const [commentCount, setCommentCount] = useState(props.commentCount);
   const [shareCount, setShareCount] = useState(props.shareCount);
   const [language, setLanguage] = useState(props.language);
+
+
+
+  
+   useEffect(()=>{
+    if(props.isLiked)
+    {
+      setReact('like');
+    }
+    },[props.isLiked])
+
 
   // buttons functions
   const saveSnippet = () => {
@@ -76,13 +91,35 @@ export default function Post(props) {
     successNotify(`No longer intrested in ${snippetPoster}'s Snippets`);
   };
 
-  const likeSnippet = () => {
-    if (react === 'dislike') {
+
+
+  const likeSnippet =async () => {
+    try
+    {if (react === 'dislike') {
       setDislikeCount((prev) => parseInt(prev) - 1);
     }
+    const result=await axios.get(`http://localhost:4000/like/${userId}/${props.id}`)
     setReact('like');
     setLikeCount((prev) => parseInt(prev) + 1);
+   }catch(err)
+   {
+    notify("Couldn't like the Post");
+   }
   };
+  
+
+  const unlikeSnippet = async () => {
+    try
+      {
+      const result=await axios.get(`http://localhost:4000/unlike/${userId}/${props.id}`)
+      setReact('none');
+      setLikeCount((prev) => parseInt(prev) - 1);
+      }catch(err)
+      {
+        notify("Couldn't unlike the Post");
+      }
+    };
+
 
   const dislikeSnippet = () => {
     if (react === 'like') {
@@ -92,10 +129,6 @@ export default function Post(props) {
     setDislikeCount((prev) => parseInt(prev) + 1);
   };
 
-  const unlikeSnippet = () => {
-    setReact('none');
-    setLikeCount((prev) => parseInt(prev) - 1);
-  };
 
   const undislikeSnippet = () => {
     setReact('none');
@@ -127,7 +160,7 @@ export default function Post(props) {
           <div className="avatar">
             <img
               src={profile_pic}
-              alt="user picture"
+              alt="user"
               className="rounded-circle"
               style={{ width: '60px', height: '60px' }}
             />

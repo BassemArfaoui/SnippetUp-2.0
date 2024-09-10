@@ -10,13 +10,14 @@ function FeedSide() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); 
   const feedSideRef = useRef(null); 
-  const limit = 10; 
+  const userId=1;
+  const limit = 5; 
   const fetchPosts = useCallback(async () => {
     if (loading) return;
 
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:4000/posts', {
+      const response = await axios.get(`http://localhost:4000/${userId}/posts`, {
         params: { limit }
       });
       const newPosts = response.data;
@@ -91,9 +92,11 @@ function FeedSide() {
           ref={feedSideRef} 
         >
           <div className="pt-3"></div>
-          {posts.map((post) => (
+          {posts.map((post,index) => (
             <Post
-              key={post.id}               title={post.title}
+              key={`${post.id}-${index}`}     
+              id={post.id}
+              title={post.title}
               snippet={post.snippet}
               description={post.description}
               posterId={post.poster_id}
@@ -102,6 +105,7 @@ function FeedSide() {
               dislikeCount={post.dislike_count}
               commentCount={post.comment_count}
               shareCount={post.share_count}
+              isLiked={post.isLiked}
             />
           ))}
           {loading && (
