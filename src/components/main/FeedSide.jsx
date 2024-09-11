@@ -10,8 +10,9 @@ function FeedSide() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); 
   const feedSideRef = useRef(null); 
-  const userId=1;
-  const limit = 5; 
+  const userId = 1;
+  const limit = 10; 
+
   const fetchPosts = useCallback(async () => {
     if (loading) return;
 
@@ -21,7 +22,6 @@ function FeedSide() {
         params: { limit }
       });
       const newPosts = response.data;
-
       setPosts(prevPosts => [...prevPosts, ...newPosts]);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -29,19 +29,18 @@ function FeedSide() {
       setLoading(false);
       setInitialLoading(false); 
     }
-  }, [loading]);
+  }, [loading, userId, limit]);
 
   useEffect(() => {
     fetchPosts(); 
-  }, [fetchPosts]);
+  }, []);
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const { scrollTop, scrollHeight, clientHeight } = feedSideRef.current;
-
     if (scrollTop + clientHeight >= scrollHeight - 50 && !loading) {
       fetchPosts();
     }
-  };
+  }, [fetchPosts, loading]);
 
   useEffect(() => {
     const feedSideDiv = feedSideRef.current;
@@ -71,12 +70,10 @@ function FeedSide() {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-
 
   return (
     <div className="col-lg-12 p-0">
@@ -92,7 +89,7 @@ function FeedSide() {
           ref={feedSideRef} 
         >
           <div className="pt-3"></div>
-          {posts.map((post,index) => (
+          {posts.map((post, index) => (
             <Post
               key={`${post.id}-${index}`}     
               id={post.id}
@@ -116,7 +113,6 @@ function FeedSide() {
           ))}
           {loading && (
             <div className="d-flex justify-content-center my-3">
-              {/* Bootstrap Spinner */}
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
