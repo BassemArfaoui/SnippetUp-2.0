@@ -4,6 +4,7 @@ import Post from '../parts/Post';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; 
+import CustomTooltip from '../tools/CustomTooltip';
 
 function FeedSide() {
   const [posts, setPosts] = useState([]);
@@ -120,14 +121,16 @@ function FeedSide() {
           )}
         </div>
       )}
-
-      <IconButton
-        onClick={scroll} 
-        aria-label="Scroll to End"
-        className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning" 
-        style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} >
-        <ArrowDownwardIcon fontSize="large" className="text-dark" />
-      </IconButton>
+      <CustomTooltip title='Scroll Down' placement='right'>
+        <IconButton
+          onClick={scroll} 
+          aria-label="Scroll to End"
+          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning" 
+          style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} >
+          <ArrowDownwardIcon fontSize="large" className="text-dark" />
+        </IconButton>
+      </CustomTooltip>
+         
     </div>
   );
 }

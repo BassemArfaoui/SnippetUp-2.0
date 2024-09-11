@@ -3,6 +3,7 @@ import { IconButton, Drawer } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationSide from '../main/NotificationSide';
+import CustomTooltip from '../tools/CustomTooltip';
 
 
 
@@ -41,15 +42,17 @@ export default function NotificationBell() {
 
   return (
     <>
-    <IconButton
-        variant="contained"
-        onClick={toggleDrawer(true)}
-        aria-label="Toggle notifications"
-        className="position-fixed bottom-0 end-0 m-3 mx-4 bg-warning "
-        style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} 
-      >
-        <NotificationsIcon  fontSize="large" className='text-dark'/>
-      </IconButton>
+        <CustomTooltip title="Notifications" placement="left">
+            <IconButton
+                variant="contained"
+                onClick={toggleDrawer(true)}
+                aria-label="Toggle notifications"
+                className="position-fixed bottom-0 end-0 m-3 mx-4 bg-warning "
+                style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} 
+              >
+                  <NotificationsIcon  fontSize="large" className='text-dark'/>
+              </IconButton>
+        </CustomTooltip>
 
       <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
         <div className="d-flex flex-column h-100 p-3" style={{ width: '400px' }}>
