@@ -84,7 +84,7 @@ return (
                         <ul className="d-flex gap-4 m-0">
                             <Link to="/" className="btn ms-3 menu-btn  d-flex align-items-center active"  name='/' ><HomeIcon style={{fontSize:'44px'}} /></Link>
                             <Link to='/saved' className="btn menu-btn  d-flex align-items-center"  name='/saved'><BookmarkIcon style={{fontSize:'41px'}} /></Link>
-                            <li className="add-btn btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 " style={{width:'70px',height:'70px'}}><AddIcon style={{fontSize:'65px'}}/></li>
+                            <li className="add-btn btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 " style={{width:'68px',height:'68px'}}><AddIcon style={{fontSize:'65px'}}/></li>
                             <Link to='/profile' className="btn menu-btn  d-flex align-items-center" name='/profile'><PersonIcon style={{fontSize:'41px'}}/></Link>
                             <Link to='/settings'  className="btn menu-btn  d-flex align-items-center" name='/settings'><SettingsIcon style={{fontSize:'41px'}}/></Link>
                         </ul>

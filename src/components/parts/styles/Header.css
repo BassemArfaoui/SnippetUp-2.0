@@ -16,6 +16,16 @@ header
     border: none !important;
 }
 
+.add-btn:hover
+{
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.add-btn:active
+{
+    transform: scale(1);
+}
 .menu-btn.active
 {
     color: rgb(13, 110, 253) !important;
