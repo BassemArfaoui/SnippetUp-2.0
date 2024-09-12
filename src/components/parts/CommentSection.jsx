@@ -85,6 +85,7 @@ function CommentSection(props) {
           boxShadow: 24,
           p: 4,
           borderRadius: "16px",
+          minHeight: "50vh",
           maxHeight: "95vh",
           overflowY: "auto",
           width: "80%",
