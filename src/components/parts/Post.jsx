@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, {lazy, Suspense, useState , useEffect} from 'react';
 import profile_pic from '../../imgs/profile_pic.jpg';
 import './styles/Post.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -19,6 +19,7 @@ import { successNotify, notify } from '../tools/CustomToaster';
 import CodeHighlighter from '../saved/CodeHighliter';
 import DescriptionIcon from '@mui/icons-material/Description';
 import axios from 'axios';
+const CommentSection = lazy(() => import('./CommentSection'));
 
 
 
@@ -30,11 +31,11 @@ export default function Post(props) {
   const [isInterested, setisInterested] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false); 
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false); 
 
   // post states
   const [snippetCode, setSnippetCode] = useState(props.snippet);
   const [snippetTitle, setSnippetTitle] = useState(props.title);
-  const [snippetPoster, setSnippetPoster] = useState('Bassem Arfaoui');
   const [snippetDescription, setSnippetDescription] = useState(props.description);
 
   // reactions counts
@@ -132,7 +133,6 @@ export default function Post(props) {
     }
   };
 
-
   const likeSnippet =async () => {
     try
     {if (react === 'dislike') {
@@ -203,6 +203,14 @@ export default function Post(props) {
     setIsDescriptionOpen(false);
   };
 
+  const openComments = () => {
+    setIsCommentsOpen(true);
+  };
+
+  const closeComments = () => {
+    setIsCommentsOpen(false);
+  };
+  
   return (
     <div className="post rounded-4 p-4">
       {/* Post Header */}
@@ -421,7 +429,7 @@ export default function Post(props) {
           <div className="text-light mt-1">{dislikeCount}</div>
         </div>
         <div className="text-center">
-          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn">
+          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openComments}>
             <CommentIcon />
           </button>
           <div className="text-light mt-1">{commentCount}</div>
@@ -433,6 +441,22 @@ export default function Post(props) {
           <div className="text-light mt-1">{shareCount}</div>
         </div>
       </div>
+      
+      {/* Comments Section */}
+      <Modal
+        open={isCommentsOpen}
+        onClose={closeComments}
+        aria-labelledby="description-modal-title"
+        aria-describedby="description-modal-content"
+      >
+              <div>
+                (
+                        <Suspense fallback={<div>Loading comments...</div>}>
+                          <CommentSection closeComments={closeComments}/>
+                        </Suspense>)
+              </div>
+      </Modal>
+
     </div>
   );
 }

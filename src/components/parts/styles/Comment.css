@@ -1,0 +1,54 @@
+.comment
+{
+    background-color: rgba(182, 207, 226, 0.903);
+    color: black;
+    text-align: start;
+
+}
+
+.comment-reply
+{
+    background-color: transparent;
+    color: black;
+    text-align: start;
+}
+
+.commentor_name
+{
+    font-size: 22px;
+}
+
+
+.comment-content
+{
+    margin-left: 45px;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.reactions
+{
+    margin-left: 45px;
+
+}
+
+.reactions>span
+{
+    cursor: pointer;
+}
+
+.comment-num
+{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.reply-btn
+{
+    margin-bottom: 5px;
+}
+
+.text-orange
+{
+    color: rgb(255, 98, 0);
+}
