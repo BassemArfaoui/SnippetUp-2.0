@@ -91,7 +91,7 @@ export default function NotificationSide() {
               key={notification.id}
               type={notification.type}
               title={notification.post_title || 'No title'}
-              time={timeSince(notification.time)} // Pass formatted time as prop
+              time={timeSince(notification.time)} 
             />
           ))}
 

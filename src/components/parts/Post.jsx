@@ -452,7 +452,7 @@ export default function Post(props) {
               <div>
                 (
                         <Suspense fallback={<div>Loading comments...</div>}>
-                          <CommentSection closeComments={closeComments}/>
+                          <CommentSection closeComments={closeComments} postId={props.id} postTitle={snippetTitle}/>
                         </Suspense>)
               </div>
       </Modal>

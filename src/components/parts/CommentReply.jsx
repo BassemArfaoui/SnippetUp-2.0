@@ -2,8 +2,7 @@ import React , {useState} from 'react'
 import profile_pic from '../../imgs/profile_pic.jpg'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import { BiSolidCommentDetail } from "react-icons/bi";
-import { FaReply } from "react-icons/fa";
+
 
 
 

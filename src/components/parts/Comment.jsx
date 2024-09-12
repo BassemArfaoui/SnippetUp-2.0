@@ -8,10 +8,10 @@ import CommentReply from './CommentReply';
 
 
 
-function Comment() {
+function Comment(props) {
     const [commentReact,setCommentReact]=useState('none');
-    const [likeCount,setLikeCount]=useState(45)
-    const [dislikeCount,setDislikeCount]=useState(2)
+    const [likeCount,setLikeCount]=useState(props.likeCount)
+    const [dislikeCount,setDislikeCount]=useState(props.dislikeCount)
     const [showReplies,setShowReplies]=useState(false);
     const [replies, setReplies] = useState([]);
     const repliesCount = replies.length || 45;
@@ -70,7 +70,7 @@ function Comment() {
 
               <div>
                 <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
-                  <span className="commentor_name p-0 m-0 text-dark">Bassem Arfaoui</span>
+                  <span className="commentor_name p-0 m-0 text-dark">{props.firstname + ' ' + props.lastname }<span> ({props.time})</span> </span>
                 </div>
               </div>
 
@@ -79,27 +79,48 @@ function Comment() {
 
           <div className='comment-content fs-5 '>
             <div className='comment-content ms-2 mb-2 pe-3 border border-2 border-dark rounded-4 py-2 px-3'>
-            Great post! One quick question - what's the benefit of using hooks over class components?
-            what's the benefit of using hooks over class components?
-            what's the benefit of using hooks over class components?
+                {props.content}
             </div>
           </div>
 
             <span className='reactions d-flex justify-content-start  gap-3 align-items-center px-3 ms-5'>
 
-                <span className='d-flex align-items-center gap-1'>
-                    <span className='comment-num m-0 p-0 mt-2'>{likeCount}</span>
-                    {commentReact==='like' ?  <span onClick={unlikeComment} className='text-primary'><ThumbUpAltIcon/></span> : <span onClick={likeComment}><ThumbUpAltIcon/></span>   }
+                <span className='d-flex align-items-center'> 
+                    {commentReact==='like' ? 
+                    <span onClick={unlikeComment} className='d-flex align-items-center'>
+                        <span className='comment-num m-0 p-0 mt-2 me-1 text-primary'>{likeCount}</span>
+                         <span  className='text-primary'><ThumbUpAltIcon/></span> 
+                    </span>
+                        
+                      : <span onClick={likeComment} className='d-flex align-items-center'>
+                            <span className='comment-num m-0 p-0 mt-2 mb-0 me-1'>{likeCount}</span>
+                            <span ><ThumbUpAltIcon/></span>
+                        </span>  
+                    }
                 </span>
 
                 <span className='d-flex align-items-center gap-1'>
-                    <span className='comment-num m-0 p-0 mt-2'>{dislikeCount}</span>
-                    {commentReact==='dislike' ?  <span onClick={undislikeComment} className='text-danger'><ThumbDownAltIcon/></span> : <span onClick={dislikeComment}><ThumbDownAltIcon/></span> }
+                    {commentReact==='dislike' ? 
+                    <span onClick={undislikeComment}>
+                        <span className='comment-num m-0 p-0 mt-2 me-1 text-danger'>{dislikeCount}</span>
+                        <span  className='text-danger'><ThumbDownAltIcon/></span>
+                    </span> :
+                    <span onClick={dislikeComment}>
+                        <span className='comment-num m-0 p-0 mt-2 me-1'>{dislikeCount}</span>
+                        <span ><ThumbDownAltIcon/></span>
+                    </span>}
                 </span>
 
                 <span className='d-flex align-items-center gap-1 '>
-                    <span className='comment-num m-0 p-0 mt-1'>{repliesCount}</span>
-                    {!showReplies ? <span onClick={seeReplies}><BiSolidCommentDetail /></span> : <span className='text-orange' onClick={hideReplies}><BiSolidCommentDetail /></span>}
+                    {!showReplies ?
+                    <span onClick={seeReplies}>
+                        <span className='comment-num m-0 p-0 mt-1 me-1'>{repliesCount}</span>
+                        <span ><BiSolidCommentDetail /></span>
+                    </span>
+                     : <span onClick={hideReplies}>
+                            <span className='comment-num m-0 p-0 mt-1 text-secondary me-1'>{repliesCount}</span>
+                            <span className='text-secondary' ><BiSolidCommentDetail /></span>
+                        </span> }
                 </span>
 
                 <span className=' reply-btn ms-2'><FaReply/></span>
@@ -110,7 +131,6 @@ function Comment() {
                 <CommentReply />
                 <CommentReply />
                 <CommentReply />
-
             </div>}
           
 
