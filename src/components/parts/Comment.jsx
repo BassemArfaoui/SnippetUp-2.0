@@ -21,7 +21,7 @@ function Comment(props) {
             setCommentReact('like');
         }
 
-        if (props.isDisliked) {
+        else if (props.isDisliked) {
             setCommentReact('dislike');
         }
     }, [props.isLiked, props.isDisliked]);
@@ -80,6 +80,8 @@ function Comment(props) {
         setShowReplies(false);
     };
 
+
+    
     return (
         <div id="comment" className="comment rounded-4 pb-3 pt-3 px-3 fs-5 position-relative" style={{ whiteSpace: 'pre-wrap' }}>
             <div className="d-flex align-items-center mb-2">
