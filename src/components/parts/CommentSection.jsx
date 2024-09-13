@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, IconButton, CircularProgress } from '@mui/material';
+import { Box, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // Material-UI Icon
 import axios from 'axios';
 import Comment from './Comment';
 import './styles/Comment.css';
+import { notify } from '../tools/CustomToaster';
 
 function CommentSection(props) {
   const [comments, setComments] = useState([]);
@@ -12,9 +13,8 @@ function CommentSection(props) {
   const [initialLoading, setInitialLoading] = useState(true); // For the first loading state
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const limit = 20;
+  const limit = 30;
 
-  // Fetch comments
   const fetchComments = useCallback(async () => {
     if (loading) return;
 
@@ -35,6 +35,7 @@ function CommentSection(props) {
       setPage(prevPage => prevPage + 1);
     } catch (error) {
       console.error('Error fetching comments:', error);
+      notify("Failed to Load Comments");
     } finally {
       setLoading(false);
       setInitialLoading(false); // Disable the initial loading state after first load
@@ -51,28 +52,25 @@ function CommentSection(props) {
     }
   };
 
-    // Function to calculate the time since the notification
-    const timeSince = (time) => {
-      const now = new Date();
-      const timeDiff = now - new Date(time);
-  
-      const seconds = Math.floor(timeDiff / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-      if (days > 0) {
-        return `${days} day${days > 1 ? 's' : ''} ago`;
-      } else if (hours > 0) {
-        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-      } else if (minutes > 0) {
-        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-      } else {
-        return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
-      }
-    };
+  const timeSince = (time) => {
+    const now = new Date();
+    const timeDiff = now - new Date(time);
 
+    const seconds = Math.floor(timeDiff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    if (days > 0) {
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (minutes > 0) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else {
+      return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+    }
+  };
 
-    
   return (
     <div>
       <Box
@@ -85,7 +83,7 @@ function CommentSection(props) {
           boxShadow: 24,
           p: 4,
           borderRadius: "16px",
-          minHeight: "50vh",
+          minHeight: "95vh",
           maxHeight: "95vh",
           overflowY: "auto",
           width: "80%",
@@ -112,19 +110,36 @@ function CommentSection(props) {
         <h2 className='text-center p-0 text-warning fw-bold mt-4'>{props.postTitle}<span className='text-light'> Comments</span></h2>
         <div className='space' style={{ marginTop: '35px' }}></div>
         <div className='d-flex flex-column gap-4'>
-          {comments.map((comment,index) => (
-            <Comment
-              key={comment.id - index*comment.id}
-              id={comment.id}
-              content={comment.content}
-              likeCount={comment.like_count}
-              dislikeCount={comment.dislike_count}
-              firstname={comment.firstname}
-              lastname={comment.lastname}
-              profilePic={comment.profile_pic}
-              time={timeSince(comment.commented_at)}
-            />
-          ))}
+          {initialLoading ? (
+            // Render skeletons while initial data is loading
+            Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="comment-skeleton">
+                <Skeleton variant="circular" width={40} height={40} sx={{ bgcolor: 'grey.800' }} />
+                <Skeleton variant="text" width="80%" height={40} sx={{ bgcolor: 'grey.700' }} /> {/* Increased height */}
+                <Skeleton variant="rectangular" width="100%" height={80} sx={{ bgcolor: 'grey.700' }} /> {/* Increased height */}
+              </div>
+            ))
+          ) : (
+            // Render actual comments once data is loaded
+            comments.length ===0 ? (
+              <div className="d-flex justify-content-center align-items-center my-3 fw-bold" style={{minHeight:'60vh'}}>
+                <p>No comments yet</p>
+              </div>
+            ) :
+            comments.map((comment, index) => (
+              <Comment
+                key={comment.id - index * comment.id}
+                id={comment.id}
+                content={comment.content}
+                likeCount={comment.like_count}
+                dislikeCount={comment.dislike_count}
+                firstname={comment.firstname}
+                lastname={comment.lastname}
+                profilePic={comment.profile_pic}
+                time={timeSince(comment.commented_at)}
+              />
+            ))
+          )}
 
           {loading && !initialLoading && (
             <div className="d-flex justify-content-center my-3">
@@ -132,9 +147,9 @@ function CommentSection(props) {
             </div>
           )}
 
-          {!hasMore && !loading && (
-            <div className="d-flex justify-content-center my-3">
-              <p>No comments to load</p>
+          {comments.length>0 && !hasMore && !loading &&  (
+            <div className="d-flex justify-content-center my-3 fw-bold">
+              <p>No more comments to load</p>
             </div>
           )}
         </div>
