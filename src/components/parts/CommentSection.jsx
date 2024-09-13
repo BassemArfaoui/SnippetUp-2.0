@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // Material-UI Icon
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
 import axios from 'axios';
 import Comment from './Comment';
 import './styles/Comment.css';
@@ -11,7 +11,7 @@ function CommentSection(props) {
   const userId=1;
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true); // For the first loading state
+  const [initialLoading, setInitialLoading] = useState(true); 
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const limit = 30;
@@ -28,6 +28,7 @@ function CommentSection(props) {
         }
       });
 
+
       if (response.data.length < limit) {
         setHasMore(false);
       }
@@ -39,12 +40,15 @@ function CommentSection(props) {
       notify("Failed to Load Comments");
     } finally {
       setLoading(false);
-      setInitialLoading(false); // Disable the initial loading state after first load
+      setInitialLoading(false); 
     }
   }, [loading, page, props.postId]);
 
   useEffect(() => {
-    fetchComments();
+    //todo : remove when have so much data
+    setTimeout(() => {
+      fetchComments();
+    },250)
   }, []);
 
   const handleLoadMore = () => {
@@ -114,10 +118,10 @@ function CommentSection(props) {
           {initialLoading ? (
             // Render skeletons while initial data is loading
             Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className="comment-skeleton">
-                <Skeleton variant="circular" width={40} height={40} sx={{ bgcolor: 'grey.800' }} />
-                <Skeleton variant="text" width="80%" height={40} sx={{ bgcolor: 'grey.700' }} /> {/* Increased height */}
-                <Skeleton variant="rectangular" width="100%" height={80} sx={{ bgcolor: 'grey.700' }} /> {/* Increased height */}
+              <div key={index} className="comment-skeleton mb-4">
+                <Skeleton variant="circular" width={40} height={40} sx={{ bgcolor: ' rgba(182, 207, 226, 0.903)' }} />
+                <Skeleton variant="text" width="80%" height={40} sx={{ bgcolor: 'rgba(182, 207, 226, 0.903)' }} /> 
+                <Skeleton variant="rectangular" width="100%" height={110} sx={{ bgcolor: 'rgba(182, 207, 226, 0.903)' }} />
               </div>
             ))
           ) : (
