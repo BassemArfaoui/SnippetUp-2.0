@@ -13,17 +13,24 @@ function Comment(props) {
     const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
     const [showReplies, setShowReplies] = useState(false);
     const [replies, setReplies] = useState([]);
-    const repliesCount = replies.length || 45;
-    const userId=1;
+    const repliesCount = replies.length
+    const userId = 1;
 
     useEffect(() => {
         if (props.isLiked) {
             setCommentReact('like');
-        }
-
-        else if (props.isDisliked) {
+        } else if (props.isDisliked) {
             setCommentReact('dislike');
         }
+        const loadReplies = async () => {
+            try {
+                const response = await axios.get(`http://localhost:4000/comments/${props.id}/replies`);
+                setReplies(response.data);
+            } catch (err) {
+                console.error("Couldn't fetch replies", err);
+            }
+        }
+        loadReplies();
     }, [props.isLiked, props.isDisliked]);
 
     const likeComment = async () => {
@@ -72,16 +79,14 @@ function Comment(props) {
         }
     };
 
-    const seeReplies = () => {
-        setShowReplies(true);
+    const seeReplies = async () => {
+       if(replies.length > 0 ) {setShowReplies(true);}
     };
 
     const hideReplies = () => {
         setShowReplies(false);
     };
 
-
-    
     return (
         <div id="comment" className="comment rounded-4 pb-3 pt-3 px-3 fs-5 position-relative" style={{ whiteSpace: 'pre-wrap' }}>
             <div className="d-flex align-items-center mb-2">
@@ -155,9 +160,19 @@ function Comment(props) {
             </span>
 
             {showReplies && <div className='replies d-flex flex-column gap-2 ms-5 mt-3'>
-                <CommentReply />
-                <CommentReply />
-                <CommentReply />
+                {replies.map(reply => (
+                    <CommentReply
+                        key={reply.id}
+                        id={reply.id}
+                        fullname={reply.firstname + ' ' + reply.lastname}
+                        content={reply.content}
+                        time={reply.commented_at}
+                        likeCount={reply.like_count}
+                        dislikeCount={reply.dislike_count}
+                        isLiked={reply.liked}
+                        isDisliked={reply.disliked}
+                    />
+                ))}
             </div>}
         </div>
     );

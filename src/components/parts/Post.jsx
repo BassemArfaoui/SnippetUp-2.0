@@ -450,11 +450,10 @@ export default function Post(props) {
         aria-describedby="description-modal-content"
       >
               <div>
-                (
-                          <CommentSection closeComments={closeComments} postId={props.id} postTitle={snippetTitle}/>
+                <CommentSection closeComments={closeComments} postId={props.id} postTitle={snippetTitle}/>
               </div>
       </Modal>
-    </Suspense>)
+    </Suspense>
 
 
     </div>
