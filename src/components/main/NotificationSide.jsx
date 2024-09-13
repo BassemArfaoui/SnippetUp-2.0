@@ -92,6 +92,7 @@ export default function NotificationSide() {
               type={notification.type}
               title={notification.post_title || 'No title'}
               time={timeSince(notification.time)} 
+              fromFullname={notification.from_firstname + ' ' + notification.from_lastname}
             />
           ))}
 

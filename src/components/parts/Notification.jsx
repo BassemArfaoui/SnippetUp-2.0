@@ -9,8 +9,7 @@ import { Divider } from '@mui/material';
 
 
 function Notification(props) {
-    const [from,setFrom]=useState("Jhon Doe");
-    const [SnippetTitle,setSnippetTitle]=useState(props.title);
+    const SnippetTitle=props.title;
   return (
     <div>
       {props.type === "like" && (
@@ -23,9 +22,9 @@ function Notification(props) {
           </div>      
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{from} </strong>
+              <strong className="text-black">{props.fromFullname} </strong>
               liked your Snippet :
-              <strong className="text-black"> {SnippetTitle}</strong>
+              <strong className="text-black"> {props.title}</strong>
               <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
@@ -42,9 +41,9 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{from} </strong>
+              <strong className="text-black">{props.fromFullname} </strong>
               disliked yourSnippet :
-              <strong className="text-black"> {SnippetTitle}</strong>
+              <strong className="text-black"> {props.title}</strong>
               <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
@@ -65,9 +64,9 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{from}</strong> Commented on
+              <strong className="text-black">{props.fromFullname}</strong> Commented on
               your Snippet :
-              <strong className="text-black"> {SnippetTitle}</strong>
+              <strong className="text-black"> {props.title}</strong>
               <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>
@@ -88,7 +87,7 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{from} </strong>
+              <strong className="text-black">{props.fromFullname} </strong>
                is now interested in your Snippets
                <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
@@ -110,9 +109,9 @@ function Notification(props) {
           </div>
           <div className="w-100">
             <p className="text-muted mb-0 fw-bold">
-              <strong className="text-black">{from} </strong>
+              <strong className="text-black">{props.fromFullname} </strong>
                shared your Snippet : 
-               <strong className="text-black"> {SnippetTitle}</strong>
+               <strong className="text-black"> {props.title}</strong>
                <span className="ms-2" style={{fontSize:'16px'}}> ({props.time})</span>
             </p>
           </div>

@@ -119,9 +119,11 @@ function CommentSection(props) {
             // Render skeletons while initial data is loading
             Array.from({ length: 5 }).map((_, index) => (
               <div key={index} className="comment-skeleton mb-4">
-                <Skeleton variant="circular" width={40} height={40} sx={{ bgcolor: ' rgba(182, 207, 226, 0.903)' }} />
-                <Skeleton variant="text" width="80%" height={40} sx={{ bgcolor: 'rgba(182, 207, 226, 0.903)' }} /> 
-                <Skeleton variant="rectangular" width="100%" height={110} sx={{ bgcolor: 'rgba(182, 207, 226, 0.903)' }} />
+                <div className='d-flex gap-3 mb-2 align-items-center'>
+                  <Skeleton variant="circular" width={50} height={50} sx={{ bgcolor: ' rgba(182, 207, 226, 0.800)' }} />
+                  <Skeleton variant="text"  height={40} sx={{ bgcolor: 'rgba(182, 207, 226, 0.800)' ,flexGrow: '1', marginRight:'6px' }} />
+                </div>
+                <Skeleton variant="rectangular" width="100%" height={170} sx={{ bgcolor: 'rgba(182, 207, 226, 0.800)', borderRadius :'15px' }} />
               </div>
             ))
           ) : (
