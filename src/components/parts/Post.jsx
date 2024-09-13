@@ -177,8 +177,7 @@ export default function Post(props) {
   const undislikeSnippet = async () => {
     try {
     
-      // Call the undislike route
-      const result = await axios.get(`http://localhost:4000/undislike/${userId}/${props.id}`);
+      await axios.get(`http://localhost:4000/undislike/${userId}/${props.id}`);
       
       setReact('none'); 
       setDislikeCount((prev) => parseInt(prev) - 1);
