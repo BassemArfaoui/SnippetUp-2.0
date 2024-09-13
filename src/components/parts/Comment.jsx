@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState , useEffect } from 'react'
 import profile_pic from '../../imgs/profile_pic.jpg'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -16,6 +16,20 @@ function Comment(props) {
     const [replies, setReplies] = useState([]);
     const repliesCount = replies.length || 45;
 
+
+    useEffect(()=>{
+        if(props.isLiked)
+        {
+          setCommentReact('like');
+        }
+
+        if(props.isDisliked)
+        {
+          setCommentReact('dislike');
+        }
+        },[props.isLiked,props.isDisliked])
+    
+    
 
 
     const likeComment = () => {

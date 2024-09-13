@@ -8,6 +8,7 @@ import './styles/Comment.css';
 import { notify } from '../tools/CustomToaster';
 
 function CommentSection(props) {
+  const userId=1;
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); // For the first loading state
@@ -20,7 +21,7 @@ function CommentSection(props) {
 
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:4000/${props.postId}/comments`, {
+      const response = await axios.get(`http://localhost:4000/${props.postId}/${userId}/comments`, {
         params: {
           page: page,
           limit: limit
@@ -137,6 +138,8 @@ function CommentSection(props) {
                 lastname={comment.lastname}
                 profilePic={comment.profile_pic}
                 time={timeSince(comment.commented_at)}
+                isLiked={comment.liked}
+                isDisliked={comment.disliked}
               />
             ))
           )}
