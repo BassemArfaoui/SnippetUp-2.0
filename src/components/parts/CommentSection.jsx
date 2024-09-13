@@ -135,7 +135,7 @@ function CommentSection(props) {
             ) :
             comments.map((comment, index) => (
               <Comment
-                key={comment.id - index * comment.id}
+                key={comment.id}
                 id={comment.id}
                 content={comment.content}
                 likeCount={comment.like_count}
@@ -158,7 +158,7 @@ function CommentSection(props) {
 
           {comments.length>0 && !hasMore && !loading &&  (
             <div className="d-flex justify-content-center my-3 fw-bold">
-              <p>No more comments to load</p>
+              <p className='text-secondary'>No more comments to load</p>
             </div>
           )}
         </div>

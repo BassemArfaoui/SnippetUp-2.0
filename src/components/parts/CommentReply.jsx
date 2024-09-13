@@ -89,7 +89,7 @@ function CommentReply(props) {
 
               <div>
                 <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
-                  <span className="commentor_name p-0 m-0 text-dark">{props.fullname}</span>
+                  <span className="commentor_name p-0 m-0 text-dark">{props.fullname}<span className='text-secondary small'> ({props.timeSince})</span> </span>
                 </div>
               </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import profile_pic from '../../imgs/profile_pic.jpg';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -6,6 +6,9 @@ import { BiSolidCommentDetail } from 'react-icons/bi';
 import { FaReply } from 'react-icons/fa';
 import CommentReply from './CommentReply';
 import axios from 'axios';
+import { CircularProgress, IconButton } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { notify } from '../tools/CustomToaster';
 
 function Comment(props) {
     const [commentReact, setCommentReact] = useState('none');
@@ -13,7 +16,11 @@ function Comment(props) {
     const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
     const [showReplies, setShowReplies] = useState(false);
     const [replies, setReplies] = useState([]);
-    const repliesCount = replies.length
+    const [repliesCount, setRepliesCount] = useState(0);
+    const [loadingReplies, setLoadingReplies] = useState(false);
+    const [hasMoreReplies, setHasMoreReplies] = useState(true);
+    const [repliesPage, setRepliesPage] = useState(1);
+    const limit = 3; 
     const userId = 1;
 
     useEffect(() => {
@@ -22,16 +29,64 @@ function Comment(props) {
         } else if (props.isDisliked) {
             setCommentReact('dislike');
         }
-        const loadReplies = async () => {
-            try {
-                const response = await axios.get(`http://localhost:4000/comments/${props.id}/replies`);
-                setReplies(response.data);
-            } catch (err) {
-                console.error("Couldn't fetch replies", err);
+    }, [props.isLiked, props.isDisliked]);
+
+    useEffect(() => {
+        const updateRepliesTotal = async () => 
+        {
+            try 
+            {
+                const response = await axios.get(`http://localhost:4000/comments/${props.id}/repliesCount`);
+                setRepliesCount(response.data.totalReplies);
+            }
+            catch(err)
+            {
+                notify('Error updating replies total')
             }
         }
-        loadReplies();
-    }, [props.isLiked, props.isDisliked]);
+
+        updateRepliesTotal();
+        fetchReplies();
+    }, []);
+
+    const fetchReplies = useCallback(async () => {
+        if (loadingReplies) return;
+
+        setLoadingReplies(true);
+        try {
+            const response = await axios.get(`http://localhost:4000/comments/${props.id}/replies`, {
+                params: {
+                    limit: limit,
+                    offset: (repliesPage - 1) * limit
+                }
+            });
+
+            if (response.data.replies.length < limit) {
+                setHasMoreReplies(false);
+            }
+
+            setReplies(prevReplies => [...prevReplies, ...response.data.replies]);
+            setRepliesPage(prevPage => prevPage + 1);
+        } catch (error) {
+            console.error('Error fetching replies:', error);
+        } finally {
+            setLoadingReplies(false);
+        }
+    }, [loadingReplies, repliesPage, props.id]);
+
+
+    
+    const seeReplies = () => {
+        
+        if (repliesCount > 0 ) {
+            setShowReplies(true);
+        }
+      
+    };
+
+    const hideReplies = () => {
+        setShowReplies(false);
+    };
 
     const likeComment = async () => {
         try {
@@ -40,7 +95,7 @@ function Comment(props) {
             }
             await axios.get(`http://localhost:4000/likeComment/${userId}/${props.id}`);
             setCommentReact('like');
-            setLikeCount((prev) => prev + 1);
+            setLikeCount(prev => prev + 1);
         } catch (err) {
             console.error("Couldn't like the comment", err);
         }
@@ -50,7 +105,7 @@ function Comment(props) {
         try {
             await axios.get(`http://localhost:4000/unlikeComment/${userId}/${props.id}`);
             setCommentReact('none');
-            setLikeCount((prev) => prev - 1);
+            setLikeCount(prev => prev - 1);
         } catch (err) {
             console.error("Couldn't unlike the comment", err);
         }
@@ -63,7 +118,7 @@ function Comment(props) {
             }
             await axios.get(`http://localhost:4000/dislikeComment/${userId}/${props.id}`);
             setCommentReact('dislike');
-            setDislikeCount((prev) => prev + 1);
+            setDislikeCount(prev => prev + 1);
         } catch (err) {
             console.error("Couldn't dislike the comment", err);
         }
@@ -73,18 +128,29 @@ function Comment(props) {
         try {
             await axios.get(`http://localhost:4000/undislikeComment/${userId}/${props.id}`);
             setCommentReact('none');
-            setDislikeCount((prev) => prev - 1);
+            setDislikeCount(prev => prev - 1);
         } catch (err) {
             console.error("Couldn't undislike the comment", err);
         }
     };
 
-    const seeReplies = async () => {
-       if(replies.length > 0 ) {setShowReplies(true);}
-    };
+    const timeSince = (time) => {
+        const now = new Date();
+        const timeDiff = now - new Date(time);
 
-    const hideReplies = () => {
-        setShowReplies(false);
+        const seconds = Math.floor(timeDiff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        if (days > 0) {
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        } else if (hours > 0) {
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        } else if (minutes > 0) {
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        } else {
+            return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+        }
     };
 
     return (
@@ -101,7 +167,7 @@ function Comment(props) {
                     </div>
                     <div>
                         <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
-                            <span className="commentor_name p-0 m-0 text-dark">{props.firstname + ' ' + props.lastname}<span> ({props.time})</span></span>
+                            <span className="commentor_name p-0 m-0 text-dark">{props.firstname + ' ' + props.lastname}<span className='text-secondary small'> ({props.time})</span></span>
                         </div>
                     </div>
                 </div>
@@ -159,21 +225,44 @@ function Comment(props) {
                 <span className='reply-btn ms-2'><FaReply /></span>
             </span>
 
-            {showReplies && <div className='replies d-flex flex-column gap-2 ms-5 mt-3'>
-                {replies.map(reply => (
-                    <CommentReply
-                        key={reply.id}
-                        id={reply.id}
-                        fullname={reply.firstname + ' ' + reply.lastname}
-                        content={reply.content}
-                        time={reply.commented_at}
-                        likeCount={reply.like_count}
-                        dislikeCount={reply.dislike_count}
-                        isLiked={reply.liked}
-                        isDisliked={reply.disliked}
-                    />
-                ))}
-            </div>}
+            {showReplies && (
+                <div className='replies d-flex flex-column gap-2 ms-5 mt-3'>
+                    {replies.map((reply,index) => (
+                        <CommentReply
+                            key={reply.id}
+                            id={reply.id}
+                            fullname={reply.firstname + ' ' + reply.lastname}
+                            content={reply.content}
+                            time={reply.commented_at}
+                            likeCount={reply.like_count}
+                            dislikeCount={reply.dislike_count}
+                            isLiked={reply.liked}
+                            isDisliked={reply.disliked}
+                            timeSince={timeSince(reply.commented_at)}
+                        />
+                    ))}
+
+                    {loadingReplies && (
+                        <div className="d-flex justify-content-center my-3">
+                            <CircularProgress color="primary" />
+                        </div>
+                    )}
+
+                    {!hasMoreReplies && !loadingReplies && (
+                        <div className="d-flex justify-content-center my-3 fw-bold small">
+                            <p className='small text-secondary '>No more replies to load</p>
+                        </div>
+                    )}
+
+                    {hasMoreReplies && !loadingReplies && (
+                        <div className="d-flex justify-content-center my-3">
+                            <IconButton onClick={fetchReplies} aria-label="Load More">
+                                <ExpandMoreIcon className='text-primary' style={{ fontSize: '62px' }} />
+                            </IconButton>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
