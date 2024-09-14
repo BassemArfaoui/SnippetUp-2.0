@@ -158,7 +158,7 @@ function CommentSection(props) {
 
           {comments.length>0 && !hasMore && !loading &&  (
             <div className="d-flex justify-content-center my-3 fw-bold">
-              <p className='text-secondary'>No more comments to load</p>
+              <p className='text-secondary'>No more comments</p>
             </div>
           )}
         </div>

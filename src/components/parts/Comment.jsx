@@ -250,7 +250,7 @@ function Comment(props) {
 
                     {!hasMoreReplies && !loadingReplies && (
                         <div className="d-flex justify-content-center my-3 fw-bold small">
-                            <p className='small text-secondary '>No more replies to load</p>
+                            <p className='small text-secondary '>No more replies</p>
                         </div>
                     )}
 
