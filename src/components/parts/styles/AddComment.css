@@ -15,6 +15,7 @@
 
 .comment-textarea::placeholder {
     font-size: 21px;
+    text-align: center;
     line-height: 30px; 
     position: absolute;
     top: 50%;
@@ -40,3 +41,27 @@
     align-items: center;
     
   }
+
+  .textarea-wrapper {
+    position: relative;
+  }
+  
+  .comment-textarea {
+    padding-right: 2rem; /* Leave space for the X button */
+  }
+  
+  .clear-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  .clear-button:hover {
+    color: #ff5100;
+  }
+  
