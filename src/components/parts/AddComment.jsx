@@ -11,7 +11,7 @@ function AddComment(props) {
   useEffect(()=>{
     if(props.reply)
     {
-      setCommentContent('@' + props.commentToReply.commentorName + ' ')
+      setCommentContent(`[@${props.commentToReply.commentorName}]  `)
       setPlaceholder(`Reply to ${props.commentToReply.commentorName}`)
       textareaRef.current.focus();
 
@@ -36,6 +36,7 @@ function AddComment(props) {
    {if(!props.reply)
     {
       await props.addComment(commentContent,false,null);
+      props.scrollToTop();
     }
     else
     {

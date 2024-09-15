@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback , useRef } from 'react';
 import { Box, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
@@ -19,6 +19,9 @@ function CommentSection(props) {
   const [reset, setReset] = useState(false);
   const [isReply,setIsReply]=useState(false);
   const [commentToReply,setCommentToReply]=useState({});
+
+  //refs
+  const commentsRef = useRef(null);
 
   const limit = 30;
 
@@ -74,8 +77,14 @@ function CommentSection(props) {
   setComments([]);
   setHasMore(true);
   setPage(1);
-  setReset(true);  // This triggers the useEffect to call fetchComments
+  setReset(true);
 };
+
+
+const refreshAndScroll = () => {
+  handleRefresh();
+  scrollToTop();
+}
 
 
   const handleLoadMore = () => {
@@ -115,6 +124,15 @@ function CommentSection(props) {
   }
 
 
+  const scrollToTop = ()=> {
+    if (commentsRef.current) {
+      commentsRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }
+
   return (
     <div>
       <Box
@@ -152,7 +170,7 @@ function CommentSection(props) {
         {/* Refresh button */}
         <IconButton
           aria-label="refresh"
-          onClick={handleRefresh}
+          onClick={refreshAndScroll}
           sx={{
             position: "absolute",
             top: "10px",
@@ -165,6 +183,7 @@ function CommentSection(props) {
 
         <div className="comments-body d-flex flex-column ">
           <div
+          ref={commentsRef}
             className="comments"
             style={{ height: "80vh", overflowY: "auto" }}
           >
@@ -263,6 +282,7 @@ function CommentSection(props) {
               <AddComment
               addComment={props.addComment}
               refreshComments={handleRefresh}
+              scrollToTop={scrollToTop}
               /> :
               <AddComment
               addComment={props.addComment}
