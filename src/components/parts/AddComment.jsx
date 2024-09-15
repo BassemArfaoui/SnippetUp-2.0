@@ -11,7 +11,7 @@ function AddComment(props) {
 
   useEffect(() => {
     if (props.reply) {
-      setCommentContent(`[@${props.commentToReply.commentorName}]  `);
+      setCommentContent(prev =>`[@${props.commentToReply.commentorName}]  `+prev);
       setPlaceholder(`Reply to ${props.commentToReply.commentorName}`);
       textareaRef.current.focus();
     }
@@ -30,7 +30,7 @@ function AddComment(props) {
 
   const submitComment = async (e) => {
     e.preventDefault();
-    if (commentContent) {
+    if (commentContent.trim()) {
       if (!props.reply) {
         await props.addComment(commentContent, false, null);
         props.scrollToTop();
