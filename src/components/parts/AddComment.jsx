@@ -52,8 +52,8 @@ function AddComment(props) {
   };
 
   return (
-    <form method='POST' onSubmit={submitComment} className='add-cmnt-container w-100 d-flex justify-content-center align-items-center gap-3'>
-      <div className="textarea-wrapper position-relative w-100">
+    <form method='POST' onSubmit={submitComment} className='add-cmnt-container w-100 h-100 d-flex justify-content-center align-items-center gap-3'>
+      <div className="textarea-wrapper position-relative w-100 d-flex align-items-center justify-content-center">
         <textarea
           value={commentContent}
           onChange={commentChanged}
