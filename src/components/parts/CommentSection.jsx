@@ -2,22 +2,25 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Box, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
+import RefreshIcon from '@mui/icons-material/Refresh';  // Add the refresh icon
 import axios from 'axios';
 import Comment from './Comment';
 import './styles/Comment.css';
 import { notify } from '../tools/CustomToaster';
 import AddComment from './AddComment';
 
-
 function CommentSection(props) {
-  const userId=1;
+  const userId = 1;
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); 
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [reset, setReset] = useState(false);
+
   const limit = 30;
 
+  // Fetch comments function
   const fetchComments = useCallback(async () => {
     if (loading) return;
 
@@ -30,10 +33,11 @@ function CommentSection(props) {
         }
       });
 
-
       if (response.data.length < limit) {
         setHasMore(false);
       }
+
+      
 
       setComments(prevComments => [...prevComments, ...response.data]);
       setPage(prevPage => prevPage + 1);
@@ -47,11 +51,30 @@ function CommentSection(props) {
   }, [loading, page, props.postId]);
 
   useEffect(() => {
-    //todo : remove when have so much data
     setTimeout(() => {
       fetchComments();
-    },250)
+    }, 250);
   }, []);
+
+
+  useEffect(() => {
+    if (reset) {
+      setTimeout(() => {
+        fetchComments();
+      }, 150);
+      setReset(false);  
+    }
+  }, [reset]);
+
+
+ const handleRefresh = () => {
+  setInitialLoading(true);
+  setComments([]);
+  setHasMore(true);
+  setPage(1);
+  setReset(true);  // This triggers the useEffect to call fetchComments
+};
+
 
   const handleLoadMore = () => {
     if (!loading && hasMore) {
@@ -73,7 +96,11 @@ function CommentSection(props) {
       return `${hours} hour${hours > 1 ? 's' : ''} ago`;
     } else if (minutes > 0) {
       return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    } else {
+    } else if (seconds<0 )
+    {
+      return 'now';
+    }
+    else {
       return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
     }
   };
@@ -96,6 +123,7 @@ function CommentSection(props) {
           color: "white"
         }}
       >
+        {/* Close button */}
         <IconButton
           aria-label="close"
           onClick={() => {
@@ -104,28 +132,35 @@ function CommentSection(props) {
           sx={{
             position: "absolute",
             top: "10px",
-            right: "10px",
+            right: "8px",
             color: "white",
           }}
         >
           <CloseIcon className="fs-2" />
         </IconButton>
 
-
-
-      
+        {/* Refresh button */}
+        <IconButton
+          aria-label="refresh"
+          onClick={handleRefresh}
+          sx={{
+            position: "absolute",
+            top: "10px",
+            left: "3px", 
+            color: "white",
+          }}
+        >
+          <RefreshIcon className="fs-2" />
+        </IconButton>
 
         <div className="comments-body d-flex flex-column ">
-        
           <div className="comments" style={{height:'80vh' , overflowY:'auto'}}>
-
             <h2 className='text-center p-0 text-warning fw-bold mt-4 mx-3 lh-base'>{props.postTitle}<span className='text-light'> Comments</span></h2>
 
             <div className='space' style={{ marginTop: '50px' }}></div>
 
             <div className='d-flex flex-column gap-4 px-5'>
               {initialLoading ? (
-                // Render skeletons while initial data is loading
                 Array.from({ length: 5 }).map((_, index) => (
                   <div key={index} className="comment-skeleton mb-4">
                     <div className='d-flex gap-3 mb-2 align-items-center'>
@@ -136,34 +171,34 @@ function CommentSection(props) {
                   </div>
                 ))
               ) : (
-                // Render actual comments once data is loaded
-                comments.length ===0 ? (
+                comments.length === 0 ? (
                   <div className="d-flex justify-content-center align-items-center my-3 fw-bold" style={{minHeight:'60vh'}}>
                     <p>No comments yet</p>
                   </div>
-                ) :
-                comments.map((comment, index) => (
-                  <Comment
-                    key={comment.id}
-                    id={comment.id}
-                    content={comment.content}
-                    likeCount={comment.like_count}
-                    dislikeCount={comment.dislike_count}
-                    firstname={comment.firstname}
-                    lastname={comment.lastname}
-                    profilePic={comment.profile_pic}
-                    time={timeSince(comment.commented_at)}
-                    isLiked={comment.liked}
-                    isDisliked={comment.disliked}
-                  />
-                ))
+                ) : (
+                  comments.map((comment, index) => (
+                    <Comment
+                      key={comment.id}
+                      id={comment.id}
+                      content={comment.content}
+                      likeCount={comment.like_count}
+                      dislikeCount={comment.dislike_count}
+                      firstname={comment.firstname}
+                      lastname={comment.lastname}
+                      profilePic={comment.profile_pic}
+                      time={timeSince(comment.commented_at)}
+                      isLiked={comment.liked}
+                      isDisliked={comment.disliked}
+                    />
+                  ))
+                )
               )}
               {loading && !initialLoading && (
                 <div className="d-flex justify-content-center my-3">
                   <CircularProgress color="primary" />
                 </div>
               )}
-              {comments.length>0 && !hasMore && !loading &&  (
+              {comments.length > 0 && !hasMore && !loading && (
                 <div className="d-flex justify-content-center my-3 fw-bold">
                   <p className='text-secondary'>No more comments</p>
                 </div>
@@ -175,12 +210,11 @@ function CommentSection(props) {
                   <ExpandMoreIcon className='text-primary' style={{ fontSize: '62px' }} />
                 </IconButton>
               </div>
-                    )}
-
+            )}
           </div>
 
           <div style={{height:'15vh'}} className='d-flex justify-content-center align-items-center px-5'>
-            <AddComment/>
+            <AddComment addComment={props.addComment} refreshComments={handleRefresh} />
           </div>
         </div>
       </Box>

@@ -71,6 +71,27 @@ export default function Post(props) {
     },[props.isLiked,props.isDisliked,props.isSaved,props.isInterested])
 
 
+
+  const addComment = async(content,is_reply,reply_to_id) =>
+  {
+    try
+    {
+      const data = {
+                    userId:userId ,
+                    postId:props.id ,
+                    content:content ,
+                    is_reply:is_reply ,
+                    reply_to_id:reply_to_id
+                  }
+      await axios.post(`http://localhost:4000/add/comment`,data)
+    }
+    catch(err)
+    {
+      console.log(err);
+      notify("Couldn't Add the Comment")
+    }
+  }
+
   const saveSnippet = async () => {
     try {
       await axios.get(`http://localhost:4000/save/${userId}/${props.id}`);
@@ -294,6 +315,7 @@ export default function Post(props) {
             </CustomTooltip>
           )}
 
+
           <CustomTooltip title='Full Screen' placement='top'>
             <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
               <FullscreenIcon style={{ fontSize: '34px' }} />
@@ -442,7 +464,7 @@ export default function Post(props) {
       </div>
       
       {/* Comments Section */}
-    <Suspense fallback={<div>Loading comments...</div>}>
+    <Suspense>
       <Modal
         open={isCommentsOpen}
         onClose={closeComments}
@@ -450,7 +472,7 @@ export default function Post(props) {
         aria-describedby="description-modal-content"
       >
               <div>
-                <CommentSection closeComments={closeComments} postId={props.id} postTitle={snippetTitle}/>
+                <CommentSection closeComments={closeComments} postId={props.id} postTitle={snippetTitle} addComment={addComment}/>
               </div>
       </Modal>
     </Suspense>
