@@ -80,8 +80,8 @@ export default function Post(props) {
                     userId:userId ,
                     postId:props.id ,
                     content:content ,
-                    is_reply:is_reply ,
-                    reply_to_id:reply_to_id
+                    isReply:is_reply ,
+                    replyToId:reply_to_id
                   }
       await axios.post(`http://localhost:4000/add/comment`,data)
     }

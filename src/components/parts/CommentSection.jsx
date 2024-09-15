@@ -17,6 +17,8 @@ function CommentSection(props) {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [reset, setReset] = useState(false);
+  const [isReply,setIsReply]=useState(false);
+  const [commentToReply,setCommentToReply]=useState({});
 
   const limit = 30;
 
@@ -96,7 +98,7 @@ function CommentSection(props) {
       return `${hours} hour${hours > 1 ? 's' : ''} ago`;
     } else if (minutes > 0) {
       return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    } else if (seconds<0 )
+    } else if (seconds<=0 )
     {
       return 'now';
     }
@@ -104,6 +106,14 @@ function CommentSection(props) {
       return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
     }
   };
+
+
+  const updateCommentToReply = (comment) =>
+  {
+    setIsReply(true);
+    setCommentToReply(comment);
+  }
+
 
   return (
     <div>
@@ -120,7 +130,7 @@ function CommentSection(props) {
           maxHeight: "95vh",
           width: "80%",
           backgroundColor: "#1E1E1E",
-          color: "white"
+          color: "white",
         }}
       >
         {/* Close button */}
@@ -146,7 +156,7 @@ function CommentSection(props) {
           sx={{
             position: "absolute",
             top: "10px",
-            left: "3px", 
+            left: "3px",
             color: "white",
           }}
         >
@@ -154,44 +164,73 @@ function CommentSection(props) {
         </IconButton>
 
         <div className="comments-body d-flex flex-column ">
-          <div className="comments" style={{height:'80vh' , overflowY:'auto'}}>
-            <h2 className='text-center p-0 text-warning fw-bold mt-4 mx-3 lh-base'>{props.postTitle}<span className='text-light'> Comments</span></h2>
+          <div
+            className="comments"
+            style={{ height: "80vh", overflowY: "auto" }}
+          >
+            <h2 className="text-center p-0 text-warning fw-bold mt-4 mx-3 lh-base">
+              {props.postTitle}
+              <span className="text-light"> Comments</span>
+            </h2>
 
-            <div className='space' style={{ marginTop: '50px' }}></div>
+            <div className="space" style={{ marginTop: "50px" }}></div>
 
-            <div className='d-flex flex-column gap-4 px-5'>
+            <div className="d-flex flex-column gap-4 px-5">
               {initialLoading ? (
                 Array.from({ length: 5 }).map((_, index) => (
                   <div key={index} className="comment-skeleton mb-4">
-                    <div className='d-flex gap-3 mb-2 align-items-center'>
-                      <Skeleton variant="circular" width={50} height={50} sx={{ bgcolor: ' rgba(182, 207, 226, 0.800)' }} />
-                      <Skeleton variant="text"  height={40} sx={{ bgcolor: 'rgba(182, 207, 226, 0.800)' ,flexGrow: '1', marginRight:'6px' }} />
+                    <div className="d-flex gap-3 mb-2 align-items-center">
+                      <Skeleton
+                        variant="circular"
+                        width={50}
+                        height={50}
+                        sx={{ bgcolor: " rgba(182, 207, 226, 0.800)" }}
+                      />
+                      <Skeleton
+                        variant="text"
+                        height={40}
+                        sx={{
+                          bgcolor: "rgba(182, 207, 226, 0.800)",
+                          flexGrow: "1",
+                          marginRight: "6px",
+                        }}
+                      />
                     </div>
-                    <Skeleton variant="rectangular" width="100%" height={170} sx={{ bgcolor: 'rgba(182, 207, 226, 0.800)', borderRadius :'15px' }} />
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height={170}
+                      sx={{
+                        bgcolor: "rgba(182, 207, 226, 0.800)",
+                        borderRadius: "15px",
+                      }}
+                    />
                   </div>
                 ))
+              ) : comments.length === 0 ? (
+                <div
+                  className="d-flex justify-content-center align-items-center my-3 fw-bold"
+                  style={{ minHeight: "60vh" }}
+                >
+                  <p>No comments yet</p>
+                </div>
               ) : (
-                comments.length === 0 ? (
-                  <div className="d-flex justify-content-center align-items-center my-3 fw-bold" style={{minHeight:'60vh'}}>
-                    <p>No comments yet</p>
-                  </div>
-                ) : (
-                  comments.map((comment, index) => (
-                    <Comment
-                      key={comment.id}
-                      id={comment.id}
-                      content={comment.content}
-                      likeCount={comment.like_count}
-                      dislikeCount={comment.dislike_count}
-                      firstname={comment.firstname}
-                      lastname={comment.lastname}
-                      profilePic={comment.profile_pic}
-                      time={timeSince(comment.commented_at)}
-                      isLiked={comment.liked}
-                      isDisliked={comment.disliked}
-                    />
-                  ))
-                )
+                comments.map((comment, index) => (
+                  <Comment
+                    key={comment.id}
+                    id={comment.id}
+                    content={comment.content}
+                    likeCount={comment.like_count}
+                    dislikeCount={comment.dislike_count}
+                    firstname={comment.firstname}
+                    lastname={comment.lastname}
+                    profilePic={comment.profile_pic}
+                    time={timeSince(comment.commented_at)}
+                    isLiked={comment.liked}
+                    isDisliked={comment.disliked}
+                    updateCommentToReply={updateCommentToReply}
+                  />
+                ))
               )}
               {loading && !initialLoading && (
                 <div className="d-flex justify-content-center my-3">
@@ -200,21 +239,39 @@ function CommentSection(props) {
               )}
               {comments.length > 0 && !hasMore && !loading && (
                 <div className="d-flex justify-content-center my-3 fw-bold">
-                  <p className='text-secondary'>No more comments</p>
+                  <p className="text-secondary">No more comments</p>
                 </div>
               )}
             </div>
             {hasMore && !loading && (
               <div className="d-flex justify-content-center my-3">
                 <IconButton onClick={handleLoadMore} aria-label="Load More">
-                  <ExpandMoreIcon className='text-primary' style={{ fontSize: '62px' }} />
+                  <ExpandMoreIcon
+                    className="text-primary"
+                    style={{ fontSize: "62px" }}
+                  />
                 </IconButton>
               </div>
             )}
           </div>
 
-          <div style={{height:'15vh'}} className='d-flex justify-content-center align-items-center px-5'>
-            <AddComment addComment={props.addComment} refreshComments={handleRefresh} />
+          <div
+            style={{ height: "15vh" }}
+            className="d-flex justify-content-center align-items-center px-5"
+          >
+           {  !isReply ?
+              <AddComment
+              addComment={props.addComment}
+              refreshComments={handleRefresh}
+              /> :
+              <AddComment
+              addComment={props.addComment}
+              refreshComments={handleRefresh}
+              reply 
+              commentToReply={commentToReply}
+              setIsReply={setIsReply}
+              />
+            }
           </div>
         </div>
       </Box>

@@ -153,6 +153,15 @@ function Comment(props) {
         }
     };
 
+    const handleReplyClick =() =>
+    {
+        props.updateCommentToReply
+        ({
+            commentId: props.id,
+            commentorName : props.firstname + ' ' + props.lastname
+        })
+    }
+
     return (
         <div id="comment" className="comment rounded-4 pb-3 pt-3 px-3 fs-5 position-relative" style={{ whiteSpace: 'pre-wrap' }}>
             <div className="d-flex align-items-center mb-2">
@@ -222,7 +231,7 @@ function Comment(props) {
                     }
                 </span>
 
-                <span className='reply-btn ms-2'><FaReply /></span>
+                <span className='reply-btn ms-2' onClick={handleReplyClick}><FaReply /></span>
             </span>
 
             {showReplies && (

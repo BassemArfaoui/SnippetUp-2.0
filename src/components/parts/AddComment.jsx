@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useRef } from 'react';
 import './styles/AddComment.css';
 import { IoSend } from "react-icons/io5";
 import { successNotify } from '../tools/CustomToaster';
 
 function AddComment(props) {
   const [commentContent, setCommentContent] = useState('');
+  const [placeholder,setPlaceholder]=useState('Add a comment');
+  const textareaRef =useRef(null);
 
   useEffect(()=>{
-    if(props.commentorName)
+    if(props.reply)
     {
-      setCommentContent('@' + props.commentorName + '')
+      setCommentContent('@' + props.commentToReply.commentorName + ' ')
+      setPlaceholder(`Reply to ${props.commentToReply.commentorName}`)
+      textareaRef.current.focus();
+
     }
-  },[props.commentorName])
+  },[props.commentToReply])
 
   const commentChanged = (event) => {
     setCommentContent(event.target.value);
@@ -20,7 +25,7 @@ function AddComment(props) {
   const handleKeyDown = (event) => {
     if (event.shiftKey && event.key === 'Enter') {
       event.preventDefault(); 
-      submitComment(event); 
+      submitComment(event);
 
     }
   }
@@ -28,8 +33,16 @@ function AddComment(props) {
   const submitComment = async (e) => {
     e.preventDefault();
    if(commentContent)
-   {
-    await props.addComment(commentContent,false,null);
+   {if(!props.reply)
+    {
+      await props.addComment(commentContent,false,null);
+    }
+    else
+    {
+      await props.addComment(commentContent, true, props.commentToReply.commentId);
+      setPlaceholder('Add a comment')
+      props.setIsReply(false);
+    }
     setCommentContent('');
     successNotify('Comment Uploaded Successfully')
     props.refreshComments();
@@ -43,10 +56,11 @@ function AddComment(props) {
         onChange={commentChanged}
         onKeyDown={handleKeyDown}
         className='comment-textarea w-100 rounded-3 text-light fw-bold'
-        placeholder='Add a comment'
+        placeholder={placeholder}
         autoFocus
         autoComplete='off'
         autoCorrect='off'
+        ref={textareaRef}
       ></textarea>
       <span>
         <button type='submit' className='submit-cmnt bg-warning rounded-circle border-0 fs-4'>
