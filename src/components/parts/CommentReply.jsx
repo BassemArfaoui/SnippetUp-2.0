@@ -11,6 +11,7 @@ function CommentReply(props) {
     const [commentReact,setCommentReact]=useState('none');
     const [likeCount,setLikeCount]=useState(props.likeCount)
     const [dislikeCount,setDislikeCount]=useState(props.dislikeCount)
+    const [showMore,setShowMore]=useState(false);
     const userId=1;
 
 
@@ -22,6 +23,25 @@ function CommentReply(props) {
       }
 
   }, [props.isLiked, props.isDisliked]);
+
+
+   function truncateComment(str, n) {
+    const lineBreakCount = (str.match(/\n/g) || []).length;
+  
+    if (str.length <= n && lineBreakCount <= 2) {
+      setShowMore(true);
+      return str;
+    } else {
+      const truncatedStr = str.split('\n').slice(0, 2).join('\n') + '\n...';
+      return truncatedStr;
+    }
+    }
+  
+
+    const seeMore = () =>
+    {
+        setShowMore(true);
+    }
 
 
    
@@ -98,7 +118,7 @@ function CommentReply(props) {
 
           <div className='comment-content fs-5 '>
             <div className='comment-content ms-2 mb-2 pe-3 border border-2 border-dark rounded-4 py-2 px-3'>
-              {props.content}
+                <span className='p-0 m-0'> {!showMore ? <span className='m-0 p-0'>{truncateComment(props.content,100)} <span className='text-secondary small fw-bold see-more-btn' onClick={seeMore}>See all</span></span> : props.content}</span> 
             </div>
           </div>
 

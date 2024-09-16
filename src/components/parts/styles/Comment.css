@@ -52,3 +52,9 @@
 {
     color: rgb(255, 98, 0);
 }
+
+
+.see-more-btn
+{
+    cursor: pointer;
+}

@@ -20,6 +20,7 @@ function Comment(props) {
     const [loadingReplies, setLoadingReplies] = useState(false);
     const [hasMoreReplies, setHasMoreReplies] = useState(true);
     const [repliesPage, setRepliesPage] = useState(1);
+    const [showMore,setShowMore]=useState(false);
     const limit = 3; 
     const userId = 1;
 
@@ -162,6 +163,28 @@ function Comment(props) {
         })
     }
 
+    function truncateComment(str, n) {
+        const lineBreakCount = (str.match(/\n/g) || []).length;
+      
+        if (str.length <= n && lineBreakCount <= 2) {
+          setShowMore(true);
+          return str;
+        } else {
+          const truncatedStr = str.split('\n').slice(0, 2).join('\n') + '\n...';
+          return truncatedStr;
+        }
+      }
+      
+      
+    const seeMore = () =>
+    {
+        setShowMore(true);
+    }
+
+
+
+    
+
     return (
         <div id="comment" className="comment rounded-4 pb-3 pt-3 px-3 fs-5 position-relative" style={{ whiteSpace: 'pre-wrap' }}>
             <div className="d-flex align-items-center mb-2">
@@ -184,7 +207,7 @@ function Comment(props) {
 
             <div className='comment-content fs-5'>
                 <div className='comment-content ms-2 mb-2 pe-3 border border-2 border-dark rounded-4 py-2 px-3'>
-                    {props.content}
+                  <span className='p-0 m-0'> {!showMore ? <span className='m-0 p-0'>{truncateComment(props.content,100)} <span className='text-secondary small fw-bold see-more-btn' onClick={seeMore}>See all</span></span> : props.content}</span> 
                 </div>
             </div>
 
