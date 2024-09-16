@@ -1,0 +1,8 @@
+.post-container
+{
+    
+    height: 87vh;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+}
