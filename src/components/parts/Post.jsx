@@ -18,6 +18,11 @@ import CustomTooltip from '../tools/CustomTooltip';
 import { successNotify, notify } from '../tools/CustomToaster';
 import CodeHighlighter from '../saved/CodeHighliter';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { FaFacebook } from "react-icons/fa";
+import { IoLogoWhatsapp } from "react-icons/io";
+import { FaLink } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import axios from 'axios';
 const CommentSection = lazy(() => import('./CommentSection'));
 
@@ -32,6 +37,7 @@ export default function Post(props) {
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false); 
   const [isCommentsOpen, setIsCommentsOpen] = useState(false); 
+  const [isShareModalOpen,setIsShareModalOpen]=useState(false)
 
   // post states
   const [snippetCode, setSnippetCode] = useState(props.snippet);
@@ -49,7 +55,7 @@ export default function Post(props) {
 
 
   
-   useEffect(()=>{
+  useEffect(()=>{
     if(props.isLiked)
     {
       setReact('like');
@@ -230,6 +236,43 @@ export default function Post(props) {
   const closeComments = () => {
     setIsCommentsOpen(false);
   };
+
+
+  const openShareModal = () =>
+  {
+    setIsShareModalOpen(true)
+  }
+
+  const closeShareModal = () =>
+  {
+    setIsShareModalOpen(false)
+  }
+
+  const copyLink = (link) => {
+    if (navigator.clipboard) {
+         try 
+         {
+          navigator.clipboard.writeText(link)
+          successNotify('Link copied to clipboard')
+         }
+        catch(err)
+        {
+          console.error("Couldn't copy the Link");
+          console.log(err);
+        }
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = link;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      successNotify('Link copied to clipboard');
+    }
+  }
+  
+  
+  
   
   return (
     <div className="post rounded-4 p-4">
@@ -423,6 +466,58 @@ export default function Post(props) {
         </Box>
       </Modal>
 
+
+       {/* Share Modal */}
+       <Modal
+        open={isShareModalOpen}
+        onClose={closeShareModal}
+        aria-labelledby="description-modal-title"
+        aria-describedby="description-modal-content"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            width: '50%',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+            border:'2px solid darkgray'
+
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeShareModal}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h3 id="share-modal-title" className="fw-bold mb-5 text-center text-warning px-3">Share this post with :</h3>
+          <div id="share-modal-content " className="fs-5  mt-4 d-flex justify-content-center gap-3 flex-wrap">
+             <span className='share-option bg-primary' style={{fontSize:'38px'}}><FaFacebook/></span>
+             <span className='share-option' style={{fontSize:'38px',backgroundColor:'#25D366'}}><IoLogoWhatsapp/></span>
+             <span className='share-option instagram-option' style={{fontSize:'38px'}}><FaInstagram/></span>
+             <span className='share-option x-option' style={{fontSize:'33px'}} > <FaXTwitter/></span>
+             <span className='share-option bg-danger' style={{fontSize:'31px'}} onClick={()=>{copyLink(`http://localhost:3000/post/${props.id}`)}}><FaLink/></span>
+        
+          </div>
+        </Box>
+      </Modal>
+
       {/* Reactions */}
       <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
         <div className="text-center">
@@ -456,7 +551,7 @@ export default function Post(props) {
           <div className="text-light mt-1">{commentCount}</div>
         </div>
         <div className="text-center">
-          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn">
+          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openShareModal}>
             <ShareIcon />
           </button>
           <div className="text-light mt-1">{shareCount}</div>
