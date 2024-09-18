@@ -280,16 +280,17 @@ function Comment(props) {
                         </div>
                     )}
 
-                    {!hasMoreReplies && !loadingReplies && (
+                    { !loadingReplies && (!hasMoreReplies || (repliesCount - replies.length ==0)) && (
                         <div className="d-flex justify-content-center my-3 fw-bold small">
                             <p className='small text-secondary '>No more replies</p>
                         </div>
                     )}
 
-                    {hasMoreReplies && !loadingReplies && (
+                    {hasMoreReplies && !loadingReplies && (repliesCount - replies.length !==0) && (
                         <div className="d-flex justify-content-center my-3">
                             <IconButton onClick={fetchReplies} aria-label="Load More">
-                                <ExpandMoreIcon className='text-primary' style={{ fontSize: '62px' }} />
+                                {/* <ExpandMoreIcon className='text-primary' style={{ fontSize: '62px' }} /> */}
+                                <p className='text-primary small fw-bold fs-6'>{repliesCount - replies.length} more {((repliesCount - replies.length) != 1) ? 'replies' : 'reply' }</p>
                             </IconButton>
                         </div>
                     )}
