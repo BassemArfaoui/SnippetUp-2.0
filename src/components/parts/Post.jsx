@@ -12,12 +12,12 @@ import CommentIcon from '@mui/icons-material/Comment';
 import ShareIcon from '@mui/icons-material/Share';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { Modal, Box, IconButton } from '@mui/material'; // Added IconButton component
-import CloseIcon from '@mui/icons-material/Close'; // Close icon
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { Modal, Box, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import CustomTooltip from '../tools/CustomTooltip';
 import { successNotify, notify } from '../tools/CustomToaster';
-import CodeHighlighter from '../saved/CodeHighliter';
-import DescriptionIcon from '@mui/icons-material/Description';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';import CodeHighlighter from '../tools/CodeHighliter';
 import { FaFacebook } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { FaLink } from "react-icons/fa";
@@ -320,10 +320,22 @@ export default function Post(props) {
       <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
         <h3 className="snippet-title fw-bold text-center">{snippetTitle}</h3>
         <div className="buttons align-self-end d-flex gap-3 align-items-center">
+
+          {/*github proj link*/}
+          {props.githubLink && (
+            <CustomTooltip title='See Related Repo' placement='top'>
+                <a target='_blank' href={props.githubLink} className="btn btn-outline-light post-btn" >
+                  <GitHubIcon style={{ fontSize: '28px' }} />
+                </a>
+            </CustomTooltip>
+          
+          ) }
+
+
           {/* Description Button */}
           <CustomTooltip title='Description' placement='top'>
             <button className="btn btn-outline-light post-btn" onClick={openDescription}>
-              <DescriptionIcon style={{ fontSize: '27px' }} />
+              <LightbulbIcon style={{ fontSize: '27px' }} />
             </button>
           </CustomTooltip>
 

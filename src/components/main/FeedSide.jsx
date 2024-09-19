@@ -107,6 +107,7 @@ function FeedSide() {
               isDisliked={post.isDisliked}
               isSaved={post.isSaved}
               isInterested={post.isInterested}
+              githubLink={post.github_link}
               firstname={post.poster_firstname}
               lastname={post.poster_lastname}
               username={post.poster_username}
