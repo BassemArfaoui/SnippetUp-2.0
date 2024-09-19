@@ -3,7 +3,7 @@ import './styles/container.css'
 
 function SavedContainer(props) {
   return (
-    <div className='data-container d-flex flex-column gap-4 pt-3'>
+    <div className=''>
         {props.children}
     </div>
   )

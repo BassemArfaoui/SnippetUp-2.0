@@ -7,7 +7,7 @@ function SavedChoice(props) {
 
   return (
     <div className='saved-choice-container d-flex justify-content-center align-items-center'>
-        <div className='d-flex mb-2 mt-3'>
+        <div className='d-flex choice-sub-container'>
             {
                props.choice === 'posts'? <div className=' bg-primary text-light left-choice px-3 fw-bold fs-5 d-flex align-items-center justify-content-center text-light' >Saved Posts</div>
                : <div className=' bg-light text-dark left-choice px-3 fw-bold fs-5 d-flex align-items-center justify-content-center text-light' onClick={()=>{props.setChoice('posts')}}>Saved Posts</div>

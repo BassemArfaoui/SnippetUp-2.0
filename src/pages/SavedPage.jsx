@@ -1,29 +1,29 @@
 import React , {useState} from 'react'
 import '../css/SavedPage.css'
 import SavedChoice from '../components/saved/SavedChoice'
-import SavedContainer from '../components/saved/SavedContainer';
 import SavedPosts from '../components/saved/SavedPosts';
+import SavedLocal from '../components/saved/SavedLocal';
 
 
 
 function SavedPage() {
   
+  const [showChoice,setShowChoice]=useState(true);
   const [choice,setChoice]=useState('posts');
+
   
 
   return (
 
 
 
-    <div className='min-vh-100'> 
-       <SavedChoice choice={choice} setChoice={setChoice}/>
+    <div className='saved-page'> 
+       {showChoice && <SavedChoice choice={choice} setChoice={setChoice}/>}
            
-       <SavedContainer>
           {
-            choice==='posts' ? <SavedPosts/>
-            : null
+            choice==='posts' ? <SavedPosts setShowChoice={setShowChoice}/>
+            : <SavedLocal  setShowChoice={setShowChoice}/>
           }
-       </SavedContainer>
     </div>
   )
 }
