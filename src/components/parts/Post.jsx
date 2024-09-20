@@ -1,6 +1,8 @@
 import React, {lazy, Suspense, useState , useEffect} from 'react';
-import profile_pic from '../../imgs/profile_pic.jpg';
+import InfoTooltip from '../tools/InfoTooltip';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import './styles/Post.css';
+import profile_pic from '../../imgs/profile_pic.jpg';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
@@ -270,321 +272,339 @@ export default function Post(props) {
       successNotify('Link copied to clipboard');
     }
   }
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    
+    const day = date.getDate().toString().padStart(2, '0');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+    return `${day} ${month} ${year} ${hours}:${minutes}`;
+  }
+  
+  
+  
+  
   
   
   
   
   return (
-    <div className="post rounded-4 p-4">
-      {/* Post Header */}
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <div className="d-flex align-items-center gap-3">
-          <div className="avatar">
-            <img
-              src={profile_pic}
-              alt="user"
-              className="rounded-circle"
-              style={{ width: '60px', height: '60px' }}
-            />
-          </div>
-          <div>
-            <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
-              <span className="p-0 m-0">{props.firstname +' '+props.lastname}</span>
-              {!isInterested ? (
-                <span
-                  className="text-light p-0 mb-1 ms-2 intrested-icon"
-                  onClick={becomeInterested}
-                >
-                  <CustomTooltip title='Intrested' placement='top'>
-                    <StarBorderIcon style={{ fontSize: '30px' }} />
-                  </CustomTooltip>
-                </span>
-              ) : (
-                <span
-                  className="text-primary p-0 mb-1 ms-2 intrested-icon"
-                  onClick={becomeUninterested}
-                >
-                  <StarIcon style={{ fontSize: '30px' }} />
-                </span>
-              )}
+    <div className='position-relative'>
+      <div className="post rounded-4 p-4">
+        {/* Post Header */}
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <div className="d-flex align-items-center gap-3">
+            <div className="avatar">
+              <img
+                src={profile_pic}
+                alt="user"
+                className="rounded-circle"
+                style={{ width: '60px', height: '60px' }}
+              />
             </div>
-            <div className="text-secondary fs-5">@{props.username}</div>
+            <div>
+              <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
+                <span className="p-0 m-0">{props.firstname +' '+props.lastname}</span>
+                {!isInterested ? (
+                  <span
+                    className="text-light p-0 mb-1 ms-2 intrested-icon"
+                    onClick={becomeInterested}
+                  >
+                    <CustomTooltip title='Intrested' placement='top'>
+                      <StarBorderIcon style={{ fontSize: '30px' }} />
+                    </CustomTooltip>
+                  </span>
+                ) : (
+                  <span
+                    className="text-primary p-0 mb-1 ms-2 intrested-icon"
+                    onClick={becomeUninterested}
+                  >
+                    <StarIcon style={{ fontSize: '30px' }} />
+                  </span>
+                )}
+              </div>
+              <div className="text-secondary fs-5">@{props.username}</div>
+            </div>
+          </div>
+          <div className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
+            {language}
           </div>
         </div>
-        <div className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
-          {language}
-        </div>
-      </div>
-
-      {/* Snippet Title and Buttons */}
-      <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
-        <h3 className="snippet-title fw-bold text-center">{snippetTitle}</h3>
-        <div className="buttons align-self-end d-flex gap-3 align-items-center">
-
-          {/*github proj link*/}
-          {props.githubLink && (
-            <CustomTooltip title='See Related Repo' placement='top'>
-                <a target='_blank' href={props.githubLink} className="btn btn-outline-light post-btn" >
-                  <GitHubIcon style={{ fontSize: '28px' }} />
-                </a>
+        {/* Snippet Title and Buttons */}
+        <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
+          <h3 className="snippet-title fw-bold text-center">{snippetTitle}</h3>
+          <div className="buttons align-self-end d-flex gap-3 align-items-center">
+            {/*github proj link*/}
+            {props.githubLink && (
+              <CustomTooltip title='See Related Repo' placement='top'>
+                  <a target='_blank' href={props.githubLink} className="btn btn-outline-light post-btn" >
+                    <GitHubIcon style={{ fontSize: '28px' }} />
+                  </a>
+              </CustomTooltip>
+      
+            ) }
+            {/* Description Button */}
+            <CustomTooltip title='Description' placement='top'>
+              <button className="btn btn-outline-light post-btn" onClick={openDescription}>
+                <LightbulbIcon style={{ fontSize: '27px' }} />
+              </button>
             </CustomTooltip>
-          
-          ) }
-
-
-          {/* Description Button */}
-          <CustomTooltip title='Description' placement='top'>
-            <button className="btn btn-outline-light post-btn" onClick={openDescription}>
-              <LightbulbIcon style={{ fontSize: '27px' }} />
-            </button>
-          </CustomTooltip>
-
-          {/* Save, Copy, and Fullscreen Buttons */}
-          {isSaved ? (
-            <button
-              className="btn btn-outline-primary post-btn"
-              onClick={unsaveSnippet}
-            >
-              <BookmarkAddedIcon style={{ fontSize: '28px' }} />
-            </button>
-          ) : (
-            <CustomTooltip title='Save Snippet' placement='top'>
+            {/* Save, Copy, and Fullscreen Buttons */}
+            {isSaved ? (
               <button
-                className="btn btn-outline-light post-btn"
-                onClick={saveSnippet}
+                className="btn btn-outline-primary post-btn"
+                onClick={unsaveSnippet}
               >
-                <BookmarkAddIcon style={{ fontSize: '28px' }} />
+                <BookmarkAddedIcon style={{ fontSize: '28px' }} />
+              </button>
+            ) : (
+              <CustomTooltip title='Save Snippet' placement='top'>
+                <button
+                  className="btn btn-outline-light post-btn"
+                  onClick={saveSnippet}
+                >
+                  <BookmarkAddIcon style={{ fontSize: '28px' }} />
+                </button>
+              </CustomTooltip>
+            )}
+            {isCopied ? (
+              <button className="btn btn-outline-primary post-btn">
+                <DoneIcon />
+              </button>
+            ) : (
+              <CustomTooltip title='Copy Snippet' placement='top'>
+                <button className="btn btn-outline-light post-btn" onClick={copyCode}>
+                  <ContentCopyIcon />
+                </button>
+              </CustomTooltip>
+            )}
+            <CustomTooltip title='Full Screen' placement='top'>
+              <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
+                <FullscreenIcon style={{ fontSize: '34px' }} />
               </button>
             </CustomTooltip>
-          )}
-
-          {isCopied ? (
-            <button className="btn btn-outline-primary post-btn">
-              <DoneIcon />
-            </button>
-          ) : (
-            <CustomTooltip title='Copy Snippet' placement='top'>
-              <button className="btn btn-outline-light post-btn" onClick={copyCode}>
-                <ContentCopyIcon />
-              </button>
-            </CustomTooltip>
-          )}
-
-
-          <CustomTooltip title='Full Screen' placement='top'>
-            <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
-              <FullscreenIcon style={{ fontSize: '34px' }} />
-            </button>
-          </CustomTooltip>
+          </div>
         </div>
-      </div>
-
-      {/* Code Block */}
-      <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
-        <pre className="text-white " style={{fontSize:'22px'}}>
-          <code>
-            <CodeHighlighter codeSnippet={snippetCode} /> 
-          </code>
-        </pre>
-      </div>
-
-      {/* Fullscreen Modal */}
-      <Modal
-        open={isFullScreen}
-        onClose={closeFullScreen}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: '16px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            width: '90%',
-            backgroundColor: '#1E1E1E',
-            color: 'white',
-          }}
-        >
-          <IconButton
-            aria-label="close"
-            onClick={closeFullScreen}
-            sx={{
-              position: 'absolute',
-              top: '10px',
-              right: '10px',
-              color: 'white'
-            }}
-          >
-            <CloseIcon className='fs-2'/>
-          </IconButton>
-
-          <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">{snippetTitle}</h2>
-          <pre id="modal-description" style={{ whiteSpace: 'pre-wrap' }}>
-            <code style={{fontSize:'25px'}}>
+        {/* Code Block */}
+        <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
+          <pre className="text-white " style={{fontSize:'22px'}}>
+            <code>
               <CodeHighlighter codeSnippet={snippetCode} />
             </code>
           </pre>
-        </Box>
-      </Modal>
-
-      {/* Description Modal */}
-      <Modal
-        open={isDescriptionOpen}
-        onClose={closeDescription}
-        aria-labelledby="description-modal-title"
-        aria-describedby="description-modal-content"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: '16px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            width: '50%',
-            backgroundColor: '#1E1E1E',
-            color: 'white',
-          }}
+        </div>
+        {/* Fullscreen Modal */}
+        <Modal
+          open={isFullScreen}
+          onClose={closeFullScreen}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
         >
-          <IconButton
-            aria-label="close"
-            onClick={closeDescription}
+          <Box
             sx={{
               position: 'absolute',
-              top: '10px',
-              right: '10px',
-              color: 'white'
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: '16px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              width: '90%',
+              backgroundColor: '#1E1E1E',
+              color: 'white',
             }}
           >
-            <CloseIcon className='fs-2'/>
-          </IconButton>
-
-          <h3 id="description-modal-title" className="fw-bold mb-5 text-center text-warning">{snippetTitle}</h3>
-          <div id="description-modal-content " className="fs-5 text-center mt-4" style={{ whiteSpace: 'pre-wrap' }}>
-            {snippetDescription}
-          </div>
-        </Box>
-      </Modal>
-
-
-       {/* Share Modal */}
-       <Modal
-        open={isShareModalOpen}
-        onClose={closeShareModal}
-        aria-labelledby="description-modal-title"
-        aria-describedby="description-modal-content"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: '16px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            width: '50%',
-            backgroundColor: '#1E1E1E',
-            color: 'white',
-            border:'2px solid darkgray'
-
-          }}
+            <IconButton
+              aria-label="close"
+              onClick={closeFullScreen}
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                color: 'white'
+              }}
+            >
+              <CloseIcon className='fs-2'/>
+            </IconButton>
+            <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">{snippetTitle}</h2>
+            <pre id="modal-description" style={{ whiteSpace: 'pre-wrap' }}>
+              <code style={{fontSize:'25px'}}>
+                <CodeHighlighter codeSnippet={snippetCode} />
+              </code>
+            </pre>
+          </Box>
+        </Modal>
+        {/* Description Modal */}
+        <Modal
+          open={isDescriptionOpen}
+          onClose={closeDescription}
+          aria-labelledby="description-modal-title"
+          aria-describedby="description-modal-content"
         >
-          <IconButton
-            aria-label="close"
-            onClick={closeShareModal}
+          <Box
             sx={{
               position: 'absolute',
-              top: '10px',
-              right: '10px',
-              color: 'white'
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: '16px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              width: '50%',
+              backgroundColor: '#1E1E1E',
+              color: 'white',
             }}
           >
-            <CloseIcon className='fs-2'/>
-          </IconButton>
-
-          <h3 id="share-modal-title" className="fw-bold mb-5 text-center text-warning px-3">Share this post with :</h3>
-          <div id="share-modal-content " className="fs-5  mt-4 d-flex justify-content-center gap-3 flex-wrap">
-             <span className='share-option bg-primary' style={{fontSize:'38px'}}><FaFacebook/></span>
-             <span className='share-option' style={{fontSize:'38px',backgroundColor:'#25D366'}}><IoLogoWhatsapp/></span>
-             <span className='share-option instagram-option' style={{fontSize:'38px'}}><FaInstagram/></span>
-             <span className='share-option x-option' style={{fontSize:'33px'}} > <FaXTwitter/></span>
-             <span className='share-option bg-danger' style={{fontSize:'31px'}} onClick={()=>{copyLink(`http://localhost:3000/post/${props.id}`)}}><FaLink/></span>
-        
-          </div>
-        </Box>
-      </Modal>
-
-      {/* Reactions */}
-      <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
-        <div className="text-center">
-          {react === 'like' ? (
-            <button className="btn btn-primary p-2 px-3 fw-bolder fs-5 like-btn" onClick={unlikeSnippet}>
-              <ThumbUpIcon />
-            </button>
-          ) : (
-            <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={likeSnippet}>
-              <ThumbUpIcon />
-            </button>
-          )}
-          <div className="text-light mt-1">{likeCount}</div>
-        </div>
-        <div className="text-center">
-          {react === 'dislike' ? (
-            <button className="btn btn-danger p-2 px-3 fw-bolder fs-5 like-btn" onClick={undislikeSnippet}>
-              <ThumbDownIcon />
-            </button>
-          ) : (
-            <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={dislikeSnippet}>
-              <ThumbDownIcon />
-            </button>
-          )}
-          <div className="text-light mt-1">{dislikeCount}</div>
-        </div>
-        <div className="text-center">
-          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openComments}>
-            <CommentIcon />
-          </button>
-          <div className="text-light mt-1">{commentCount}</div>
-        </div>
-        <div className="text-center">
-          <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openShareModal}>
-            <ShareIcon />
-          </button>
-          <div className="text-light mt-1">{shareCount}</div>
-        </div>
-      </div>
+            <IconButton
+              aria-label="close"
+              onClick={closeDescription}
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                color: 'white'
+              }}
+            >
+              <CloseIcon className='fs-2'/>
+            </IconButton>
+            <h3 id="description-modal-title" className="fw-bold mb-5 text-center text-warning">{snippetTitle}</h3>
+            <div id="description-modal-content " className="fs-5 text-center mt-4" style={{ whiteSpace: 'pre-wrap' }}>
+              {snippetDescription}
+            </div>
+          </Box>
+        </Modal>
+         {/* Share Modal */}
+         <Modal
+          open={isShareModalOpen}
+          onClose={closeShareModal}
+          aria-labelledby="description-modal-title"
+          aria-describedby="description-modal-content"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: '16px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              width: '50%',
+              backgroundColor: '#1E1E1E',
+              color: 'white',
+              border:'2px solid darkgray'
+            }}
+          >
+            <IconButton
+              aria-label="close"
+              onClick={closeShareModal}
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                color: 'white'
+              }}
+            >
+              <CloseIcon className='fs-2'/>
+            </IconButton>
+            <h3 id="share-modal-title" className="fw-bold mb-5 text-center text-warning px-3">Share this post with :</h3>
+            <div id="share-modal-content " className="fs-5  mt-4 d-flex justify-content-center gap-3 flex-wrap">
+               <span className='share-option bg-primary' style={{fontSize:'38px'}}><FaFacebook/></span>
+               <span className='share-option' style={{fontSize:'38px',backgroundColor:'#25D366'}}><IoLogoWhatsapp/></span>
+               <span className='share-option instagram-option' style={{fontSize:'38px'}}><FaInstagram/></span>
+               <span className='share-option x-option' style={{fontSize:'33px'}} > <FaXTwitter/></span>
+               <span className='share-option bg-danger' style={{fontSize:'31px'}} onClick={()=>{copyLink(`http://localhost:3000/post/${props.id}`)}}><FaLink/></span>
       
-      {/* Comments Section */}
-    <Suspense>
-      <Modal
-        open={isCommentsOpen}
-        onClose={closeComments}
-        aria-labelledby="description-modal-title"
-        aria-describedby="description-modal-content"
-      >
-              <div>
-                <CommentSection closeComments={closeComments} postId={props.id} postTitle={snippetTitle} addComment={addComment}/>
-              </div>
-      </Modal>
-    </Suspense>
-
-
+            </div>
+          </Box>
+        </Modal>
+        {/* Reactions */}
+        <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
+          <div className="text-center">
+            {react === 'like' ? (
+              <button className="btn btn-primary p-2 px-3 fw-bolder fs-5 like-btn" onClick={unlikeSnippet}>
+                <ThumbUpIcon />
+              </button>
+            ) : (
+              <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={likeSnippet}>
+                <ThumbUpIcon />
+              </button>
+            )}
+            <div className="text-light mt-1">{likeCount}</div>
+          </div>
+          <div className="text-center">
+            {react === 'dislike' ? (
+              <button className="btn btn-danger p-2 px-3 fw-bolder fs-5 like-btn" onClick={undislikeSnippet}>
+                <ThumbDownIcon />
+              </button>
+            ) : (
+              <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={dislikeSnippet}>
+                <ThumbDownIcon />
+              </button>
+            )}
+            <div className="text-light mt-1">{dislikeCount}</div>
+          </div>
+          <div className="text-center">
+            <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openComments}>
+              <CommentIcon />
+            </button>
+            <div className="text-light mt-1">{commentCount}</div>
+          </div>
+          <div className="text-center">
+            <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openShareModal}>
+              <ShareIcon />
+            </button>
+            <div className="text-light mt-1">{shareCount}</div>
+          </div>
+        </div>
+      
+        {/* Comments Section */}
+      <Suspense>
+        <Modal
+          open={isCommentsOpen}
+          onClose={closeComments}
+          aria-labelledby="description-modal-title"
+          aria-describedby="description-modal-content"
+        >
+                <div>
+                  <CommentSection closeComments={closeComments} postId={props.id} postTitle={snippetTitle} addComment={addComment}/>
+                </div>
+        </Modal>
+      </Suspense>
+      </div>
+      {
+        props.savedAt && 
+        <InfoTooltip 
+  title={
+    <div style={{ whiteSpace: 'pre-line' }}>
+      {`Saved at:
+        ${formatTimestamp(props.savedAt)}`
+      }
+    </div>
+  } 
+  placement='top'
+>
+          <span className="saved-at text-light rounded-5 position-absolute fs-4">
+            <AccessTimeIcon  fontSize='50px'/>
+          </span>
+        </InfoTooltip>
+      }
     </div>
   );
 }

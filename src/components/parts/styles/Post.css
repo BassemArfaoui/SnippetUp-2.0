@@ -69,3 +69,16 @@
   {
     background-color: grey;
   }
+
+  .saved-at
+  {
+    margin: 9px;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-weight: bold; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    bottom: 0;
+  }

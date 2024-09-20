@@ -21,7 +21,7 @@ function SavedPosts({ setShowChoice }) {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
-  const [showOptions, setShowOptions]=useState(true)
+  const [showOptions, setShowOptions]=useState(false)
   const [option, setOption]=useState('none')
 
   // Function to load saved posts
@@ -137,6 +137,7 @@ function SavedPosts({ setShowChoice }) {
               firstname={post.poster_firstname}
               lastname={post.poster_lastname}
               username={post.poster_username}
+              savedAt={post.saved_at}
             />
           ))}
           {loading && !initialLoading && (
