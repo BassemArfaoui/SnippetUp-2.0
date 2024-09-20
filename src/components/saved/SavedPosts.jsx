@@ -85,38 +85,51 @@ function SavedPosts({ setShowChoice }) {
   }, [loading, setShowChoice]);
 
   return (
-    <div className="saved-posts d-flex flex-column gap-4 pt-3 position-relative" ref={savedPostsRef}>
-
-
-      <CustomTooltip title="Options" placement='right'>
+    <div
+      className="saved-posts d-flex flex-column gap-4 pt-3 position-relative"
+      ref={savedPostsRef}
+    >
+      <CustomTooltip title="Options" placement="right">
         <IconButton
-              variant="contained"
-              onClick={toggleOptions}
-              aria-label="Toggle notifications"
-              className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning "
-              style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} 
-            >
-                  { showOptions && 
-                    <div className='options-container bg-transparent position-absolute bottom-100 my-4 d-flex flex-column gap-2'>
-                        <IconButton className='text-dark bg-warning' variant="contained" onClick={()=>{}}><SearchIcon  fontSize="large" className='text-dark' /></IconButton>
-                        <IconButton className='text-dark bg-warning' variant="contained" onClick={()=>{}}><TuneIcon  fontSize="large" className='text-dark' /></IconButton>
-                        <IconButton className='text-dark bg-warning' variant="contained" onClick={()=>{}}><AppsIcon  fontSize="large" className='text-dark' /></IconButton> 
-                    </div> 
-                  }
-                  <MoreHorizIcon  fontSize="large" className='text-dark'/>
-            </IconButton>
+          variant="contained"
+          onClick={toggleOptions}
+          aria-label="Toggle notifications"
+          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning "
+          style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
+        >
+          {showOptions && (
+            <div className="options-container bg-transparent position-absolute bottom-100 my-4 d-flex flex-column gap-2">
+              <IconButton
+                className="text-dark bg-warning"
+                variant="contained"
+                onClick={() => {}}
+              >
+                <TuneIcon fontSize="large" className="text-dark" />
+              </IconButton>
+
+              <IconButton
+                className="text-dark bg-warning"
+                variant="contained"
+                onClick={() => {}}
+              >
+                <AppsIcon fontSize="large" className="text-dark" />
+              </IconButton>
+            </div>
+          )}
+          <MoreHorizIcon fontSize="large" className="text-dark" />
+        </IconButton>
       </CustomTooltip>
 
-     
-
-
       {initialLoading ? (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: "80vh" }}
+        >
           <Spinner />
         </div>
       ) : (
         <>
-          {savedPosts.map(post => (
+          {savedPosts.map((post) => (
             <Post
               key={post.id}
               id={post.id}
@@ -149,7 +162,9 @@ function SavedPosts({ setShowChoice }) {
           )}
 
           {!initialLoading && !loading && !hasMore && (
-            <p className="text-center text-muted py-3 text-secondary small fw-bold">No more saved posts</p>
+            <p className="text-center text-muted py-3 text-secondary small fw-bold">
+              No more saved posts
+            </p>
           )}
         </>
       )}

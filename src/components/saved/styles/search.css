@@ -1,0 +1,30 @@
+
+.saved-posts-input
+{
+   border: 2pt solid rgb(132, 126, 126);
+   color: rgb(132, 126, 126)   ;
+   border-radius: 18px;
+   height: 55px;
+   font-size: 21px;
+
+}
+
+
+.saved-posts-input:focus
+{
+   outline: none !important;
+   color: #0d6efd   ;
+   border: 2pt solid #0d6efd ;
+
+}
+
+
+.saved-posts-input::placeholder
+{
+
+    color: rgb(138, 134, 134);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+}
