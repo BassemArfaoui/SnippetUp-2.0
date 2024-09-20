@@ -593,7 +593,7 @@ export default function Post(props) {
         <InfoTooltip 
   title={
     <div style={{ whiteSpace: 'pre-line' }}>
-      {`Saved at:
+      {`Saved at :
         ${formatTimestamp(props.savedAt)}`
       }
     </div>

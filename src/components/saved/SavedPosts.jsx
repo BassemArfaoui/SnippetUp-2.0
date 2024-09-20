@@ -149,7 +149,7 @@ function SavedPosts({ setShowChoice }) {
           )}
 
           {!initialLoading && !loading && !hasMore && (
-            <div className="text-center text-muted py-3">No more posts to load</div>
+            <p className="text-center text-muted py-3 text-secondary small fw-bold">No more saved posts</p>
           )}
         </>
       )}
