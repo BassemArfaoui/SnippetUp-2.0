@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Post from '../parts/Post';
 import Spinner from '../tools/Spinner';
-import { IconButton } from '@mui/material';
+import { IconButton, Modal, TextField, Button, Box } from '@mui/material';
 import './styles/saves.css';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
 import AppsIcon from '@mui/icons-material/Apps';
 import CustomTooltip from '../tools/CustomTooltip';
@@ -13,7 +12,7 @@ import { notify } from '../tools/CustomToaster';
 
 function SavedPosts({ setShowChoice }) {
   const userId = 1;
-  const limit=10;
+  const limit = 10;
   const savedPostsRef = useRef(null);
   const lastScrollTop = useRef(0);
   const scrollThreshold = 40;
@@ -22,20 +21,22 @@ function SavedPosts({ setShowChoice }) {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
-  const [showOptions, setShowOptions]=useState(false)
-  const [option, setOption]=useState('none')
+  const [showOptions, setShowOptions] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [filterLanguage, setFilterLanguage] = useState('');
+  const [filterTitle, setFilterTitle] = useState('');
+  const [filterContent, setFilterContent] = useState('');
 
-  // Function to load saved posts
   const loadSavedPosts = async () => {
     try {
       setLoading(true);
       const res = await axios.get(`http://localhost:4000/${userId}/saved-posts`, {
         params: { limit, page },
       });
-      if(res.data.length < limit) setHasMore(false)
+      if (res.data.length < limit) setHasMore(false);
       setSavedPosts(prevPosts => [...prevPosts, ...res.data]);
     } catch (error) {
-      notify('Error loading saved posts')
+      notify('Error loading saved posts');
       console.error('Error loading saved posts:', error);
     } finally {
       setLoading(false);
@@ -45,14 +46,35 @@ function SavedPosts({ setShowChoice }) {
     }
   };
 
+  const toggleOptions = () => {
+    setShowOptions(prev => !prev);
+  };
 
-  const toggleOptions=()=>{
-    setShowOptions(prev=>!prev)
-  }
+  const handleFilterOpen = () => {
+    setFilterModalOpen(true);
+    setFilterLanguage('');
+    setFilterTitle('');
+    setFilterContent('');
+  };
 
-  // Fetch initial posts on mount and when page changes
+  const handleFilterClose = () => {
+    setFilterModalOpen(false);
+  };
+
+  const applyFilters = () => {
+    const filteredPosts = savedPosts.filter(post => {
+      return (
+        (filterLanguage ? post.language.includes(filterLanguage) : true) &&
+        (filterTitle ? post.title.includes(filterTitle) : true) &&
+        (filterContent ? post.description.includes(filterContent) : true)
+      );
+    });
+    setSavedPosts(filteredPosts);
+    handleFilterClose();
+  };
+
   useEffect(() => {
-    if(hasMore )  {loadSavedPosts();}
+    if (hasMore) { loadSavedPosts(); }
   }, [page]);
 
   useEffect(() => {
@@ -62,13 +84,11 @@ function SavedPosts({ setShowChoice }) {
       const clientHeight = savedPostsRef.current.clientHeight;
       const scrollDifference = Math.abs(scrollTop - lastScrollTop.current);
 
-      // Show/hide the choice based on scroll direction
       if (scrollDifference >= scrollThreshold) {
         setShowChoice(scrollTop < lastScrollTop.current);
         lastScrollTop.current = scrollTop;
       }
 
-      // Load more posts when user scrolls to the bottom
       if (scrollTop + clientHeight >= scrollHeight - 10 && !loading) {
         setPage(prevPage => prevPage + 1);
       }
@@ -96,7 +116,7 @@ function SavedPosts({ setShowChoice }) {
           variant="contained"
           onClick={toggleOptions}
           aria-label="Toggle notifications"
-          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning "
+          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
           style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
         >
           {showOptions && (
@@ -104,7 +124,7 @@ function SavedPosts({ setShowChoice }) {
               <IconButton
                 className="text-dark bg-warning"
                 variant="contained"
-                onClick={() => {}}
+                onClick={handleFilterOpen} // Open filter modal
               >
                 <TuneIcon fontSize="large" className="text-dark" />
               </IconButton>
@@ -121,6 +141,67 @@ function SavedPosts({ setShowChoice }) {
           <MoreHorizIcon fontSize="large" className="text-dark" />
         </IconButton>
       </CustomTooltip>
+
+      <Modal
+        open={filterModalOpen}
+        onClose={handleFilterClose}
+        aria-labelledby="filter-modal-title"
+        aria-describedby="filter-modal-description"
+      >
+        <Box
+          sx={{
+            backgroundColor: '#333', // Dark background
+            width: '80%',
+            height: '90vh',
+            paddingX: '50px',
+            paddingY: '20px',
+            overflowY: 'auto', // Allow scrolling if content exceeds height
+            borderRadius: '15px', // Rounded corners
+            color: '#fff', // Text color
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)', // Center vertically
+            position: 'relative'
+          }}
+        >
+          <h2 id="filter-modal-title" className='text-center mb-4 mt-2 fw-bold text-warning'>Filter Saved Posts</h2>
+          <TextField
+            label="Language"
+            variant="outlined"
+            fullWidth
+            value={filterLanguage}
+            onChange={(e) => setFilterLanguage(e.target.value)}
+            margin="normal"
+             sx={{ backgroundColor: '#fff' }}
+          />
+          <TextField
+            label="Title"
+            variant="outlined"
+            fullWidth
+            value={filterTitle}
+            onChange={(e) => setFilterTitle(e.target.value)}
+            margin="normal"
+            sx={{ backgroundColor: '#fff' }}
+          />
+          <TextField
+            label="Content"
+            variant="outlined"
+            fullWidth
+            value={filterContent}
+            onChange={(e) => setFilterContent(e.target.value)}
+            margin="normal"
+            sx={{ backgroundColor: '#fff' }}
+          />
+          <div className="d-flex justify-content-end mt-3">
+            <Button variant="contained" color="primary" onClick={applyFilters}>
+              Apply Filters
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleFilterClose} style={{ marginLeft: '8px' }}>
+              Cancel
+            </Button>
+          </div>
+        </Box>
+      </Modal>
 
       {initialLoading ? (
         <div
@@ -143,7 +224,7 @@ function SavedPosts({ setShowChoice }) {
               likeCount={post.like_count}
               dislikeCount={post.dislike_count}
               commentCount={post.comment_count}
-              shareCount={post.share_count}   
+              shareCount={post.share_count}
               isLiked={post.isLiked}
               isDisliked={post.isDisliked}
               isSaved={post.isSaved}
