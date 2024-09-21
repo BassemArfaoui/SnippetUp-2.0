@@ -113,9 +113,23 @@ export default function Post(props) {
   
   const unsaveSnippet = async () => {
     try {
+  
+      
       await axios.get(`http://localhost:4000/unsave/${userId}/${props.id}`);
       
       setIsSaved(false);
+      if(props.setSavedPosts)
+      {
+        props.setSavedPosts((prev)=>{
+          return prev.filter((post)=>post.id!==props.id)
+        })
+      }
+      if(props.setSearchResults)
+      {
+        props.setSearchResults((prev)=>{
+          return prev.filter((post)=>post.id!==props.id)
+        })
+      }
       successNotify('Snippet Unsaved');
     } catch (err) {
       notify("Couldn't unsave the Snippet");

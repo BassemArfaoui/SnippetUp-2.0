@@ -9,6 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
 import AppsIcon from '@mui/icons-material/Apps';
 import CustomTooltip from '../tools/CustomTooltip';
+import { notify } from '../tools/CustomToaster';
 
 function SavedPosts({ setShowChoice }) {
   const userId = 1;
@@ -34,6 +35,7 @@ function SavedPosts({ setShowChoice }) {
       if(res.data.length < limit) setHasMore(false)
       setSavedPosts(prevPosts => [...prevPosts, ...res.data]);
     } catch (error) {
+      notify('Error loading saved posts')
       console.error('Error loading saved posts:', error);
     } finally {
       setLoading(false);
@@ -123,7 +125,7 @@ function SavedPosts({ setShowChoice }) {
       {initialLoading ? (
         <div
           className="d-flex justify-content-center align-items-center"
-          style={{ height: "80vh" }}
+          style={{ height: "50vh" }}
         >
           <Spinner />
         </div>
@@ -136,12 +138,12 @@ function SavedPosts({ setShowChoice }) {
               title={post.title}
               snippet={post.snippet}
               description={post.description}
-              posterId={post.posterId}
+              posterId={post.poster_id}
               language={post.language}
               likeCount={post.like_count}
               dislikeCount={post.dislike_count}
               commentCount={post.comment_count}
-              shareCount={post.share_count}
+              shareCount={post.share_count}   
               isLiked={post.isLiked}
               isDisliked={post.isDisliked}
               isSaved={post.isSaved}
@@ -151,6 +153,7 @@ function SavedPosts({ setShowChoice }) {
               lastname={post.poster_lastname}
               username={post.poster_username}
               savedAt={post.saved_at}
+              setSavedPosts={setSavedPosts}
             />
           ))}
           {loading && !initialLoading && (

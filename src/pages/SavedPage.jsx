@@ -35,7 +35,7 @@ function SavedPage() {
             } </> :
            <>
             {
-              isSearching==='posts' ? <PostsSearch postsSearch={postsSearch}/>
+              isSearching==='posts' ? <PostsSearch postsSearch={postsSearch} setShowChoice={setShowChoice}/>
               : <LocalSearch localSearch={localSearch} />
             }
            </>
