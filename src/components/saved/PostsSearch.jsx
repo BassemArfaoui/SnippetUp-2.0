@@ -120,7 +120,7 @@ function PostsSearch({ postsSearch, setShowChoice }) {
           ) : (
             <div className='d-flex justify-content-center ' style={{ height: '85vh' }}>
               <p className="text-center text-muted py-5 text-secondary small fw-bold fs-6 text-danger">
-                <span className='text-danger fw-bold'> No Results for  </span> <span className='text-primary fw-bolder'> " {postsSearch} "</span>
+                <span className='text-secondary fw-bolder'> No Results for " </span> <span className='text-primary fw-bolder'> {postsSearch}</span><span className='text-secondary'> "</span>
               </p>
             </div>
           )}
@@ -133,7 +133,7 @@ function PostsSearch({ postsSearch, setShowChoice }) {
           )}
           {!hasMore && searchResults.length > 0 && (
             <p className="text-center text-muted py-3 text-secondary small fw-bold">
-              <span>No more results for  </span> <span className='text-primary fw-bolder'> " {postsSearch} "</span>
+              <span className='fw-bold'>No more results for " </span> <span className='text-primary fw-bolder'> {postsSearch} </span><span>"</span>
             </p>
           )}
         </>
