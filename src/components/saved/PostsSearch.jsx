@@ -5,7 +5,7 @@ import Spinner from '../tools/Spinner';
 import './styles/search-result.css';
 import { notify } from '../tools/CustomToaster';
 
-function PostsSearch({ postsSearch, setShowChoice }) {
+function PostsSearch({ postsSearch, setShowChoice}) {
   const userId = 1;
   const limit = 10;
   const [searchResults, setSearchResults] = useState([]);
@@ -40,6 +40,7 @@ function PostsSearch({ postsSearch, setShowChoice }) {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (postsSearch) {

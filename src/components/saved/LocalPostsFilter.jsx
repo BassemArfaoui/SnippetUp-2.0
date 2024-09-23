@@ -5,7 +5,9 @@ import './styles/filter-result.css'
 
 function LocalPostsFilter() {
   return (
-    <div>LocalPostsFilter</div>
+    <div className='local-filter-result'>
+        LocalPostsFilter
+    </div>
   )
 }
 

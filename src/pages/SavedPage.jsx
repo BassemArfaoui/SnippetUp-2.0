@@ -49,6 +49,7 @@ function SavedPage() {
 
   const applyFilters = () => {
     setFilterloading(true);
+    setIsSearching('none');
     //the api call 
     setIsFiltering('posts')
     setFilterModalOpen(false)
@@ -63,7 +64,7 @@ function SavedPage() {
 
     <div className='saved-page'> 
         {showChoice &&
-         <SavedChoice choice={choice} setChoice={setChoice} setIsSearching={setIsSearching} localSearch={localSearch} postsSearch={postsSearch} setLocalSearch={setLocalSearch} setPostsSearch={setPostsSearch} />
+         <SavedChoice choice={choice} setChoice={setChoice} setIsSearching={setIsSearching} localSearch={localSearch} postsSearch={postsSearch} setLocalSearch={setLocalSearch} setPostsSearch={setPostsSearch} isFiltering={isFiltering} setIsFiltering={setIsFiltering}/>
         }
            
         {isFiltering ==='none' ? 
@@ -76,8 +77,8 @@ function SavedPage() {
               } </> :
              <>
               {
-                isSearching==='posts' ? <PostsSearch postsSearch={postsSearch} setShowChoice={setShowChoice}/>
-                : <LocalSearch localSearch={localSearch} />
+                isSearching==='posts' ? <PostsSearch postsSearch={postsSearch} setShowChoice={setShowChoice} setIsFiltering={setIsFiltering} />
+                : <LocalSearch localSearch={localSearch} setIsFiltering={setIsFiltering}/>
               }
              </>
           }
