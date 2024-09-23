@@ -10,6 +10,8 @@ import { Modal, Box, IconButton } from '@mui/material';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import CustomTooltip from '../components/tools/CustomTooltip';
 import SpinnerSpan from '../components/tools/SpinnerSpan'
+import SavedPostsFilter from '../components/saved/SavedPostsFilter';
+import LocalPostsFilter from '../components/saved/LocalPostsFilter';
 
 
 
@@ -19,6 +21,7 @@ function SavedPage() {
   const [showChoice,setShowChoice]=useState(true);
   const [choice,setChoice]=useState('posts');
   const [isSearching,setIsSearching]=useState('none');
+  const [isFiltering,setIsFiltering]=useState('none');
   const [postsSearch , setPostsSearch]=useState('');
   const [localSearch, setLocalSearch]=useState('');
 
@@ -46,6 +49,10 @@ function SavedPage() {
 
   const applyFilters = () => {
     setFilterloading(true);
+    //the api call 
+    setIsFiltering('posts')
+    setFilterModalOpen(false)
+
    };
  
   
@@ -59,18 +66,27 @@ function SavedPage() {
          <SavedChoice choice={choice} setChoice={setChoice} setIsSearching={setIsSearching} localSearch={localSearch} postsSearch={postsSearch} setLocalSearch={setLocalSearch} setPostsSearch={setPostsSearch} />
         }
            
-        {
-          isSearching === 'none' ?
-          <>{
-            choice==='posts' ? <SavedPosts setShowChoice={setShowChoice} handleFilterOpen={handleFilterOpen} handleFilterClose={handleFilterClose} />
-            : <SavedLocal  setShowChoice={setShowChoice}/>
-            } </> :
-           <>
-            {
-              isSearching==='posts' ? <PostsSearch postsSearch={postsSearch} setShowChoice={setShowChoice}/>
-              : <LocalSearch localSearch={localSearch} />
-            }
-           </>
+        {isFiltering ==='none' ? 
+        <>
+          {
+            isSearching === 'none' ?
+            <>{
+              choice==='posts' ? <SavedPosts setShowChoice={setShowChoice} handleFilterOpen={handleFilterOpen} handleFilterClose={handleFilterClose} />
+              : <SavedLocal  setShowChoice={setShowChoice}/>
+              } </> :
+             <>
+              {
+                isSearching==='posts' ? <PostsSearch postsSearch={postsSearch} setShowChoice={setShowChoice}/>
+                : <LocalSearch localSearch={localSearch} />
+              }
+             </>
+          }
+        </> : 
+        <>
+          {
+            isFiltering==='posts' ? <SavedPostsFilter /> : <LocalPostsFilter />
+          }
+        </>
         }
 
 
