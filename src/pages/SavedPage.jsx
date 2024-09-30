@@ -128,6 +128,7 @@ function SavedPage() {
           setPostsSearch={setPostsSearch}
           isFiltering={isFiltering}
           setIsFiltering={setIsFiltering}
+          cancelFilter={cancelFilter}
         />
       )}
 
@@ -152,6 +153,7 @@ function SavedPage() {
                   postsSearch={postsSearch}
                   setShowChoice={setShowChoice}
                   setIsFiltering={setIsFiltering}
+              
                 />
               ) : (
                 <LocalSearch localSearch={localSearch} setIsFiltering={setIsFiltering} />
@@ -172,6 +174,7 @@ function SavedPage() {
               setShowChoice={setShowChoice}  
               cancelFilter={cancelFilter}
               setFilteredPosts={setFilteredPosts}
+       
             />
           ) : (
             <LocalPostsFilter />

@@ -26,7 +26,7 @@ function SavedChoice(props) {
             }
         </div>
 
-        <SavedPostsSearch choice={props.choice} setIsSearching ={props.setIsSearching} postsSearch={props.postsSearch} localSearch={props.localSearch} setLocalSearch={props.setLocalSearch} setPostsSearch={props.setPostsSearch} setIsFiltering={props.setIsFiltering} isFiltering={props.isFiltering} />
+        <SavedPostsSearch choice={props.choice} setIsSearching ={props.setIsSearching} postsSearch={props.postsSearch} localSearch={props.localSearch} setLocalSearch={props.setLocalSearch} setPostsSearch={props.setPostsSearch}  isFiltering={props.isFiltering} cancelFilter={props.cancelFilter} />
     </div>
   )
 }

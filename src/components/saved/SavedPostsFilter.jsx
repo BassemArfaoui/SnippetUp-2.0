@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import './styles/filter-result.css';
 import Post from '../parts/Post';
 
-function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFilteredPosts, cancelFilter ,setFilteredPosts }) {
+function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFilteredPosts, cancelFilter ,setFilteredPosts ,setShowChoice }) {
   const containerRef = useRef(null);
+  const lastScrollTop = useRef(0);
 
   // Function to handle scroll
   const handleScroll = () => {
@@ -28,7 +29,20 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
   }, [hasMoreFilteredPosts, loadMoreFilteredPosts]);
 
   return (
-    <div className='search-result-container d-flex flex-column gap-3' ref={containerRef} style={{ overflowY: 'auto', maxHeight: '80vh' }}>
+    <div className='search-result-container d-flex flex-column gap-3' ref={containerRef}
+          onScroll={(e) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+
+        if (scrollTop > lastScrollTop.current) {
+          setShowChoice(false);
+        } else if (scrollTop < lastScrollTop.current) {
+          setShowChoice(true);
+        }
+
+        lastScrollTop.current = scrollTop;}}
+
+      
+        >
       {filteredPosts.length === 0 ? (
         <p>No saved posts found with the current filters.</p>
       ) : (

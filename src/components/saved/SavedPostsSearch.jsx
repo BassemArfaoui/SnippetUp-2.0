@@ -8,12 +8,20 @@ function SavedPostsSearch(props) {
 
     const postsSearchChanged=(e)=>{
         props.setPostsSearch(e.target.value);
-        if(props.setIsFiltering !=='none')  props.setIsFiltering('none');
+        if(props.setIsFiltering !=='none')
+         {
+           props.cancelFilter();
+
+         }
     }
 
     const localSearchChanged=(e)=>{
         props.setLocalSearch(e.target.value);
-        if(props.setIsFiltering !=='none')  props.setIsFiltering('none');
+        if(props.setIsFiltering !=='none')
+          {
+            props.cancelFilter();
+
+          }
 
     }
 
