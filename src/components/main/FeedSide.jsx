@@ -1,61 +1,68 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import './styles/Feed.css';
 import Post from '../parts/Post';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; 
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import CustomTooltip from '../tools/CustomTooltip';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 function FeedSide() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true); 
-  const feedSideRef = useRef(null); 
+  const feedSideRef = useRef(null); // Reference to the feed container
+  const observerRef = useRef(null); // Reference to the observer for infinite scroll
   const userId = 1;
-  const limit = 10; 
+  const limit = 10;
 
-  const fetchPosts = useCallback(async () => {
-    if (loading) return;
+  // Function to fetch posts with pagination
+  const fetchPosts = async ({ pageParam = 1 }) => {
+    const response = await axios.get(`http://localhost:4000/${userId}/posts`, {
+      params: { limit, page: pageParam },
+    });
+    return response.data;
+  };
 
-    setLoading(true);
-    try {
-      const response = await axios.get(`http://localhost:4000/${userId}/posts`, {
-        params: { limit }
-      });
-      const newPosts = response.data;
-      setPosts(prevPosts => [...prevPosts, ...newPosts]);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    } finally {
-      setLoading(false);
-      setInitialLoading(false); 
-    }
-  }, [loading, userId, limit]);
+  // useInfiniteQuery hook for infinite scrolling
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery({
+    queryKey: ['posts', userId],
+    queryFn: fetchPosts,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === limit ? allPages.length + 1 : undefined;
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes in milliseconds
+    cacheTime: 1000 * 60 * 60, // Cache for 1 hour, optional
+  });
+  
 
+  // Set up Intersection Observer to detect when the loading spinner is in view
   useEffect(() => {
-    fetchPosts(); 
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
 
-  const handleScroll = useCallback(() => {
-    const { scrollTop, scrollHeight, clientHeight } = feedSideRef.current;
-    if (scrollTop + clientHeight >= scrollHeight - 50 && !loading) {
-      fetchPosts();
-    }
-  }, [fetchPosts, loading]);
-
-  useEffect(() => {
-    const feedSideDiv = feedSideRef.current;
-    if (feedSideDiv) {
-      feedSideDiv.addEventListener('scroll', handleScroll);
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
     }
 
     return () => {
-      if (feedSideDiv) {
-        feedSideDiv.removeEventListener('scroll', handleScroll);
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
       }
     };
-  }, [handleScroll]);
+  }, [fetchNextPage, hasNextPage]);
 
+  // Function to handle the manual scroll down button
   const scroll = () => {
     if (feedSideRef.current) {
       const { scrollTop, clientHeight } = feedSideRef.current;
@@ -63,6 +70,7 @@ function FeedSide() {
     }
   };
 
+  // Keyboard event listener to scroll down
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowDown') {
@@ -78,60 +86,68 @@ function FeedSide() {
 
   return (
     <div className="col-lg-12 p-0">
-      {initialLoading ? (
+      {isLoading ? (
         <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       ) : (
-        <div 
-          className="feed-side d-flex flex-column gap-2" 
-          ref={feedSideRef} 
-        >
+        <div className="feed-side d-flex flex-column gap-2" ref={feedSideRef}>
           <div className="pt-3"></div>
-          {posts.map((post, index) => (
-            <Post
-              key={`${post.id}-${index}`}     
-              id={post.id}
-              title={post.title}
-              snippet={post.snippet}
-              description={post.description}
-              posterId={post.poster_id}
-              language={post.language}
-              likeCount={post.like_count}
-              dislikeCount={post.dislike_count}
-              commentCount={post.comment_count}
-              shareCount={post.share_count}
-              isLiked={post.isLiked}
-              isDisliked={post.isDisliked}
-              isSaved={post.isSaved}
-              isInterested={post.isInterested}
-              githubLink={post.github_link}
-              firstname={post.poster_firstname}
-              lastname={post.poster_lastname}
-              username={post.poster_username}
-            />
-          ))}
-          {loading && (
-            <div className="d-flex justify-content-center my-3">
+          {data.pages.map((page, pageIndex) =>
+            page.map((post, postIndex) => (
+              <Post
+                key={`${post.id}-${pageIndex}-${postIndex}`}
+                id={post.id}
+                title={post.title}
+                snippet={post.snippet}
+                description={post.description}
+                posterId={post.poster_id}
+                language={post.language}
+                likeCount={post.like_count}
+                dislikeCount={post.dislike_count}
+                commentCount={post.comment_count}
+                shareCount={post.share_count}
+                isLiked={post.isLiked}
+                isDisliked={post.isDisliked}
+                isSaved={post.isSaved}
+                isInterested={post.isInterested}
+                githubLink={post.github_link}
+                firstname={post.poster_firstname}
+                lastname={post.poster_lastname}
+                username={post.poster_username}
+              />
+            ))
+          )}
+
+          {/* Observer-triggered element (Spinner for loading more posts) */}
+          <div ref={observerRef} className="d-flex justify-content-center my-3">
+            {isFetchingNextPage && (
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
+            )}
+          </div>
+
+          {/* Error state */}
+          {isError && (
+            <div className="d-flex justify-content-center">
+              <p>Error loading posts. Please try again.</p>
             </div>
           )}
         </div>
       )}
-      <CustomTooltip title='Scroll Down' placement='right'>
+      <CustomTooltip title="Scroll Down" placement="right">
         <IconButton
-          onClick={scroll} 
+          onClick={scroll}
           aria-label="Scroll to End"
-          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning" 
-          style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }} >
+          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
+          style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }}
+        >
           <ArrowDownwardIcon fontSize="large" className="text-dark" />
         </IconButton>
       </CustomTooltip>
-         
     </div>
   );
 }

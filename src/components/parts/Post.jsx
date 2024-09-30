@@ -130,6 +130,13 @@ export default function Post(props) {
           return prev.filter((post)=>post.id!==props.id)
         })
       }
+
+      if(props.setFilteredPosts)
+      {
+        props.setFilteredPosts((prev)=>{
+          return prev.filter((post)=>post.id!==props.id)
+        })
+      }
       successNotify('Snippet Unsaved');
     } catch (err) {
       notify("Couldn't unsave the Snippet");
