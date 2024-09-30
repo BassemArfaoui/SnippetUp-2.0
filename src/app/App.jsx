@@ -6,6 +6,7 @@ import CustomToaster from "../components/tools/CustomToaster";
 import Spinner from "../components/tools/Spinner";
 import PostPage from "../pages/PostPage";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Correct import
+import SavedPostsCollections from "../components/saved/SavedPostsCollections";
 
 // Lazy-load the components
 const MainPage = lazy(() => import("../pages/MainPage"));
@@ -29,6 +30,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/post/:postId" element={<PostPage />} />
+            <Route path="/saved/posts/collections" element={<SavedPostsCollections />} />
           </Routes>
         </Suspense>
       </Router>

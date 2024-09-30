@@ -56,15 +56,20 @@ function Header()
   //menu buttons func
   function updateMenuButton() {
     const btn = document.querySelectorAll('.menu-btn');
-
+  
     btn.forEach(element => {
-        if (element.name === location.pathname) {
-            element.classList.add('active');
-        } else {
-            element.classList.remove('active');
-        }
+      if ( element.name == '/' && location.pathname === element.name) 
+      {
+        element.classList.add('active');
+      }
+      else if (location.pathname.startsWith(element.name) && element.name !== '/') {
+        element.classList.add('active');
+      } 
+      else {
+        element.classList.remove('active');
+      }
     });
-   }
+  }
  
 
 

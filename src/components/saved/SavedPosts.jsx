@@ -8,8 +8,8 @@ import './styles/filter.css'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import TuneIcon from '@mui/icons-material/Tune';
 import AppsIcon from '@mui/icons-material/Apps';
-import CustomTooltip from '../tools/CustomTooltip';
 import { notify } from '../tools/CustomToaster';
+import { Link } from 'react-router-dom';
 
 function SavedPosts(props) {
   const userId = 1;
@@ -118,13 +118,15 @@ function SavedPosts(props) {
                 <TuneIcon fontSize="large" className="text-dark" />
               </IconButton>
 
-              <IconButton
-                className="text-dark bg-warning"
-                variant="contained"
-                onClick={() => {}}
-              >
-                <AppsIcon fontSize="large" className="text-dark" />
-              </IconButton>
+                <Link to='/saved/posts/collections' className='m-0 p-0 d-flex justify-content-center align-items-center'>
+                  <IconButton
+                    className="text-dark bg-warning"
+                    variant="contained"
+                    onClick={props.openCollections}
+                  >
+                      <AppsIcon fontSize="large" className="text-dark" />
+                  </IconButton>
+                </Link>
             </div>
           )}
           <MoreHorizIcon fontSize="large" className="text-dark" />

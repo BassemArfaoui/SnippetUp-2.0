@@ -25,38 +25,7 @@
     font-weight: bold;
 }
 
-icon-button-span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-sizing: border-box;
-    background-color: transparent;
-    outline: 0;
-    border: 0;
-    margin: 0;
-    border-radius: 50%;
-    padding: 8px;
-    cursor: pointer;
-    user-select: none;
-    vertical-align: middle;
-    text-decoration: none;
-    color: inherit;
-    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  }
-  
-  .icon-button-span:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
-  
-  .icon-button-span:active {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
-  
-  .icon-button-span svg {
-    font-size: 1.5rem;
-  }
-  
+
 
   .mui-icon-button {
     display: inline-flex;
