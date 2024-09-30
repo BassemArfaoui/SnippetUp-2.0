@@ -47,7 +47,7 @@ function SavedPage() {
   const applyFilters = async () => {
    if(!filterContent && !filterLanguage && !filterTitle)
    {
-    notify('Please select at least one filter option');
+    notify('Please add at least one filter option');
    }
    else
    {

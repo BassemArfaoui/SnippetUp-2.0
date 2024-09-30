@@ -24,3 +24,81 @@
     font-size: 22px;
     font-weight: bold;
 }
+
+icon-button-span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+    margin: 0;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  
+  .icon-button-span:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  .icon-button-span:active {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  .icon-button-span svg {
+    font-size: 1.5rem;
+  }
+  
+
+  .mui-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    vertical-align: middle;
+    appearance: none;
+    text-decoration: none;
+    text-align: center;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    overflow: visible;
+    color: rgba(0, 0, 0, 0.54);
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    padding: 8px;
+    font-size: 1.75rem;
+  }
+  
+  .mui-icon-button:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  .mui-icon-button:active {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  .mui-icon-button:focus {
+    outline: none;
+  }
+  
+  .mui-icon-button:disabled {
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.26);
+    cursor: default;
+    pointer-events: none;
+  }

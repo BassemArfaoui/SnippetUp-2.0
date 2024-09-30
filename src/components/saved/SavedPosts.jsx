@@ -102,11 +102,11 @@ function SavedPosts(props) {
 
 
       <CustomTooltip title="Options" placement="right">
-        <IconButton
+        <span
           variant="contained"
           onClick={toggleOptions}
           aria-label="Toggle notifications"
-          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
+          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning mui-icon-button"
           style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
         >
           {showOptions && (
@@ -129,7 +129,7 @@ function SavedPosts(props) {
             </div>
           )}
           <MoreHorizIcon fontSize="large" className="text-dark" />
-        </IconButton>
+        </span>
       </CustomTooltip>
 
 
