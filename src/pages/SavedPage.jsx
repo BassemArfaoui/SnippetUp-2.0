@@ -13,6 +13,7 @@ import SpinnerSpan from '../components/tools/SpinnerSpan';
 import SavedPostsFilter from '../components/saved/SavedPostsFilter';
 import LocalPostsFilter from '../components/saved/LocalPostsFilter';
 import axios from 'axios';
+import { notify } from '../components/tools/CustomToaster';
 
 function SavedPage() {
   const userId = 1;
@@ -44,6 +45,12 @@ function SavedPage() {
   };
 
   const applyFilters = async () => {
+   if(!filterContent && !filterLanguage && !filterTitle)
+   {
+    notify('Please select at least one filter option');
+   }
+   else
+   {
     setFilterLoading(true);
     setIsSearching('none');
     setFilterPage(1); // reset to first page when applying new filters
@@ -76,10 +83,15 @@ function SavedPage() {
       setFilterLoading(false);
       setIsFiltering('posts');
     }
+   }
   };
+
+
+   
 
   const loadMoreFilteredPosts = async () => {
     // Increment the page number before making the next request
+    setFilterLoading(true);
     const nextPage = filterPage + 1;
     setFilterPage(nextPage);
 
@@ -102,6 +114,7 @@ function SavedPage() {
 
       // Append the newly fetched posts to the existing ones
       setFilteredPosts((prevPosts) => [...prevPosts, ...fetchedPosts]);
+      setFilterLoading(false);
     } catch (error) {
       console.error('Error loading more filtered posts:', error);
     }
@@ -138,6 +151,7 @@ function SavedPage() {
             <>
               {choice === 'posts' ? (
                 <SavedPosts
+                  showChoice={showChoice}
                   setShowChoice={setShowChoice}
                   handleFilterOpen={handleFilterOpen}
                   handleFilterClose={handleFilterClose}
@@ -171,9 +185,11 @@ function SavedPage() {
               filteredPosts={filteredPosts}
               hasMoreFilteredPosts={hasMoreFilteredPosts}
               loadMoreFilteredPosts={loadMoreFilteredPosts} 
+              showChoice={showChoice}
               setShowChoice={setShowChoice}  
               cancelFilter={cancelFilter}
               setFilteredPosts={setFilteredPosts}
+              filterLoading={filterLoading}
        
             />
           ) : (
@@ -192,7 +208,7 @@ function SavedPage() {
           sx={{
             backgroundColor: '#333',
             width: '60%',
-            height: '60vh',
+            height: '65vh',
             paddingX: '70px',
             paddingY: '20px',
             overflowY: 'auto',

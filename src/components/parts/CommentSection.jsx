@@ -56,17 +56,17 @@ function CommentSection(props) {
   }, [loading, page, props.postId]);
 
   useEffect(() => {
-    setTimeout(() => {
+   
       fetchComments();
-    }, 250);
+  
   }, []);
 
 
   useEffect(() => {
     if (reset) {
-      setTimeout(() => {
+     
         fetchComments();
-      }, 150);
+      
       setReset(false);  
     }
   }, [reset]);

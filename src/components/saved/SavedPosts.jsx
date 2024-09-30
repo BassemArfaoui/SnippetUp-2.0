@@ -51,6 +51,13 @@ function SavedPosts(props) {
 
 
 
+  useEffect(() => {
+    if(props.showChoice ===false)
+    {
+        props.setShowChoice(true)
+    }
+    
+  }, []);
 
   
 

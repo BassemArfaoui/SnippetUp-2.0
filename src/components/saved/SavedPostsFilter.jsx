@@ -1,8 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import './styles/filter-result.css';
 import Post from '../parts/Post';
+import CustomTooltip from '../tools/CustomTooltip';
+import { IconButton } from '@mui/material';
+import BlockIcon from '@mui/icons-material/Block';
 
-function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFilteredPosts, cancelFilter ,setFilteredPosts ,setShowChoice }) {
+
+
+
+function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFilteredPosts, cancelFilter ,setFilteredPosts , showChoice , setShowChoice ,filterLoading }) {
   const containerRef = useRef(null);
   const lastScrollTop = useRef(0);
 
@@ -15,6 +21,12 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
       }
     }
   };
+
+  useEffect(() => {
+    if(showChoice === false)
+    {
+      setShowChoice(true)
+    }},[])
 
   useEffect(() => {
     const currentContainer = containerRef.current;
@@ -31,7 +43,7 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
   return (
     <div className='search-result-container d-flex flex-column gap-3' ref={containerRef}
           onScroll={(e) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.target;
+        const { scrollTop} = e.target;
 
         if (scrollTop > lastScrollTop.current) {
           setShowChoice(false);
@@ -44,7 +56,7 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
       
         >
       {filteredPosts.length === 0 ? (
-        <p>No saved posts found with the current filters.</p>
+        <p className='text-center text-danger mt-5 fw-bolder fs-5'>No Results for those Filters</p>
       ) : (
         filteredPosts.map((post) => (
           <Post
@@ -73,15 +85,40 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
         ))
       )}
 
-      {hasMoreFilteredPosts && (
-        <button onClick={loadMoreFilteredPosts}>Load More</button>
-      )}
+
+
+      {
+        filterLoading && (
+          <div className="d-flex justify-content-center my-3">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )
+      }
+
+
+      {
+        !filterLoading && hasMoreFilteredPosts === false && (
+          <p className="text-center text-muted py-3 text-secondary small fw-bold">
+            No more Results
+          </p>
+        )}
+
 
       {/* Cancel Filter Button */}
       <div className='cancel-filter-container'>
-        <button onClick={cancelFilter} className='cancel-filter-button'>
-          Cancel Filter
-        </button>
+          <CustomTooltip title='Cancel Filters' placement='right'>
+            <IconButton
+              variant="contained"
+              onClick={cancelFilter}
+              aria-label="Toggle notifications"
+              className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
+              style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
+            >
+              <BlockIcon  fontSize="large" className="text-dark"/>
+            </IconButton>
+          </CustomTooltip>
       </div>
     </div>
   );
