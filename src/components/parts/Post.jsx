@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useState , useEffect} from 'react';
+import React, {lazy, Suspense, useState , useEffect, useCallback} from 'react';
 import InfoTooltip from '../tools/InfoTooltip';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import './styles/Post.css';
@@ -40,11 +40,13 @@ export default function Post(props) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false); 
   const [isCommentsOpen, setIsCommentsOpen] = useState(false); 
   const [isShareModalOpen,setIsShareModalOpen]=useState(false)
+  const [isCollectionModalOpen,setIsCollectionModalOpen]=useState(false)
 
   // post states
   const [snippetCode, setSnippetCode] = useState(props.snippet);
   const [snippetTitle, setSnippetTitle] = useState(props.title);
   const [snippetDescription, setSnippetDescription] = useState(props.description);
+  const [collection, setCollection]=useState('')
 
   // reactions counts
   const [react, setReact] = useState('none');
@@ -100,7 +102,7 @@ export default function Post(props) {
     }
   }
 
-  const saveSnippet = async () => {
+  const skipCollection = async () => {
     try {
       await axios.get(`http://localhost:4000/save/${userId}/${props.id}`);
       
@@ -308,6 +310,42 @@ export default function Post(props) {
   
     return `${day} ${month} ${year} ${hours}:${minutes}`;
   }
+
+
+  const closeCollectionModal =() =>
+  {
+    skipCollection();
+    setIsCollectionModalOpen(false);
+  }
+  
+
+  const openCollectionModal = ()=>
+  {
+    setIsCollectionModalOpen(true);
+  }
+
+
+  const collectionChanged = (e)=>
+  {
+    setCollection(e.target.value);
+  }
+
+
+  const saveToCollection = async()=>
+  {
+
+
+    try {
+      await axios.get(`http://localhost:4000/save/${userId}/${props.id}?collection=${collection}`);
+      
+      setIsSaved(true);
+      setCollection('');
+      setIsCollectionModalOpen(false);
+      successNotify('Snippet Saved');
+    } catch (err) {
+      notify("Couldn't save the Snippet");
+    }
+  }
   
   
   
@@ -389,7 +427,7 @@ export default function Post(props) {
               <CustomTooltip title='Save Snippet' placement='top'>
                 <button
                   className="btn btn-outline-light post-btn"
-                  onClick={saveSnippet}
+                  onClick={openCollectionModal}
                 >
                   <BookmarkAddIcon style={{ fontSize: '28px' }} />
                 </button>
@@ -421,6 +459,9 @@ export default function Post(props) {
             </code>
           </pre>
         </div>
+
+
+
         {/* Fullscreen Modal */}
         <Modal
           open={isFullScreen}
@@ -465,6 +506,9 @@ export default function Post(props) {
             </pre>
           </Box>
         </Modal>
+
+
+
         {/* Description Modal */}
         <Modal
           open={isDescriptionOpen}
@@ -507,6 +551,10 @@ export default function Post(props) {
             </div>
           </Box>
         </Modal>
+
+
+
+
          {/* Share Modal */}
          <Modal
           open={isShareModalOpen}
@@ -555,6 +603,80 @@ export default function Post(props) {
             </div>
           </Box>
         </Modal>
+
+
+
+        
+
+        {/* collection modal  */}
+        <Modal
+          open={isCollectionModalOpen}
+          onClose={closeCollectionModal}
+          aria-labelledby="description-modal-title"
+          aria-describedby="description-modal-content"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: '16px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              width: '40%',
+              backgroundColor: '#1E1E1E',
+              color: 'white',
+              border:'2px solid darkgray'
+            }}
+          >
+            <IconButton
+              aria-label="close"
+              onClick={closeCollectionModal}
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                color: 'white'
+              }}
+            >
+              <CloseIcon className='fs-2'/>
+            </IconButton>
+            <h3 id="share-modal-title" className="fw-bold mb-4 text-center text-warning px-3">Add to a Collection :</h3>
+            <div className='w-100 d-flex justify-content-center align-items-center mt-4 mb-3'>
+              <input type='text' placeholder='Collection' className='collection-input form-control rounded-3 fw-bold text-primary fs-5 text-center' style={{height:'50px',width:'300px'}} value={collection} onChange={collectionChanged} autoFocus autoCorrect='off'/>
+            </div>
+
+            <div className='d-flex gap-3  justify-content-center align-items-center mt-4'>
+                <button className=' btn border-2 border-primary text-primary fw-bold fs-6 lh-base rounded-4' onClick={saveToCollection}>Add</button>
+
+
+                <button className='btn border-2 rounded-4  border-secondary text-secondary fs-6 lh-base small' onClick={closeCollectionModal}>Skip</button>
+            </div>
+
+            <div className='d-flex justify-content-center align-items-center'>
+            <IconButton
+              aria-label="close"
+              onClick={closeCollectionModal}
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                color: 'white'
+              }}
+            >
+              <CloseIcon className='fs-2'/>
+            </IconButton>
+            </div>
+          </Box>
+        </Modal>
+
+
+
+
         {/* Reactions */}
         <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
           <div className="text-center">

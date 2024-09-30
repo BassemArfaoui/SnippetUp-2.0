@@ -101,7 +101,6 @@ function SavedPosts(props) {
     >
 
 
-      <CustomTooltip title="Options" placement="right">
         <span
           variant="contained"
           onClick={toggleOptions}
@@ -130,7 +129,6 @@ function SavedPosts(props) {
           )}
           <MoreHorizIcon fontSize="large" className="text-dark" />
         </span>
-      </CustomTooltip>
 
 
 

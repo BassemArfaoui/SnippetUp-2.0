@@ -82,3 +82,8 @@
     right: 0;
     bottom: 0;
   }
+
+  .collection-input::placeholder
+  {
+    color: rgb(184, 177, 177);
+  }

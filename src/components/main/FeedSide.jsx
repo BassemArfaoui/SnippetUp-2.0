@@ -29,16 +29,16 @@ function FeedSide() {
     isFetchingNextPage,
     isLoading,
     isError,
+    isFetching, // This flag is true when refetching data
   } = useInfiniteQuery({
     queryKey: ['posts', userId],
     queryFn: fetchPosts,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === limit ? allPages.length + 1 : undefined;
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes in milliseconds
-    cacheTime: 1000 * 60 * 60, // Cache for 1 hour, optional
+    staleTime: 0,
+    cacheTime: 0,
   });
-  
 
   // Set up Intersection Observer to detect when the loading spinner is in view
   useEffect(() => {
@@ -95,6 +95,16 @@ function FeedSide() {
       ) : (
         <div className="feed-side d-flex flex-column gap-2" ref={feedSideRef}>
           <div className="pt-3"></div>
+
+          {/* Show a loading overlay on top of the old data while refetching */}
+            {isFetching && (
+              <div className="d-flex justify-content-center my-3 mb-5">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+              </div>
+            )}
+
           {data.pages.map((page, pageIndex) =>
             page.map((post, postIndex) => (
               <Post
@@ -124,7 +134,7 @@ function FeedSide() {
           {/* Observer-triggered element (Spinner for loading more posts) */}
           <div ref={observerRef} className="d-flex justify-content-center my-3">
             {isFetchingNextPage && (
-              <div className="spinner-border text-primary" role="status">
+              <div className="spinner-border text-primary mb-5" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             )}
@@ -138,6 +148,7 @@ function FeedSide() {
           )}
         </div>
       )}
+
       <CustomTooltip title="Scroll Down" placement="right">
         <IconButton
           onClick={scroll}
