@@ -105,7 +105,7 @@ function FeedSide() {
               </div>
             )}
 
-          {data.pages.map((page, pageIndex) =>
+          {data?.pages.map((page, pageIndex) =>
             page.map((post, postIndex) => (
               <Post
                 key={`${post.id}-${pageIndex}-${postIndex}`}

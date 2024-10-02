@@ -99,9 +99,9 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
 
 
       {
-        !filterLoading && hasMoreFilteredPosts === false && (
+        !filterLoading && hasMoreFilteredPosts === false && filteredPosts.length >0  && (
           <p className="text-center text-muted py-3 text-secondary small fw-bold">
-            No more Results
+            No More Results
           </p>
         )}
 

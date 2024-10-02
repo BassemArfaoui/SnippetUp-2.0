@@ -335,15 +335,21 @@ export default function Post(props) {
   {
 
 
-    try {
-      await axios.get(`http://localhost:4000/save/${userId}/${props.id}?collection=${collection}`);
-      
-      setIsSaved(true);
-      setCollection('');
-      setIsCollectionModalOpen(false);
-      successNotify('Snippet Saved');
-    } catch (err) {
-      notify("Couldn't save the Snippet");
+    if(collection)
+    {
+        try {
+          await axios.get(`http://localhost:4000/save/${userId}/${props.id}?collection=${collection}`);
+          
+          setIsSaved(true);
+          setCollection('');
+          setIsCollectionModalOpen(false);
+          successNotify('Snippet Saved');
+        } catch (err) {
+          notify("Couldn't save the Snippet");
+        }
+    } else 
+    {
+      notify("Can't Add an Empty Collection")
     }
   }
   
@@ -627,7 +633,7 @@ export default function Post(props) {
               borderRadius: '16px',
               maxHeight: '90vh',
               overflowY: 'auto',
-              width: '40%',
+              width: '50%',
               backgroundColor: '#1E1E1E',
               color: 'white',
               border:'2px solid darkgray'

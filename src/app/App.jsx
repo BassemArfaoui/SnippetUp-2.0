@@ -5,8 +5,10 @@ import NotificationBell from "../components/parts/NotificationsBell";
 import CustomToaster from "../components/tools/CustomToaster";
 import Spinner from "../components/tools/Spinner";
 import PostPage from "../pages/PostPage";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Correct import
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Correct 
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import SavedPostsCollections from "../components/saved/SavedPostsCollections";
+import CollectionPosts from "../components/saved/CollectionPosts";
 
 // Lazy-load the components
 const MainPage = lazy(() => import("../pages/MainPage"));
@@ -19,6 +21,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <Router>
         <CustomToaster />
         <NotificationBell />
@@ -31,6 +34,7 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/post/:postId" element={<PostPage />} />
             <Route path="/saved/posts/collections" element={<SavedPostsCollections />} />
+            <Route path="/saved/posts/collection/:collection" element={<CollectionPosts/>} />
           </Routes>
         </Suspense>
       </Router>

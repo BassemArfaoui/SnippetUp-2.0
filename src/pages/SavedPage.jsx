@@ -219,7 +219,7 @@ function SavedPage() {
             sx={{
               backgroundColor: '#333',
               width: '60%',
-              height: '65vh',
+              maxHeight: '95vh',
               paddingX: '70px',
               paddingY: '20px',
               overflowY: 'auto',
@@ -243,49 +243,51 @@ function SavedPage() {
             >
               <CloseIcon className='fs-2' />
             </IconButton>
-            <h2 id='filter-modal-title' className='text-center mb-4 mt-2 fw-bold text-warning'>
-              Filter Saved Posts
-            </h2>
-            <div className='filters-buttons h-75 w-100 d-flex flex-column justify-content-center align-items-center mt-3'>
-              <form action='' method='POST'>
-                <div className='d-flex flex-column gap-3'>
-                  <div className='d-flex flex-column flex-md-row gap-3'>
-                    <input
+            <div className="d-flex flex-column gap-3 align-items-center">
+              <h2 id='filter-modal-title' className='text-center mb-4 mt-2 fw-bold text-warning mb-3'>
+                Filter Saved Posts
+              </h2>
+              <div className='filters-buttons h-75 w-100 d-flex flex-column justify-content-center align-items-center mt-3'>
+                <form action='' method='POST'>
+                  <div className='d-flex flex-column gap-3'>
+                    <div className='d-flex flex-column flex-md-row gap-3'>
+                      <input
+                        className='filter-input form-control'
+                        placeholder='Title'
+                        value={filterTitle}
+                        onChange={(e) => setFilterTitle(e.target.value)}
+                      />
+                      <input
+                        value={filterLanguage}
+                        className='filter-input form-control'
+                        placeholder='Language'
+                        onChange={(e) => setFilterLanguage(e.target.value)}
+                      />
+                    </div>
+                    <textarea
                       className='filter-input form-control'
-                      placeholder='Title'
-                      value={filterTitle}
-                      onChange={(e) => setFilterTitle(e.target.value)}
-                    />
-                    <input
-                      value={filterLanguage}
-                      className='filter-input form-control'
-                      placeholder='Language'
-                      onChange={(e) => setFilterLanguage(e.target.value)}
-                    />
+                      value={filterContent}
+                      placeholder='Content'
+                      onChange={(e) => setFilterContent(e.target.value)}
+                    ></textarea>
                   </div>
-                  <textarea
-                    className='filter-input form-control'
-                    value={filterContent}
-                    placeholder='Content'
-                    onChange={(e) => setFilterContent(e.target.value)}
-                  ></textarea>
+                </form>
+                <div className='d-flex justify-content-center mt-5'>
+                  <CustomTooltip title='Apply Filters' placement='top'>
+                    <IconButton
+                      aria-label='Scroll to End'
+                      className='mx-4 mt-0 bg-warning'
+                      style={{ backgroundColor: '#f8f9fa' }}
+                      onClick={applyFilters} // Trigger the apply filters
+                    >
+                      {!filterLoading ? (
+                        <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
+                      ) : (
+                        <SpinnerSpan />
+                      )}
+                    </IconButton>
+                  </CustomTooltip>
                 </div>
-              </form>
-              <div className='d-flex justify-content-center mt-5'>
-                <CustomTooltip title='Apply Filters' placement='top'>
-                  <IconButton
-                    aria-label='Scroll to End'
-                    className='mx-4 mt-0 bg-warning'
-                    style={{ backgroundColor: '#f8f9fa' }}
-                    onClick={applyFilters} // Trigger the apply filters
-                  >
-                    {!filterLoading ? (
-                      <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
-                    ) : (
-                      <SpinnerSpan />
-                    )}
-                  </IconButton>
-                </CustomTooltip>
               </div>
             </div>
           </Box>
