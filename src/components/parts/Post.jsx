@@ -331,12 +331,12 @@ export default function Post(props) {
   }
 
 
-  const saveToCollection = async()=>
+  const saveToCollection = async(e)=>
   {
 
-
+    e.preventDefault();
     if(collection)
-    {
+    {   
         try {
           await axios.get(`http://localhost:4000/save/${userId}/${props.id}?collection=${collection}`);
           
@@ -652,16 +652,15 @@ export default function Post(props) {
               <CloseIcon className='fs-2'/>
             </IconButton>
             <h3 id="share-modal-title" className="fw-bold mb-4 text-center text-warning px-3">Add to a Collection :</h3>
-            <div className='w-100 d-flex justify-content-center align-items-center mt-4 mb-3'>
-              <input type='text' placeholder='Collection' className='collection-input form-control rounded-3 fw-bold text-primary fs-5 text-center' style={{height:'50px',width:'300px'}} value={collection} onChange={collectionChanged} autoFocus autoCorrect='off'/>
-            </div>
-
-            <div className='d-flex gap-3  justify-content-center align-items-center mt-4'>
-                <button className=' btn border-2 border-primary text-primary fw-bold fs-6 lh-base rounded-4' onClick={saveToCollection}>Add</button>
-
-
-                <button className='btn border-2 rounded-4  border-secondary text-secondary fs-6 lh-base small' onClick={closeCollectionModal}>Skip</button>
-            </div>
+            <form action="" onSubmit={saveToCollection}>
+              <div className='w-100 d-flex justify-content-center align-items-center mt-4 mb-3'>
+                <input type='text' placeholder='Collection' className='collection-input form-control rounded-3 fw-bold text-primary fs-5 text-center' style={{height:'50px',width:'300px'}} value={collection} onChange={collectionChanged} autoFocus autoCorrect='off'/>
+              </div>
+              <div className='d-flex gap-3  justify-content-center align-items-center mt-4'>
+                  <button className=' btn border-2 border-primary text-primary fw-bold fs-6 lh-base rounded-4' role='submit'>Add</button>
+                  <button className='btn border-2 rounded-4  border-secondary text-secondary fs-6 lh-base small' onClick={closeCollectionModal}>Skip</button>
+              </div>
+            </form>
 
             <div className='d-flex justify-content-center align-items-center'>
             <IconButton

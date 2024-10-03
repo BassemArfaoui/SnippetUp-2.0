@@ -122,7 +122,6 @@ function SavedPosts(props) {
                   <IconButton
                     className="text-dark bg-warning"
                     variant="contained"
-                    onClick={props.openCollections}
                   >
                       <AppsIcon fontSize="large" className="text-dark" />
                   </IconButton>

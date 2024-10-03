@@ -7,14 +7,14 @@ import Spinner from "../components/tools/Spinner";
 import PostPage from "../pages/PostPage";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Correct 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import SavedPostsCollections from "../components/saved/SavedPostsCollections";
-import CollectionPosts from "../components/saved/CollectionPosts";
 
 // Lazy-load the components
 const MainPage = lazy(() => import("../pages/MainPage"));
 const SavedPage = lazy(() => import("../pages/SavedPage"));
 const ProfilePage = lazy(() => import("../pages/ProfilePage"));
 const SettingsPage = lazy(() => import("../pages/SettingsPage"));
+const SavedPostsCollections = lazy (()=> import("../components/saved/SavedPostsCollections"))
+const CollectionPosts = lazy (()=> import("../components/saved/CollectionPosts"))
 
 const queryClient = new QueryClient();
 

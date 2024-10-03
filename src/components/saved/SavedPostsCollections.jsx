@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import './styles/collections.css';
 import { notify } from '../tools/CustomToaster';
 import Spinner from '../tools/Spinner';
 import CloseIcon from '@mui/icons-material/Close';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 function SavedPostsCollections() {
   const userId = 1;
@@ -18,29 +19,38 @@ function SavedPostsCollections() {
     return response.data; // assuming the collections are returned as an array
   };
 
-  // Use react-query to fetch collections without caching
-  const { data: collections, isLoading, isError, isFetching } = useQuery({
+  // Use react-query to fetch collections
+  const { data: collections, isLoading, isError, isFetching, refetch } = useQuery({
     queryKey: ['collections', userId],
     queryFn: fetchCollections,
-    staleTime: 0, // No stale time, always fetch new data
-    cacheTime: 0,  // No cache, do not store data
-    refetchOnWindowFocus: true, // Refetch when window focus returns
-    refetchOnMount: true, // Refetch when the component mounts
-    refetchOnReconnect: true, // Refetch when reconnecting to the internet
+    refetchOnWindowFocus: true,
+
   });
 
-  // Display an error notification when there is an error
-  if (isError) {
-    return (
-      <div className='h-100 w-100 d-flex justify-content-center align-items-center text-danger fw-bold mt-5 fs-4' style={{ height: '70vh' }}>
-        <span className='mt-5'>Couldn't load the collections</span>
-      </div>
-    );
-  }
+  // Optional useEffect for error notification
+  useEffect(() => {
+    if (isError) {
+      notify("Error loading collections");
+    }
+  }, [isError]);
 
-  // Display loading spinner only on the first load (no cached data yet)
   if (isLoading) {
     return <Spinner />;
+  }
+
+  if (isError) {
+    return (
+      <div className='d-flex justify-content-center align-items-center' style={{ height: '85vh' }}>
+        <IconButton
+          onClick={refetch}
+          aria-label="Refresh"
+          className="bg-primary"
+          style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
+        >
+          <RefreshIcon style={{ fontSize: 50 }} className="text-dark" />
+        </IconButton>
+      </div>
+    );
   }
 
   return (
@@ -52,20 +62,23 @@ function SavedPostsCollections() {
         </div>
       )}
 
-      <h2 className="text-center my-5 fw-bolder fs-1">Collections :</h2>
+     {collections && collections.length > 0 && <h2 className="text-center my-5 fw-bolder fs-2">Saved Posts Collections :</h2>}
 
-      {/* Display collections */}
-      <div className="collections-list d-flex justify-content-center gap-4 flex-wrap px-5">
+      <div className="collections-list d-flex justify-content-center gap-3 m-0 flex-wrap px-3">
         {collections && collections.length > 0 ? (
           collections.map((collection, index) => (
-            <Link to={`/saved/posts/collection/${collection}`}>
-              <h3 key={index} className="collection-item btn fw-bold border-2 border-primary bg-primary fs-5 px-4 py-2">
-                {collection || 'Untitled Collection'}
-              </h3>
-            </Link>
+            <div key={index + collection}>
+              <Link to={`/saved/posts/collection/${collection}`}>
+                <h3 className="collection-item fw-bold border-2 border-primary fs-5 px-4 py-2">
+                  {collection || 'Untitled Collection'}
+                </h3>
+              </Link>
+            </div>
           ))
         ) : (
-          <div>No collections found</div>
+          <div className="text-center fw-bold text-secondary small fs-4 my-5 d-flex align-items-center" style={{height:'50vh'}}>
+            No collections yet
+          </div>
         )}
       </div>
 
@@ -74,7 +87,7 @@ function SavedPostsCollections() {
           <CustomTooltip title='Close Collections' placement='right'>
             <IconButton
               variant="contained"
-              aria-label="Toggle notifications"
+              aria-label="Close collections"
               className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
               style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
             >
