@@ -3,7 +3,7 @@ import '../styles/filter-result.css';
 import Post from '../../parts/Post';
 import CustomTooltip from '../../tools/CustomTooltip';
 import { IconButton } from '@mui/material';
-import BlockIcon from '@mui/icons-material/Block';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 
 
@@ -116,7 +116,7 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
               className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
               style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
             >
-              <BlockIcon  fontSize="large" className="text-dark"/>
+              <ArrowBackIosNewIcon  fontSize="large" className="text-dark"/>
             </IconButton>
           </CustomTooltip>
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import '../styles/saves.css'
+import Snippet from './Snippet';
 
 function SavedLocal({ setShowChoice }) {
   const savedLocalRef = useRef(null);
@@ -30,9 +31,9 @@ function SavedLocal({ setShowChoice }) {
   }, [setShowChoice]);
 
   return (
-    <div className='local-saves' ref={savedLocalRef}>
+    <div className='local-saves d-flex flex-column gap-3' ref={savedLocalRef}>
       {[...Array(17)].map((_, index) => (
-        <h1 key={index} className='text-center'>test</h1>
+        <Snippet/>
       ))}
       <br/>
     </div>
