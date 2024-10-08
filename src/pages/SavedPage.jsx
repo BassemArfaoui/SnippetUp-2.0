@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import '../css/SavedPage.css';
 import SavedChoice from '../components/saved/SavedChoice';
-import SavedPosts from '../components/saved/SavedPosts';
-import SavedLocal from '../components/saved/SavedLocal';
-import PostsSearch from '../components/saved/PostsSearch';
-import LocalSearch from '../components/saved/LocalSearch';
+import SavedPosts from '../components/saved/saved-posts/SavedPosts';
+import SavedLocal from '../components/saved/local-snippets/SavedLocal';
+import PostsSearch from '../components/saved/saved-posts/PostsSearch';
+import LocalSearch from '../components/saved/local-snippets/LocalSearch';
 import CloseIcon from '@mui/icons-material/Close';
 import { Modal, Box, IconButton } from '@mui/material';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import CustomTooltip from '../components/tools/CustomTooltip';
 import SpinnerSpan from '../components/tools/SpinnerSpan';
-import SavedPostsFilter from '../components/saved/SavedPostsFilter';
-import LocalPostsFilter from '../components/saved/LocalPostsFilter';
+import SavedPostsFilter from '../components/saved/saved-posts/SavedPostsFilter';
+import LocalPostsFilter from '../components/saved/local-snippets/LocalPostsFilter';
 import axios from 'axios';
 import { notify } from '../components/tools/CustomToaster';
-import SavedPostsCollections from '../components/saved/SavedPostsCollections';
+import SavedPostsCollections from '../components/saved/saved-posts/SavedPostsCollections';
 
 function SavedPage() {
   const userId = 1;

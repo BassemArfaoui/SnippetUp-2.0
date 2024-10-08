@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import './styles/filter-result.css';
-import Post from '../parts/Post';
-import CustomTooltip from '../tools/CustomTooltip';
+import '../styles/filter-result.css';
+import Post from '../../parts/Post';
+import CustomTooltip from '../../tools/CustomTooltip';
 import { IconButton } from '@mui/material';
 import BlockIcon from '@mui/icons-material/Block';
 

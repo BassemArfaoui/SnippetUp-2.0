@@ -1,5 +1,5 @@
 import React from 'react'
-import './styles/filter-result.css'
+import '../styles/filter-result.css'
 
 
 

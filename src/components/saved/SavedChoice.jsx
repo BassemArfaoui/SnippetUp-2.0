@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './styles/choice.css'
-import SavedPostsSearch from './SavedPostsSearch'
+import SavedPostsSearch from './saved-posts/SavedPostsSearch'
 
 function SavedChoice(props) {
 

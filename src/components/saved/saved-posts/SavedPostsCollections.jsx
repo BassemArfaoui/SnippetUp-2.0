@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@mui/material';
-import CustomTooltip from '../tools/CustomTooltip';
-import './styles/collections.css';
-import { notify } from '../tools/CustomToaster';
-import Spinner from '../tools/Spinner';
+import CustomTooltip from '../../tools/CustomTooltip';
+import '../styles/collections.css';
+import { notify } from '../../tools/CustomToaster';
+import Spinner from '../../tools/Spinner';
 import CloseIcon from '@mui/icons-material/Close';
 import RefreshIcon from '@mui/icons-material/Refresh';
 

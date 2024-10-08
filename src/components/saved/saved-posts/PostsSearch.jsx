@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import Post from '../parts/Post';
-import Spinner from '../tools/Spinner';
-import './styles/search-result.css';
-import { notify } from '../tools/CustomToaster';
+import Post from '../../parts/Post';
+import Spinner from '../../tools/Spinner';
+import '../styles/search-result.css';
+import { notify } from '../../tools/CustomToaster';
 
 function PostsSearch({ postsSearch, setShowChoice}) {
   const userId = 1;

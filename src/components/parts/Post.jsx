@@ -120,6 +120,12 @@ export default function Post(props) {
       await axios.get(`http://localhost:4000/unsave/${userId}/${props.id}`);
       
       setIsSaved(false);
+
+      // if(props.filterPost)
+      // {
+      //   props.filterPost(props.id);
+      // }
+
       if(props.setSavedPosts)
       {
         props.setSavedPosts((prev)=>{

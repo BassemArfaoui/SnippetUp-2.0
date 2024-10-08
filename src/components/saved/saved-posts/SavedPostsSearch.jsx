@@ -1,5 +1,5 @@
 import React , {useEffect, useState} from 'react'
-import './styles/search.css'
+import '../styles/search.css'
 
 function SavedPostsSearch(props) {
 

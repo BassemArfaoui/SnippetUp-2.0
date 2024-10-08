@@ -1,5 +1,5 @@
 import React from 'react'
-import './styles/search-result.css'
+import '../styles/search-result.css'
 
 
 

@@ -13,8 +13,8 @@ const MainPage = lazy(() => import("../pages/MainPage"));
 const SavedPage = lazy(() => import("../pages/SavedPage"));
 const ProfilePage = lazy(() => import("../pages/ProfilePage"));
 const SettingsPage = lazy(() => import("../pages/SettingsPage"));
-const SavedPostsCollections = lazy (()=> import("../components/saved/SavedPostsCollections"))
-const CollectionPosts = lazy (()=> import("../components/saved/CollectionPosts"))
+const SavedPostsCollections = lazy (()=> import("../components/saved/saved-posts/SavedPostsCollections"))
+const CollectionPosts = lazy (()=> import("../components/saved/saved-posts/CollectionPosts"))
 
 const queryClient = new QueryClient();
 

@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import Post from '../parts/Post';
-import Spinner from '../tools/Spinner';
+import Post from '../../parts/Post';
+import Spinner from '../../tools/Spinner';
 import { Modal, Box, IconButton } from '@mui/material';
-import './styles/saves.css';
-import './styles/filter.css'
+import '../styles/saves.css';
+import '../styles/filter.css'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import TuneIcon from '@mui/icons-material/Tune';
 import AppsIcon from '@mui/icons-material/Apps';
-import { notify } from '../tools/CustomToaster';
+import { notify } from '../../tools/CustomToaster';
 import { Link } from 'react-router-dom';
 
 function SavedPosts(props) {

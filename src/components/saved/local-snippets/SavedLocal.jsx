@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import './styles/saves.css'
+import '../styles/saves.css'
 
 function SavedLocal({ setShowChoice }) {
   const savedLocalRef = useRef(null);
