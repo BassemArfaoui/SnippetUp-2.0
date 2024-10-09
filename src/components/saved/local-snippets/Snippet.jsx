@@ -1,235 +1,378 @@
-import React from 'react'
-import profile_pic from '../../../imgs/profile_pic.jpg';
+import React, { useState, useEffect, useRef } from 'react';
 import CustomTooltip from '../../tools/CustomTooltip';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Modal, Box, IconButton } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import CommentIcon from '@mui/icons-material/Comment';
-import ShareIcon from '@mui/icons-material/Share';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import CodeHighlighter from '../../tools/CodeHighliter';
+import { notify, successNotify } from '../../tools/CustomToaster';
 
-import { useState } from 'react';
+function Snippet(props) {
+  const [isCopied, setIsCopied] = useState(false);
+  const [isFullScreen, setisFullScreen] = useState(false);
+  const [isEditModalOpen,setIsEditModalOpen]=useState(false);
+  const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+
+  // Ref for options holder
+  const optionsRef = useRef(null);
+
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(props.content);
+      setIsCopied(true);
+      successNotify('Snippet Copied');
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 1600);
+    } catch (err) {
+      console.log(err);
+      notify("Couldn't Copy");
+    }
+  };
+
+  const openFullScreen = () => {
+    setisFullScreen(true);
+  };
+
+  const closeFullScreen = () => {
+    setisFullScreen(false);
+  };
+
+  const openOptions = () => {
+    setShowOptions(true);
+  };
+
+  const closeOptions = () => {
+    setShowOptions(false);
+  };
+
+  const openEditModal=()=>{
+    closeOptions();
+    setIsEditModalOpen(true);
+  }
+
+  const closeEditModal=()=>{
+    setIsEditModalOpen(false);
+  }
+
+  const openConfirmModal = ()=>
+  {
+    closeOptions();
+    setIsConfirmModalOpen(true)
+  }
+
+  const closeConfirmModal = ()=>
+  {
+    setIsConfirmModalOpen(false)
+  }
+
+  const deleteSnippet = ()=>
+  {
+    closeConfirmModal();
+    successNotify('Snippet Deleted');
+  }
+  
+
+  
 
 
-function Snippet() {
+  // Handle click outside of options div
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
 
- const [isInterested, setIsInterested] = useState(false);
+    // Add event listener for clicks
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      // Clean up event listener on unmount
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [optionsRef]);
+
   return (
     <div className="post rounded-4 p-4">
+      {/* Snippet Title and Buttons */}
+      <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
+        <h3 className="snippet-title fw-bold text-center">{props.title}</h3>
+      </div>
 
-    {/* Snippet Title and Buttons */}
-    <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
-      <h3 className="snippet-title fw-bold text-center">some title</h3>
-
-    </div>
-    {/* Code Block */}
-    <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
-      <pre className="text-white " style={{fontSize:'22px'}}>
-        <code>
-          <CodeHighlighter codeSnippet={`const fetchData = async () => { 
-     try { 
-       let response = await fetch("api/data"); 
-       let data = await response.json(); 
-       console.log(data); 
-     } 
-     catch (error) { 
-       console.error("Error fetching data:", error); 
-     } 
-   }`} />
-        </code>
-      </pre>
-    </div>
-
-
-    <div className='d-flex justify-content-between align-items-center mt-4'>
-        <div className=" d-inline-flex align-items-center justify-content-between mb-3 px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
-            javascript
-        </div>
-
-        <div className="buttons justify-content-end d-flex gap-3 align-items-center">
-        
-        {/* Description Button */}
-        <CustomTooltip title='Description' placement='top'>
-          <button className="btn btn-outline-light post-btn" onClick={()=>{}}>
-        <LightbulbIcon style={{ fontSize: '27px' }} />
-          </button>
-        </CustomTooltip>
-        
-        <CustomTooltip title='Description' placement='top'>
-          <button className="btn btn-outline-light post-btn" onClick={()=>{}}>
-        <LightbulbIcon style={{ fontSize: '27px' }} />
-          </button>
-        </CustomTooltip>
-        
-        <CustomTooltip title='Description' placement='top'>
-          <button className="btn btn-outline-light post-btn" onClick={()=>{}}>
-        <LightbulbIcon style={{ fontSize: '27px' }} />
-          </button>
-        </CustomTooltip>
-        
-        <CustomTooltip title='Description' placement='top'>
-          <button className="btn btn-outline-light post-btn" onClick={()=>{}}>
-        <LightbulbIcon style={{ fontSize: '27px' }} />
-          </button>
-        </CustomTooltip>
-        {/* Save, Copy, and Fullscreen Buttons */}
-        {/* {isSaved ? (
-          <button
-        className="btn btn-outline-primary post-btn"
-        onClick={unsaveSnippet}
-          >
-        <BookmarkAddedIcon style={{ fontSize: '28px' }} />
-          </button>
-        ) : (
-          <CustomTooltip title='Save Snippet' placement='top'>
-        <button
-          className="btn btn-outline-light post-btn"
-          onClick={openCollectionModal}
-        >
-          <BookmarkAddIcon style={{ fontSize: '28px' }} />
-        </button>
-          </CustomTooltip>
-        )} */}
-        
-        
-        {/* {isCopied ? (
-          <button className="btn btn-outline-primary post-btn">
-        <DoneIcon />
-          </button>
-        ) : (
-          <CustomTooltip title='Copy Snippet' placement='top'>
-        <button className="btn btn-outline-light post-btn" onClick={copyCode}>
-          <ContentCopyIcon />
-        </button>
-          </CustomTooltip>
-        )} */}
-        
-        {/* 
-        
-        <CustomTooltip title='Full Screen' placement='top'>
-          <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
-        <FullscreenIcon style={{ fontSize: '34px' }} />
-          </button>
-        </CustomTooltip> */}
-        </div>
-    </div>
-
-
-
-    {/* Fullscreen Modal */}
-    {/* <Modal
-      open={isFullScreen}
-      onClose={closeFullScreen}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 4,
-          borderRadius: '16px',
-          maxHeight: '90vh',
-          overflowY: 'auto',
-          width: '90%',
-          backgroundColor: '#1E1E1E',
-          color: 'white',
-        }}
-      >
-        <IconButton
-          aria-label="close"
-          onClick={closeFullScreen}
-          sx={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            color: 'white'
-          }}
-        >
-          <CloseIcon className='fs-2'/>
-        </IconButton>
-        <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">{snippetTitle}</h2>
-        <pre id="modal-description" style={{ whiteSpace: 'pre-wrap' }}>
-          <code style={{fontSize:'25px'}}>
-            <CodeHighlighter codeSnippet={snippetCode} />
+      {/* Code Block */}
+      <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
+        <pre className="text-white " style={{fontSize:'22px'}}>
+          <code>
+            <CodeHighlighter codeSnippet={props.content} />
           </code>
         </pre>
-      </Box>
-    </Modal> */}
+      </div>
 
+      <div className='d-flex justify-content-between align-items-center mt-4'>
+        <div className=" d-inline-flex align-items-center justify-content-between ms-2 px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
+          {props.language}
+        </div>
 
+        <div className="buttons justify-content-end d-flex gap-3 align-items-center me-2">
+          {/* Action Buttons */}
+          <div className='options-holder position-relative' ref={optionsRef}>
+            <span className='m-0 p-0'>
+              {!showOptions ? 
+                <button className="btn btn-outline-light post-btn" onClick={openOptions}>
+                  <MoreVertIcon  style={{ fontSize: '27px' }} />
+                </button> :
+                <button className="btn btn-outline-primary post-btn" onClick={closeOptions}>
+                  <MoreVertIcon  style={{ fontSize: '27px' }} />
+                </button>
+              }
+            </span>
 
-    {/* Description Modal */}
-    {/* <Modal
-      open={isDescriptionOpen}
-      onClose={closeDescription}
-      aria-labelledby="description-modal-title"
-      aria-describedby="description-modal-content"
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 4,
-          borderRadius: '16px',
-          maxHeight: '90vh',
-          overflowY: 'auto',
-          width: '50%',
-          backgroundColor: '#1E1E1E',
-          color: 'white',
-        }}
+            {showOptions && (
+              <div className='d-inline-flex justify-content-center align-items-center gap-3 position-absolute bottom-100 mb-3 start-50 bg-primary p-2 rounded-3' style={{transform:'translateX(-50%)'}}>
+                <CustomTooltip title='Snippet Infos' placement='top'>
+                  <button className="btn btn-outline-light post-btn" onClick={() => {}}>
+                    <InfoIcon  style={{ fontSize: '27px' }} />
+                  </button>
+                </CustomTooltip>
+
+                <CustomTooltip title='Edit Snippet' placement='top'>
+                  <button className="btn btn-outline-light post-btn" onClick={openEditModal}>
+                    <EditIcon style={{ fontSize: '28px' }} />
+                  </button>
+                </CustomTooltip>
+
+                <CustomTooltip title='Delete Snippet' placement='top'>
+                  <button className="btn text-light post-btn" onClick={openConfirmModal} style={{backgroundColor:'#eb4334'}}>
+                    <DeleteIcon style={{ fontSize: '27px' }} />
+                  </button>
+                </CustomTooltip>
+
+              </div>
+            )}
+          </div>
+
+          {isCopied ? (
+            <button className="btn btn-outline-primary post-btn">
+              <DoneIcon />
+            </button>
+          ) : (
+            <CustomTooltip title='Copy Snippet' placement='top'>
+              <button className="btn btn-outline-light post-btn" onClick={copyCode}>
+                <ContentCopyIcon style={{ fontSize: '27px' }}/>
+              </button>
+            </CustomTooltip>
+          )}
+
+          <CustomTooltip title='Full Screen' placement='top'>
+            <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
+              <FullscreenIcon style={{ fontSize: '34px' }} />
+            </button>
+          </CustomTooltip>
+
+          <CustomTooltip title='Post' placement='top'>
+            <button className="btn btn-outline-primary post-btn" onClick={() => {}}>
+              <ArrowUpwardIcon style={{ fontSize: '37px' }} />
+            </button>
+          </CustomTooltip>
+        </div>
+      </div>
+
+      {/* Fullscreen Modal */}
+      <Modal
+        open={isFullScreen}
+        onClose={closeFullScreen}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
-        <IconButton
-          aria-label="close"
-          onClick={closeDescription}
+        <Box
           sx={{
             position: 'absolute',
-            top: '10px',
-            right: '10px',
-            color: 'white'
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            width: '90%',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
           }}
         >
-          <CloseIcon className='fs-2'/>
-        </IconButton>
-        <h3 id="description-modal-title" className="fw-bold mb-5 text-center text-warning">{snippetTitle}</h3>
-        <div id="description-modal-content " className="fs-5 text-center mt-4" style={{ whiteSpace: 'pre-wrap' }}>
-          {snippetDescription}
-        </div>
-      </Box>
-    </Modal> */}
+          <IconButton
+            aria-label="close"
+            onClick={closeFullScreen}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+          <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">{props.title}</h2>
+          <pre id="modal-description" style={{ whiteSpace: 'pre-wrap' }}>
+            <code style={{fontSize:'25px'}}>
+              <CodeHighlighter codeSnippet={props.content} />
+            </code>
+          </pre>
+        </Box>
+      </Modal>
+
+      {/* edit modal */}
+      <Modal
+        open={isEditModalOpen}
+        onClose={closeEditModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            width: '90%',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeEditModal}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">Edit Snippet</h2>
+          <div className='filters-buttons h-75 w-100 d-flex flex-column justify-content-center align-items-center mt-3 px-4'>
+                <form action='' method='POST' className='w-100'>
+                  <div className='d-flex flex-column gap-3 '>
+                    <div className='d-flex flex-column flex-md-row gap-3'>
+                      <input
+                        className='filter-input form-control bg-transparent'
+                        placeholder='Title'
+                        value={props.title}
+                        onChange={() =>{}}
+                      />
+                      <input
+                        className='filter-input form-control bg-transparent'
+                        placeholder='Language'
+                        value={props.language}
+                        onChange={() => {}}
+                      />
+                    </div>
+                    <textarea
+                      className='filter-input form-control bg-transparent'
+                      placeholder='Content'
+                      onChange={()=>{}}
+                      value={props.content}
+                      style={{height:'250px'}}
+                    ></textarea>
+                  </div>
+                </form>
+                <div className='d-flex justify-content-center mt-5'>
+                  <CustomTooltip title='Apply Filters' placement='top'>
+                    {/* <IconButton
+                      aria-label='Scroll to End'
+                      className='mx-4 mt-0 bg-warning'
+                      style={{ backgroundColor: '#f8f9fa' }}
+                      onClick={applyFilters} // Trigger the apply filters
+                    >
+                      {!filterLoading ? (
+                        <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
+                      ) : (
+                        <SpinnerSpan />
+                      )}
+                    </IconButton> */}
+                    V
+                  </CustomTooltip>
+                </div>
+              </div>
+      
+          
+        </Box>
+      </Modal>
 
 
+      {/* delete confirmtion modal */}
+      <Modal
+        open={isConfirmModalOpen}
+        onClose={closeConfirmModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '95vh',
+            overflowY: 'auto',
+            width: 'clamp(400px , 100% , 500px)',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+            border:'2px solid darkgray'
+
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeConfirmModal}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h3 id="modal-title" className="fw-bold mb-4 mt-4 text-center fs-4">Are you sure you want to Delete this Snippet ?</h3>
+
+          <div className='d-flex gap-3  justify-content-center align-items-center mt-4'>
+                  <button className='btn border-2 rounded-4  border-secondary text-secondary fs-5 lh-base small' onClick={closeConfirmModal}>Cancel
+                  </button>
+
+                  <button className=' btn border-2 border-danger text-danger fw-bold fs-5 lh-base rounded-4' onClick={deleteSnippet}>Delete
+                  </button>
+          </div>
+          
+        </Box>
+      </Modal>
 
 
-
-
-
-    
-
-
-
-
-
-
-
-  </div>
-  )
+    </div>
+  );
 }
 
-export default Snippet
+export default Snippet;
