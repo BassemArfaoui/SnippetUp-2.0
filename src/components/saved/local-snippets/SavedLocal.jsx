@@ -7,13 +7,14 @@ import SpinnerSpan from '../../tools/SpinnerSpan'
 import Spinner from '../../tools/Spinner';
 
 function SavedLocal({ setShowChoice }) {
+  const userId=1;
   const savedLocalRef = useRef(null);
   const lastScrollTop = useRef(0);
   const scrollThreshold = 40;
 
   // Fetch snippets using React Query
   const fetchSnippets = async ({ pageParam = 1 }) => {
-    const response = await axios.get('http://localhost:4000/snippets', {
+    const response = await axios.get(`http://localhost:4000/${userId}/snippets`, {
       params: {
         page: pageParam,
         limit: 10,
