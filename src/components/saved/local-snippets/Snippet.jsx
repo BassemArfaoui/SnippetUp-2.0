@@ -18,6 +18,7 @@ import SpinnerSpan from '../../tools/SpinnerSpan';
 function Snippet(props) {
   const [isCopied, setIsCopied] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isEditModalOpen,setIsEditModalOpen]=useState(false);
   const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
@@ -80,7 +81,11 @@ function Snippet(props) {
   const deleteSnippet = ()=>
   {
     closeConfirmModal();
-    successNotify('Snippet Deleted');
+    setIsDeleting(true)
+    setTimeout(()=>{
+      setIsDeleting(false)
+      successNotify('Snippet Deleted');
+    },2000)
   }
 
   const editSnippet = ()=>
@@ -153,13 +158,20 @@ function Snippet(props) {
           {/* Action Buttons */}
           <div className='options-holder position-relative' ref={optionsRef}>
             <span className='m-0 p-0'>
-              {!showOptions ? 
+              {!isDeleting ? (!showOptions ? 
                 <button className="btn btn-outline-light post-btn" onClick={openOptions}>
                   <MoreVertIcon  style={{ fontSize: '27px' }} />
                 </button> :
                 <button className="btn btn-outline-primary post-btn" onClick={closeOptions}>
                   <MoreVertIcon  style={{ fontSize: '27px' }} />
-                </button>
+                </button>) :
+                  <CustomTooltip title='Deleting...' placement='top'>
+                    <button
+                      className="btn btn-outline-light post-btn border-danger"
+                    >
+                    <SpinnerSpan color='text-danger' spanStyle={{width:'25px',height:'25px'}}/>
+                    </button>
+                  </CustomTooltip>
               }
             </span>
 
@@ -217,7 +229,7 @@ function Snippet(props) {
                  <button className="btn btn-outline-primary post-btn p-2">
                    <SpinnerSpan color='text-light' spanStyle={{width:'25px',height:'25px'}} /> 
                  </button> :
-                 <button className="btn btn-outline-primary post-btn" onClick={()=>{notify('Snippet already posted')}}><DoneRoundedIcon />
+                 <button className="btn btn-outline-primary post-btn" onClick={()=> {notify('Snippet already posted')}}><DoneRoundedIcon />
                  </button>
                 }
               </>
