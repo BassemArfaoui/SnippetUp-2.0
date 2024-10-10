@@ -26,6 +26,7 @@ import { FaLink } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import axios from 'axios';
+import SpinnerSpan from '../tools/SpinnerSpan';
 const CommentSection = lazy(() => import('./CommentSection'));
 
 
@@ -34,6 +35,8 @@ export default function Post(props) {
   const userId=1;
   // bool states
   const [isSaved, setIsSaved] = useState(false);
+  const [isSaving,setIsSaving]=useState(false);
+  const [isUnsaving,setIsUnsaving]=useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isInterested, setisInterested] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
@@ -104,11 +107,13 @@ export default function Post(props) {
 
   const skipCollection = async () => {
     try {
+      setIsSaving(true);
       await axios.get(`http://localhost:4000/save/${userId}/${props.id}`);
-      
+      setIsSaving(false);
       setIsSaved(true);
       successNotify('Snippet Saved');
     } catch (err) {
+      setIsSaving(false)
       notify("Couldn't save the Snippet");
     }
   };
@@ -116,9 +121,9 @@ export default function Post(props) {
   const unsaveSnippet = async () => {
     try {
   
-      
+      setIsUnsaving(true);
       await axios.get(`http://localhost:4000/unsave/${userId}/${props.id}`);
-      
+      setIsUnsaving(false);
       setIsSaved(false);
 
       // if(props.filterPost)
@@ -147,6 +152,7 @@ export default function Post(props) {
       }
       successNotify('Snippet Unsaved');
     } catch (err) {
+      setIsUnsaving(false); 
       notify("Couldn't unsave the Snippet");
     }
   };
@@ -344,13 +350,16 @@ export default function Post(props) {
     if(collection)
     {   
         try {
+          setIsCollectionModalOpen(false);
+          setIsSaving(true);
           await axios.get(`http://localhost:4000/save/${userId}/${props.id}?collection=${collection}`);
-          
+          setIsSaving(false);
           setIsSaved(true);
           setCollection('');
-          setIsCollectionModalOpen(false);
+          
           successNotify('Snippet Saved');
         } catch (err) {
+          setIsSaving(false);
           notify("Couldn't save the Snippet");
         }
     } else 
@@ -429,13 +438,20 @@ export default function Post(props) {
             </CustomTooltip>
             {/* Save, Copy, and Fullscreen Buttons */}
             {isSaved ? (
-              <button
+              !isUnsaving ? <button
                 className="btn btn-outline-primary post-btn"
                 onClick={unsaveSnippet}
               >
                 <BookmarkAddedIcon style={{ fontSize: '28px' }} />
-              </button>
-            ) : (
+              </button> :
+                <CustomTooltip title='Unsaving...' placement='top'>
+                  <button
+                    className="btn btn-outline-light post-btn"
+                  >
+                  <SpinnerSpan color='text-primary' spanStyle={{width:'25px',height:'25px'}}/>
+                  </button>
+                </CustomTooltip>
+            ) : ( !isSaving ?
               <CustomTooltip title='Save Snippet' placement='top'>
                 <button
                   className="btn btn-outline-light post-btn"
@@ -443,7 +459,15 @@ export default function Post(props) {
                 >
                   <BookmarkAddIcon style={{ fontSize: '28px' }} />
                 </button>
+              </CustomTooltip> :
+              <CustomTooltip title='Saving...' placement='top'>
+                <button
+                  className="btn btn-outline-light post-btn"
+                >
+                <SpinnerSpan color='text-primary' spanStyle={{width:'25px',height:'25px'}}/>
+                </button>
               </CustomTooltip>
+
             )}
             {isCopied ? (
               <button className="btn btn-outline-primary post-btn">

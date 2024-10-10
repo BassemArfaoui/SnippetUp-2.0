@@ -104,8 +104,12 @@ function Snippet(props) {
   }
   
 
-  
-
+  useEffect(()=>{
+    if(props.isPosted)
+    {
+      setIsPosting('success')
+    }
+  },[props.isPosted])
 
   // Handle click outside of options div
   useEffect(() => {
@@ -211,9 +215,9 @@ function Snippet(props) {
                 {
                 isPosting ===true ?
                  <button className="btn btn-outline-primary post-btn p-2">
-                   <SpinnerSpan color='text-light' /> 
+                   <SpinnerSpan color='text-light' spanStyle={{width:'25px',height:'25px'}} /> 
                  </button> :
-                 <button className="btn btn-outline-primary post-btn" ><DoneRoundedIcon />
+                 <button className="btn btn-outline-primary post-btn" onClick={()=>{notify('Snippet already posted')}}><DoneRoundedIcon />
                  </button>
                 }
               </>

@@ -101,6 +101,7 @@ function SavedLocal({ setShowChoice }) {
             language={snippet.language}
             createdAt={snippet.created_at}
             modifiedAt={snippet.modified_at}
+            isPosted={snippet.is_posted}
           />
         ))
       )}
