@@ -4,6 +4,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
+import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import InfoIcon from '@mui/icons-material/Info';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -12,13 +13,16 @@ import { Modal, Box, IconButton } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import CodeHighlighter from '../../tools/CodeHighliter';
 import { notify, successNotify } from '../../tools/CustomToaster';
+import SpinnerSpan from '../../tools/SpinnerSpan';
 
 function Snippet(props) {
   const [isCopied, setIsCopied] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isEditModalOpen,setIsEditModalOpen]=useState(false);
   const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const [editLoading,setEditLoading]=useState(false)
 
   // Ref for options holder
   const optionsRef = useRef(null);
@@ -77,6 +81,26 @@ function Snippet(props) {
   {
     closeConfirmModal();
     successNotify('Snippet Deleted');
+  }
+
+  const editSnippet = ()=>
+  {
+    setEditLoading(true);
+    setTimeout(()=>{
+    setEditLoading(false);
+    closeEditModal();
+    successNotify('Post Edited Successfully')
+    },2000)
+  }
+
+
+  const postSnippet = ()=>
+  {
+    setIsPosting(true)
+    setTimeout(()=>{
+      setIsPosting('success')
+      successNotify('post uploaded successfully')
+    },1000)
   }
   
 
@@ -177,10 +201,24 @@ function Snippet(props) {
             </button>
           </CustomTooltip>
 
-          <CustomTooltip title='Post' placement='top'>
-            <button className="btn btn-outline-primary post-btn" onClick={() => {}}>
-              <ArrowUpwardIcon style={{ fontSize: '37px' }} />
-            </button>
+          <CustomTooltip title={!isPosting ? 'post' : (isPosting===true ? 'posting ...':'posted')} placement='top'>
+            {<span className="btn btn-outline-primary post-btn" >
+              {!isPosting ? 
+              <button className="btn btn-outline-primary post-btn" onClick={postSnippet}>
+                <ArrowUpwardIcon style={{ fontSize: '37px' }} />
+              </button> :
+              <>
+                {
+                isPosting ===true ?
+                 <button className="btn btn-outline-primary post-btn p-2">
+                   <SpinnerSpan color='text-light' /> 
+                 </button> :
+                 <button className="btn btn-outline-primary post-btn" ><DoneRoundedIcon />
+                 </button>
+                }
+              </>
+              }
+            </span>}
           </CustomTooltip>
         </div>
       </div>
@@ -295,20 +333,19 @@ function Snippet(props) {
                   </div>
                 </form>
                 <div className='d-flex justify-content-center mt-5'>
-                  <CustomTooltip title='Apply Filters' placement='top'>
-                    {/* <IconButton
-                      aria-label='Scroll to End'
+                  <CustomTooltip title='Edit Post' placement='top'>
+                    <IconButton
                       className='mx-4 mt-0 bg-warning'
                       style={{ backgroundColor: '#f8f9fa' }}
-                      onClick={applyFilters} // Trigger the apply filters
+                      onClick={editSnippet}
                     >
-                      {!filterLoading ? (
+                      {!editLoading ? (
                         <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
                       ) : (
                         <SpinnerSpan />
                       )}
-                    </IconButton> */}
-                    V
+                    </IconButton>
+                    
                   </CustomTooltip>
                 </div>
               </div>

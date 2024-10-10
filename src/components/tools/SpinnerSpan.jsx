@@ -1,9 +1,9 @@
 import React from 'react'
 
-function SpinnerSpan() {
+function SpinnerSpan(props) {
     return (
         <span className="d-flex justify-content-center align-items-center">
-            <span className="spinner-border text-primary small" role="status">
+            <span className={"spinner-border small "+(props.color ? props.color : 'text-primary')} role="status">
                 <span className="visually-hidden">Loading...</span>
             </span>
         </span>
