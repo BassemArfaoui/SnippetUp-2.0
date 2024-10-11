@@ -7,6 +7,9 @@ import SpinnerSpan from '../../tools/SpinnerSpan';
 import Spinner from '../../tools/Spinner';
 import { notify, successNotify } from '../../tools/CustomToaster';
 import LoadingSpinner from '../../tools/LoadingSpinner'; // Importing LoadingSpinner
+import { IconButton } from '@mui/material';
+import CustomTooltip from '../../tools/CustomTooltip';
+import AddIcon from '@mui/icons-material/Add';
 
 function SavedLocal({ setShowChoice }) {
   const userId = 1;
@@ -15,6 +18,7 @@ function SavedLocal({ setShowChoice }) {
   const scrollThreshold = 40;
   const queryClient = useQueryClient();
   const [deletingId, setDeletingId] = useState(null); // State to track which snippet is being deleted
+  const [editingId, setEditingId] = useState(null);   // State to track which snippet is being edited
 
   // Fetch snippets using React Query
   const fetchSnippets = async ({ pageParam = 1 }) => {
@@ -41,9 +45,26 @@ function SavedLocal({ setShowChoice }) {
       setDeletingId(null); // Reset deleting state after success
       successNotify("Snippet deleted successfully");
     },
-    onError: (err) => {
-      notify(`Failed to delete snippet`);
+    onError: () => {
       setDeletingId(null); // Reset deleting state after error
+      notify(`Failed to delete snippet`);
+    },
+  });
+
+  // Edit mutation
+  const editSnippet = useMutation({
+    mutationFn: async ({ id, updatedSnippet }) => {
+      setEditingId(id); // Track the ID of the snippet being edited
+      await axios.put(`http://localhost:4000/${userId}/edit/snippet/${id}`, updatedSnippet);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["snippets"]);
+      setEditingId(null); 
+      successNotify("Snippet updated successfully");
+    },
+    onError: () => {
+      setEditingId(null);
+      notify(`Failed to update snippet`);
     },
   });
 
@@ -150,9 +171,11 @@ function SavedLocal({ setShowChoice }) {
                   modifiedAt={snippet.modified_at}
                   isPosted={snippet.is_posted}
                   deleteSnippet={deleteSnippet.mutate}
+                  editSnippet={editSnippet.mutate}
                 />
-                {/* Show spinner next to the snippet being deleted */}
+                {/* Show spinner next to the snippet being deleted or edited */}
                 {deletingId === snippet.id && <LoadingSpinner bg="bg-primary" />}
+                {editingId === snippet.id && <LoadingSpinner bg="bg-primary" />}
               </div>
             ))
           )}
@@ -170,6 +193,18 @@ function SavedLocal({ setShowChoice }) {
           )}
         </>
       )}
+
+      {/* add btn */}
+      <CustomTooltip title="Add Snippet" placement="right">
+        <IconButton
+          onClick={()=>{}}
+          aria-label="Scroll to End"
+          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
+          style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }}
+        >
+          <AddIcon fontSize="large" className="text-dark" />
+        </IconButton>
+      </CustomTooltip>
     </div>
   );
 }

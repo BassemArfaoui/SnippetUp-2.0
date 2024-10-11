@@ -15,6 +15,7 @@ import LocalPostsFilter from '../components/saved/local-snippets/LocalPostsFilte
 import axios from 'axios';
 import { notify } from '../components/tools/CustomToaster';
 import SavedPostsCollections from '../components/saved/saved-posts/SavedPostsCollections';
+import LoadingSpinner from '../components/tools/LoadingSpinner';
 
 function SavedPage() {
   const userId = 1;
@@ -58,9 +59,10 @@ function SavedPage() {
    else
    {
     setFilterLoading(true);
+    setFilterModalOpen(false);
     setIsSearching('none');
-    setFilterPage(1); // reset to first page when applying new filters
-    setFilteredPosts([]); // clear previous results when applying new filters
+    setFilterPage(1); 
+    setFilteredPosts([]);
 
     try {
       const response = await axios.get(`http://localhost:4000/${userId}/saved-posts/filter`, {
@@ -76,13 +78,12 @@ function SavedPage() {
       const fetchedPosts = response.data;
 
       if (fetchedPosts.length < 10) {
-        setHasMoreFilteredPosts(false); // no more posts to load
+        setHasMoreFilteredPosts(false);
       } else {
-        setHasMoreFilteredPosts(true); // there are more posts to load
+        setHasMoreFilteredPosts(true); 
       }
 
       setFilteredPosts(fetchedPosts);
-      setFilterModalOpen(false);
     } catch (error) {
       console.error('Error fetching filtered posts:', error);
     } finally {
@@ -282,11 +283,8 @@ function SavedPage() {
                       style={{ backgroundColor: '#f8f9fa' }}
                       onClick={applyFilters} // Trigger the apply filters
                     >
-                      {!filterLoading ? (
+                       
                         <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
-                      ) : (
-                        <SpinnerSpan />
-                      )}
                     </IconButton>
                   </CustomTooltip>
                 </div>
@@ -294,6 +292,10 @@ function SavedPage() {
             </div>
           </Box>
         </Modal>
+
+        {filterLoading && filterPage==1 && <LoadingSpinner />}
+
+
       </>
     </div>
   );

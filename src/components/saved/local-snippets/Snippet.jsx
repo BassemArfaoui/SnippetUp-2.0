@@ -18,8 +18,8 @@ import SpinnerSpan from '../../tools/SpinnerSpan';
 function Snippet(props) {
   const [editData,setEditData]=useState({
     title:props.title,
-    language:props.language,
-    content:props.content
+    content:props.content,
+    language:props.language
   })
   const [isCopied, setIsCopied] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
@@ -27,7 +27,6 @@ function Snippet(props) {
   const [isEditModalOpen,setIsEditModalOpen]=useState(false);
   const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [editLoading,setEditLoading]=useState(false);
 
 
   // Ref for options holder
@@ -69,7 +68,7 @@ function Snippet(props) {
   }
 
   const closeEditModal=()=>{
-    setEditData(prevData=>({...prevData,title:props.title,content:props.content,language:props.language}))
+    setEditData(prevData=>({title:props.title,content:props.content,language:props.language}))
     setIsEditModalOpen(false);
   }
 
@@ -96,14 +95,26 @@ function Snippet(props) {
     }
   }
 
-  const editSnippet = ()=>
-  {
-    setEditLoading(true);
-    setTimeout(()=>{
-    setEditLoading(false);
-    closeEditModal();
-    successNotify('Post Edited Successfully')
-    },2000)
+  const editSnippet = async()=>
+  { if(editData.title && editData.language && editData.content ){ 
+      if(editData.title !== props.title || editData.language !== props.language || editData.content !== props.content)
+      {
+        setIsEditModalOpen(false);
+        try{
+          await props.editSnippet({ id: props.id, updatedSnippet: editData });
+        } catch(err)
+        {
+          console.error(err.message);
+          notify('Failed to edit snippet');
+      }}
+      else{
+        closeEditModal();
+      }
+      }
+    else 
+      {
+        notify('Please Fill all the Fields')
+      }
   }
 
 
@@ -175,20 +186,13 @@ function Snippet(props) {
           {/* Action Buttons */}
           <div className='options-holder position-relative' ref={optionsRef}>
             <span className='m-0 p-0'>
-              {!props.isDeleting ? (!showOptions ? 
+              {(!showOptions ? 
                 <button className="btn btn-outline-light post-btn" onClick={openOptions}>
                   <MoreVertIcon  style={{ fontSize: '27px' }} />
                 </button> :
                 <button className="btn btn-outline-primary post-btn" onClick={closeOptions}>
                   <MoreVertIcon  style={{ fontSize: '27px' }} />
-                </button>) :
-                  <CustomTooltip title='Deleting...' placement='top'>
-                    <button
-                      className="btn btn-outline-light post-btn border-danger"
-                    >
-                    <SpinnerSpan color='text-danger' spanStyle={{width:'25px',height:'25px'}}/>
-                    </button>
-                  </CustomTooltip>
+                </button>)
               }
             </span>
 
@@ -375,11 +379,7 @@ function Snippet(props) {
                       style={{ backgroundColor: '#f8f9fa' }}
                       onClick={editSnippet}
                     >
-                      {!editLoading ? (
-                        <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
-                      ) : (
-                        <SpinnerSpan />
-                      )}
+                      <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
                     </IconButton>
                     
                   </CustomTooltip>
