@@ -1,20 +1,20 @@
-import React, { useEffect, useRef } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import React, { useEffect, useRef, useState } from 'react';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import Snippet from './Snippet';
 import '../styles/saves.css';
-import SpinnerSpan from '../../tools/SpinnerSpan'
+import SpinnerSpan from '../../tools/SpinnerSpan';
 import Spinner from '../../tools/Spinner';
-import { notify } from '../../tools/CustomToaster';
+import { notify, successNotify } from '../../tools/CustomToaster';
+import LoadingSpinner from '../../tools/LoadingSpinner'; // Importing LoadingSpinner
 
 function SavedLocal({ setShowChoice }) {
   const userId = 1;
   const savedLocalRef = useRef(null);
   const lastScrollTop = useRef(0);
   const scrollThreshold = 40;
-
-
-
+  const queryClient = useQueryClient();
+  const [deletingId, setDeletingId] = useState(null); // State to track which snippet is being deleted
 
   // Fetch snippets using React Query
   const fetchSnippets = async ({ pageParam = 1 }) => {
@@ -30,7 +30,22 @@ function SavedLocal({ setShowChoice }) {
     return response.data;
   };
 
-
+  // Delete mutation
+  const deleteSnippet = useMutation({
+    mutationFn: async (id) => {
+      setDeletingId(id); // Track the ID of the snippet being deleted
+      await axios.delete(`http://localhost:4000/${userId}/delete/snippet/${id}`);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["snippets"]);
+      setDeletingId(null); // Reset deleting state after success
+      successNotify("Snippet deleted successfully");
+    },
+    onError: (err) => {
+      notify(`Failed to delete snippet`);
+      setDeletingId(null); // Reset deleting state after error
+    },
+  });
 
   const {
     data,
@@ -51,7 +66,7 @@ function SavedLocal({ setShowChoice }) {
 
   useEffect(() => {
     if (isError && error) {
-      notify(`Error loading  Snippets`);
+      notify(`Error loading Snippets`);
     }
   }, [isError, error]);
 
@@ -83,7 +98,6 @@ function SavedLocal({ setShowChoice }) {
     };
 
     const savedLocalElement = savedLocalRef.current;
-    // Ensure the ref is valid before adding the event listener
     if (savedLocalElement) {
       savedLocalElement.addEventListener("scroll", handleScroll);
     }
@@ -95,46 +109,66 @@ function SavedLocal({ setShowChoice }) {
     };
   }, [setShowChoice, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Loading state
   if (isLoading) {
     return (
-      <div style={{height:'85vh'}}>
+      <div style={{ height: '85vh' }}>
         <Spinner />
       </div>
     );
   }
 
-  // Error state
   if (isError) {
-    return <div  style={{height:'85vh'}} className='fw-bolder text-danger fs-2 d-flex justify-content-center align-items-center'>Couldn't Load Snippets 😿 !</div>;
+    return (
+      <div
+        style={{ height: '85vh' }}
+        className="fw-bolder text-danger fs-2 d-flex justify-content-center align-items-center"
+      >
+        Couldn't Load Snippets 😿 !
+      </div>
+    );
   }
+
+  const hasSnippets = data?.pages?.some((page) => page.snippets.length > 0);
 
   return (
     <div className="local-saves d-flex flex-column gap-3" ref={savedLocalRef}>
-      {data.pages.map((page) =>
-        page.snippets.map((snippet) => (
-          <Snippet
-            key={snippet.id}
-            title={snippet.title}
-            content={snippet.content}
-            language={snippet.language}
-            createdAt={snippet.created_at}
-            modifiedAt={snippet.modified_at}
-            isPosted={snippet.is_posted}
-          />
-        ))
-      )}
-      {/* Spinner for loading next page */}
-      {isFetchingNextPage && (
-        <div className="d-flex justify-content-center my-3 align-items-center">
-          <SpinnerSpan />
+      {!hasSnippets ? (
+        <div className="text-center my-3 MT-5  fw-bold text-secondary">
+          <span className='mt-5 d-block'> No Snippets ,<br/> Your Snippets will appear here.</span>
         </div>
-      )}
-      {/* Message when no more snippets are available */}
-      {!hasNextPage && (
-        <div className="text-center my-3 small fw-bold text-secondary">
-          No more snippets available.
-        </div>
+      ) : (
+        <>
+          {data.pages.map((page) =>
+            page.snippets.map((snippet) => (
+              <div key={snippet.id}>
+                <Snippet
+                  id={snippet.id}
+                  title={snippet.title}
+                  content={snippet.content}
+                  language={snippet.language}
+                  createdAt={snippet.created_at}
+                  modifiedAt={snippet.modified_at}
+                  isPosted={snippet.is_posted}
+                  deleteSnippet={deleteSnippet.mutate}
+                />
+                {/* Show spinner next to the snippet being deleted */}
+                {deletingId === snippet.id && <LoadingSpinner bg="bg-primary" />}
+              </div>
+            ))
+          )}
+
+          {isFetchingNextPage && (
+            <div className="d-flex justify-content-center my-3 align-items-center">
+              <SpinnerSpan />
+            </div>
+          )}
+
+          {!hasNextPage && hasSnippets && (
+            <div className="text-center my-3 small fw-bold text-secondary">
+              No more snippets available.
+            </div>
+          )}
+        </>
       )}
     </div>
   );

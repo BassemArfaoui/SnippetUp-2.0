@@ -4,9 +4,9 @@ import Header from "../components/parts/Header";
 import NotificationBell from "../components/parts/NotificationsBell";
 import CustomToaster from "../components/tools/CustomToaster";
 import Spinner from "../components/tools/Spinner";
-import PostPage from "../pages/PostPage";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Correct 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import LoadingSpinner from "../components/tools/LoadingSpinner";
 
 // Lazy-load the components
 const MainPage = lazy(() => import("../pages/MainPage"));
@@ -15,6 +15,7 @@ const ProfilePage = lazy(() => import("../pages/ProfilePage"));
 const SettingsPage = lazy(() => import("../pages/SettingsPage"));
 const SavedPostsCollections = lazy (()=> import("../components/saved/saved-posts/SavedPostsCollections"))
 const CollectionPosts = lazy (()=> import("../components/saved/saved-posts/CollectionPosts"))
+const PostPage = lazy (()=> import("../pages/PostPage"))
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,7 @@ function App() {
         <CustomToaster />
         <NotificationBell />
         <Header />
-        <Suspense fallback={<Spinner />}>
+        <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/saved" element={<SavedPage />} />

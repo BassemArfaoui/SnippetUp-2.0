@@ -1,0 +1,42 @@
+.loading-spinner-overlay {
+  position: fixed;         
+  top: 0;                  
+  left: 0;                
+  right: 0;               
+  height: 100px;           
+  backdrop-filter: blur(3px);
+  display: flex;           
+  justify-content: center; 
+  align-items: center;     
+  z-index: 1000;          
+}
+
+.spinner {
+  width: 47px;            
+  height: 47px;            
+  position: relative;
+  text-align: center;
+}
+
+.double-bounce1, .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  animation-delay: -1.0s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.0);
+  }
+}

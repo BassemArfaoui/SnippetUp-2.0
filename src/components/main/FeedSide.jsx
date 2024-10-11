@@ -93,7 +93,7 @@ function FeedSide() {
           </div>
         </div>
       ) : (
-        <div className="feed-side d-flex flex-column gap-2" ref={feedSideRef}>
+        <div className="feed-side d-flex flex-column gap-2" ref={feedSideRef}>7
           <div className="pt-3"></div>
 
           {/* Show a loading overlay on top of the old data while refetching */}

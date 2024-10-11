@@ -23,7 +23,6 @@ function Snippet(props) {
   })
   const [isCopied, setIsCopied] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isEditModalOpen,setIsEditModalOpen]=useState(false);
   const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
@@ -85,14 +84,16 @@ function Snippet(props) {
     setIsConfirmModalOpen(false)
   }
 
-  const deleteSnippet = ()=>
+  const deleteSnippet = async()=>
   {
     closeConfirmModal();
-    setIsDeleting(true)
-    setTimeout(()=>{
-      setIsDeleting(false)
-      successNotify('Snippet Deleted');
-    },2000)
+    try
+    {
+      await props.deleteSnippet(props.id);
+    }
+    catch(err)
+    {
+    }
   }
 
   const editSnippet = ()=>
@@ -174,7 +175,7 @@ function Snippet(props) {
           {/* Action Buttons */}
           <div className='options-holder position-relative' ref={optionsRef}>
             <span className='m-0 p-0'>
-              {!isDeleting ? (!showOptions ? 
+              {!props.isDeleting ? (!showOptions ? 
                 <button className="btn btn-outline-light post-btn" onClick={openOptions}>
                   <MoreVertIcon  style={{ fontSize: '27px' }} />
                 </button> :
