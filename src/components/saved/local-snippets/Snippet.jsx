@@ -16,6 +16,11 @@ import { notify, successNotify } from '../../tools/CustomToaster';
 import SpinnerSpan from '../../tools/SpinnerSpan';
 
 function Snippet(props) {
+  const [editData,setEditData]=useState({
+    title:props.title,
+    language:props.language,
+    content:props.content
+  })
   const [isCopied, setIsCopied] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -23,7 +28,8 @@ function Snippet(props) {
   const [isEditModalOpen,setIsEditModalOpen]=useState(false);
   const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [editLoading,setEditLoading]=useState(false)
+  const [editLoading,setEditLoading]=useState(false);
+
 
   // Ref for options holder
   const optionsRef = useRef(null);
@@ -64,6 +70,7 @@ function Snippet(props) {
   }
 
   const closeEditModal=()=>{
+    setEditData(prevData=>({...prevData,title:props.title,content:props.content,language:props.language}))
     setIsEditModalOpen(false);
   }
 
@@ -106,6 +113,15 @@ function Snippet(props) {
       setIsPosting('success')
       successNotify('post uploaded successfully')
     },1000)
+  }
+
+  const handleEditChange=(e)=>
+  {
+    const {name,value}=e.target;
+    setEditData(prevData=>({
+      ...prevData,
+      [name]:value
+    }))
   }
   
 
@@ -329,21 +345,24 @@ function Snippet(props) {
                       <input
                         className='filter-input form-control bg-transparent'
                         placeholder='Title'
-                        value={props.title}
-                        onChange={() =>{}}
+                        name='title'
+                        value={editData.title}
+                        onChange={handleEditChange}
                       />
                       <input
                         className='filter-input form-control bg-transparent'
                         placeholder='Language'
-                        value={props.language}
-                        onChange={() => {}}
+                        name='language'
+                        value={editData.language}
+                        onChange={handleEditChange}
                       />
                     </div>
                     <textarea
                       className='filter-input form-control bg-transparent'
                       placeholder='Content'
-                      onChange={()=>{}}
-                      value={props.content}
+                      name='content'
+                      onChange={handleEditChange}
+                      value={editData.content}
                       style={{height:'250px'}}
                     ></textarea>
                   </div>
