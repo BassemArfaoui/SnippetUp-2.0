@@ -14,8 +14,10 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import CodeHighlighter from '../../tools/CodeHighliter';
 import { notify, successNotify } from '../../tools/CustomToaster';
 import SpinnerSpan from '../../tools/SpinnerSpan';
+import axios from 'axios';
 
 function Snippet(props) {
+  const userId=1;
   const [editData,setEditData]=useState({
     title:props.title,
     content:props.content,
@@ -25,9 +27,15 @@ function Snippet(props) {
   const [isPosting, setIsPosting] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isEditModalOpen,setIsEditModalOpen]=useState(false);
+  const [isOptionalDataModalOpen,setIsOptionalDataModalOpen]=useState(false);
   const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
   const [isInfosOpen, setIsInfosOpen] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+
+  const [optionalData,setOptionalData] = useState({
+    description : '',
+    gitHubLink : '',
+  })
 
 
   // Ref for options holder
@@ -84,8 +92,19 @@ function Snippet(props) {
     setIsInfosOpen(true);
   };
 
-  const closeinfosModal = () => {
+  const closeInfosModal = () => {
     setIsInfosOpen(false);
+  }
+
+
+  const openOptionDataModal = () =>
+  {
+    setIsOptionalDataModalOpen(true);
+  }
+
+  const closeOptionDataModal = () =>
+  {
+    setIsOptionalDataModalOpen(false)
   }
 
   const closeConfirmModal = ()=>
@@ -127,14 +146,35 @@ function Snippet(props) {
       }
   }
 
-
-  const postSnippet = ()=>
+  const postSnippet = async()=>
   {
+    closeOptionDataModal();
     setIsPosting(true)
-    setTimeout(()=>{
+
+    try
+    {
+      const response = await axios.post(`http://localhost:4000/${userId}/add/post/${props.id}`,{
+        title:props.title,
+        content:props.content,
+        language:props.language,
+        description:optionalData.description,
+        gitHubLink:optionalData.gitHubLink
+      })
+
       setIsPosting('success')
+      setOptionalData({
+        description : '',
+        gitHubLink : '',
+      })
       successNotify('post uploaded successfully')
-    },1000)
+
+    }
+    catch(err)
+    {
+      notify("Couldn't post the Snippet")
+      setIsPosting(false)
+      console.log(err.message)
+    }
   }
 
   const handleEditChange=(e)=>
@@ -145,6 +185,15 @@ function Snippet(props) {
       [name]:value
     }))
   }
+
+  const handleOptionalDataChange = (e) => {
+    const {name,value}=e.target;
+    setOptionalData(prevData=>({
+      ...prevData,
+      [name]:value
+    }))
+  };
+
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -265,8 +314,8 @@ function Snippet(props) {
 
           <CustomTooltip title={!isPosting ? 'post' : (isPosting===true ? 'posting ...':'posted')} placement='top'>
             {<span className="btn btn-outline-primary post-btn" >
-              {!isPosting ? 
-              <button className="btn btn-outline-primary post-btn" onClick={postSnippet}>
+              {!isPosting ?
+              <button className="btn btn-outline-primary post-btn" onClick={openOptionDataModal}>
                 <ArrowUpwardIcon style={{ fontSize: '37px' }} />
               </button> :
               <>
@@ -477,7 +526,7 @@ function Snippet(props) {
       {/* info modal */}
       <Modal
         open={isInfosOpen}
-        onClose={closeinfosModal}
+        onClose={closeInfosModal}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
@@ -504,7 +553,7 @@ function Snippet(props) {
         >
           <IconButton
             aria-label="close"
-            onClick={closeinfosModal}
+            onClick={closeInfosModal}
             sx={{
               position: 'absolute',
               top: '10px',
@@ -525,8 +574,86 @@ function Snippet(props) {
             <div className='fs-5 fw-bold'><span className='text-primary'>Created at :</span> {formatTimestamp(props.createdAt)} </div>
             {(props.createdAt !== props.modifiedAt ) && <div className='fs-5 fw-bold'><span className='text-primary'>Modified at : </span>{formatTimestamp(props.modifiedAt)} </div>}
           </div> 
+        </Box>
+      </Modal>
 
-          
+
+      {/* Optional Data modal */}
+      <Modal
+        open={isOptionalDataModalOpen}
+        onClose={closeOptionDataModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            width: '90%',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeOptionDataModal}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">Add Extra Infos <span className='small' style={{color:'rgb(153, 143, 143)'}}>(Optional)</span></h2>
+          <div className='filters-buttons h-75 w-100 d-flex flex-column justify-content-center align-items-center mt-3 px-4'>
+                <form action='' method='POST' className='w-100 mt-2'>
+                  <div className='d-flex flex-column gap-3 '>
+                  <input
+                        className='filter-input form-control bg-transparent w-100'
+                        placeholder='Github Link'
+                        name='gitHubLink'
+                        value={optionalData.gitHubLink}
+                        onChange={handleOptionalDataChange}
+                        spellCheck='false'
+                      />
+
+                    <div className='mt-2 mb-0'  ><span className='fw-bold ms-2' style={{color:'rgb(153, 143, 143)',fontSize:'21px'}} >Description :</span></div>
+
+                    <textarea
+                      className='filter-input form-control bg-transparent mt-0'
+                      onChange={handleOptionalDataChange}
+                      value={optionalData.description}
+                      name='description'
+                      style={{height:'250px'}}
+                      spellCheck='false'
+                    ></textarea>
+                  </div>
+                </form>
+                <div className='d-flex justify-content-center mt-5'>
+                  <CustomTooltip title='Post' placement='top'>
+                    <IconButton
+                      className='mx-4 mt-0 bg-warning'
+                      style={{ backgroundColor: '#f8f9fa' }}
+                      onClick={postSnippet}
+                    >
+                      <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
+                    </IconButton>
+                    
+                  </CustomTooltip>
+                </div>
+              </div>
+      
           
         </Box>
       </Modal>

@@ -59,6 +59,7 @@ function PostPage() {
               firstname={post.firstname}
               lastname={post.lastname}
               username={post.username}
+              githubLink={post.github_link}
             />
           )}
       </div>
