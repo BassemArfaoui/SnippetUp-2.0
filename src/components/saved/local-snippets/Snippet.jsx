@@ -26,6 +26,7 @@ function Snippet(props) {
   const [isFullScreen, setisFullScreen] = useState(false);
   const [isEditModalOpen,setIsEditModalOpen]=useState(false);
   const [isConfirmModalOpen,setIsConfirmModalOpen]=useState(false);
+  const [isInfosOpen, setIsInfosOpen] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
 
 
@@ -76,6 +77,15 @@ function Snippet(props) {
   {
     closeOptions();
     setIsConfirmModalOpen(true)
+  }
+
+  const openInfosModal = () => {
+    closeOptions();
+    setIsInfosOpen(true);
+  };
+
+  const closeinfosModal = () => {
+    setIsInfosOpen(false);
   }
 
   const closeConfirmModal = ()=>
@@ -134,6 +144,21 @@ function Snippet(props) {
       ...prevData,
       [name]:value
     }))
+  }
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    
+    const day = date.getDate().toString().padStart(2, '0');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+    return `${day} ${month} ${year}  at  ${hours}:${minutes}`;
   }
   
 
@@ -199,7 +224,7 @@ function Snippet(props) {
             {showOptions && (
               <div className='d-inline-flex justify-content-center align-items-center gap-3 position-absolute bottom-100 mb-3 start-50 bg-primary p-2 rounded-3' style={{transform:'translateX(-50%)'}}>
                 <CustomTooltip title='Snippet Infos' placement='top'>
-                  <button className="btn btn-outline-light post-btn" onClick={() => {}}>
+                  <button className="btn btn-outline-light post-btn" onClick={openInfosModal}>
                     <InfoIcon  style={{ fontSize: '27px' }} />
                   </button>
                 </CustomTooltip>
@@ -444,6 +469,64 @@ function Snippet(props) {
                   <button className=' btn border-2 border-danger text-danger fw-bold fs-5 lh-base rounded-4' onClick={deleteSnippet}>Delete
                   </button>
           </div>
+          
+        </Box>
+      </Modal>
+      
+      
+      {/* info modal */}
+      <Modal
+        open={isInfosOpen}
+        onClose={closeinfosModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '95vh',
+            overflowY: 'auto',
+            width: 'clamp(400px , 100% , 500px)',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+            border:'2px solid darkgray',
+            paddingTop:'20px'
+            
+
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeinfosModal}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h3 id="modal-title" className="fw-bold mb-4 mt-3 text-center text-warning fs-2"><span className='text-warning'> Infos :</span></h3>
+
+
+          <div className='d-flex flex-column gap-1'>
+            <div className='fs-5 fw-bold'><span className='text-primary'>Title :</span> {props.title}</div>
+            <div className='fs-5 fw-bold'><span className='text-primary'>Language :</span> {props.language}</div>
+            <div className='fs-5 fw-bold'><span className='text-primary'>Status :</span> {props.isPosted ? 'Posted' : 'Local'}</div>
+            <div className='fs-5 fw-bold'><span className='text-primary'>Created at :</span> {formatTimestamp(props.createdAt)} </div>
+            {(props.createdAt !== props.modifiedAt ) && <div className='fs-5 fw-bold'><span className='text-primary'>Modified at : </span>{formatTimestamp(props.modifiedAt)} </div>}
+          </div> 
+
+          
           
         </Box>
       </Modal>
