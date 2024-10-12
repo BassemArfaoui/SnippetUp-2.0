@@ -7,9 +7,16 @@ import SpinnerSpan from '../../tools/SpinnerSpan';
 import Spinner from '../../tools/Spinner';
 import { notify, successNotify } from '../../tools/CustomToaster';
 import LoadingSpinner from '../../tools/LoadingSpinner'; // Importing LoadingSpinner
-import { IconButton } from '@mui/material';
 import CustomTooltip from '../../tools/CustomTooltip';
+import { Modal, Box, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+
+
+
+
+
 
 function SavedLocal({ setShowChoice }) {
   const userId = 1;
@@ -17,8 +24,35 @@ function SavedLocal({ setShowChoice }) {
   const lastScrollTop = useRef(0);
   const scrollThreshold = 40;
   const queryClient = useQueryClient();
-  const [deletingId, setDeletingId] = useState(null); // State to track which snippet is being deleted
-  const [editingId, setEditingId] = useState(null);   // State to track which snippet is being edited
+  const [deletingId, setDeletingId] = useState(null); 
+  const [editingId, setEditingId] = useState(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [addData, setAddData] = useState({
+    title: '',
+    content :'',
+    language: ''
+  });
+
+
+  const openAddModel = () =>
+  {
+    setIsAddModalOpen(true)
+  }
+
+  const closeAddModal = () =>
+  {
+    setIsAddModalOpen(false)
+  }
+
+
+  const handleAddChange=(e)=>
+  {
+    const {name,value}=e.target;
+    setAddData(prevData=>({
+      ...prevData,
+      [name]:value
+    }))
+  }
 
   // Fetch snippets using React Query
   const fetchSnippets = async ({ pageParam = 1 }) => {
@@ -67,6 +101,7 @@ function SavedLocal({ setShowChoice }) {
       notify(`Failed to update snippet`);
     },
   });
+
 
   const {
     data,
@@ -194,10 +229,12 @@ function SavedLocal({ setShowChoice }) {
         </>
       )}
 
+
+
       {/* add btn */}
       <CustomTooltip title="Add Snippet" placement="right">
         <IconButton
-          onClick={()=>{}}
+          onClick={openAddModel}
           aria-label="Scroll to End"
           className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
           style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }}
@@ -205,6 +242,93 @@ function SavedLocal({ setShowChoice }) {
           <AddIcon fontSize="large" className="text-dark" />
         </IconButton>
       </CustomTooltip>
+
+
+
+
+      <Modal
+        open={isAddModalOpen}
+        onClose={closeAddModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            width: '90%',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeAddModal}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">Add a Snippet</h2>
+          <div className='filters-buttons h-75 w-100 d-flex flex-column justify-content-center align-items-center mt-3 px-4'>
+                <form action='' method='POST' className='w-100'>
+                  <div className='d-flex flex-column gap-3 '>
+                    <div className='d-flex flex-column flex-md-row gap-3'>
+                      <input
+                        className='filter-input form-control bg-transparent'
+                        placeholder='Title'
+                        name='title'
+                        value={addData.title}
+                        onChange={handleAddChange}
+                        autoComplete='off'
+                      />
+                      <input
+                        className='filter-input form-control bg-transparent'
+                        placeholder='Language'
+                        name='language'
+                        value={addData.language}
+                        onChange={handleAddChange}
+                      />
+                    </div>
+                    <textarea
+                      className='filter-input form-control bg-transparent'
+                      placeholder='Content'
+                      name='content'
+                      onChange={handleAddChange}
+                      value={addData.content}
+                      style={{height:'250px'}}
+                      autoComplete='off'
+                    ></textarea>
+                  </div>
+                </form>
+                <div className='d-flex justify-content-center mt-5'>
+                  <CustomTooltip title='Add Snippet' placement='top'>
+                    <IconButton
+                      className='mx-4 mt-0 bg-warning'
+                      style={{ backgroundColor: '#f8f9fa' }}
+                      onClick={()=>{}}
+                    >
+                      <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
+                    </IconButton>
+                    
+                  </CustomTooltip>
+                </div>
+              </div>
+        </Box>
+      </Modal>
     </div>
   );
 }

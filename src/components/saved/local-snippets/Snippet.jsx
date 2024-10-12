@@ -373,7 +373,7 @@ function Snippet(props) {
                   </div>
                 </form>
                 <div className='d-flex justify-content-center mt-5'>
-                  <CustomTooltip title='Edit Post' placement='top'>
+                  <CustomTooltip title='Edit Snippet' placement='top'>
                     <IconButton
                       className='mx-4 mt-0 bg-warning'
                       style={{ backgroundColor: '#f8f9fa' }}
