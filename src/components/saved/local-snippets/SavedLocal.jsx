@@ -290,7 +290,7 @@ function SavedLocal({ setShowChoice }) {
 
 
 
-
+      {/* add  modal */}
       <Modal
         open={isAddModalOpen}
         onClose={closeAddModal}
@@ -351,7 +351,7 @@ function SavedLocal({ setShowChoice }) {
                       />
                     </div>
                     <textarea
-                      className='filter-input form-control bg-transparent'
+                      className='centered-placeholder filter-input form-control bg-transparent'
                       placeholder='Content'
                       name='content'
                       onChange={handleAddChange}
