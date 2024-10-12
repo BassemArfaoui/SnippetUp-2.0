@@ -26,6 +26,7 @@ function SavedLocal({ setShowChoice }) {
   const queryClient = useQueryClient();
   const [deletingId, setDeletingId] = useState(null); 
   const [editingId, setEditingId] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [addData, setAddData] = useState({
     title: '',
@@ -42,6 +43,25 @@ function SavedLocal({ setShowChoice }) {
   const closeAddModal = () =>
   {
     setIsAddModalOpen(false)
+  }
+
+
+  const handleAddSubmit =async () =>
+  {
+    if(addData.title.trim() && addData.content.trim() && addData.language.trim())
+    {
+      closeAddModal();
+      try
+      {
+      await addSnippet.mutateAsync({newSnippet:addData})
+      }
+      catch(err)
+      {
+        console.error(err)
+      }
+    }else{
+      notify('All fields are required')
+    }
   }
 
 
@@ -101,6 +121,28 @@ function SavedLocal({ setShowChoice }) {
       notify(`Failed to update snippet`);
     },
   });
+
+    //add mutation
+    const addSnippet = useMutation({
+      mutationFn: async ({newSnippet }) => {
+        setIsAdding(true);
+        await axios.post(`http://localhost:4000/${userId}/add/snippet`, newSnippet);
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(["snippets"]);
+        setIsAdding(false); 
+        setAddData({
+          title: '',
+          content :'',
+          language: ''
+        })
+        successNotify("Snippet Added successfully");
+      },
+      onError: () => {
+        setIsAdding(false); 
+        notify(`Failed to Add snippet`);
+      },
+    });
 
 
   const {
@@ -229,6 +271,9 @@ function SavedLocal({ setShowChoice }) {
         </>
       )}
 
+      {isAdding && <LoadingSpinner bg="bg-primary" />}
+
+
 
 
       {/* add btn */}
@@ -293,6 +338,7 @@ function SavedLocal({ setShowChoice }) {
                         name='title'
                         value={addData.title}
                         onChange={handleAddChange}
+                        spellCheck='false'
                         autoComplete='off'
                       />
                       <input
@@ -300,6 +346,7 @@ function SavedLocal({ setShowChoice }) {
                         placeholder='Language'
                         name='language'
                         value={addData.language}
+                        spellCheck='false'
                         onChange={handleAddChange}
                       />
                     </div>
@@ -311,6 +358,7 @@ function SavedLocal({ setShowChoice }) {
                       value={addData.content}
                       style={{height:'250px'}}
                       autoComplete='off'
+                      spellCheck='false'
                     ></textarea>
                   </div>
                 </form>
@@ -319,7 +367,8 @@ function SavedLocal({ setShowChoice }) {
                     <IconButton
                       className='mx-4 mt-0 bg-warning'
                       style={{ backgroundColor: '#f8f9fa' }}
-                      onClick={()=>{}}
+                      onClick={handleAddSubmit}
+                        
                     >
                       <DoneRoundedIcon fontSize='large' className='text-dark fw-bolder' />
                     </IconButton>

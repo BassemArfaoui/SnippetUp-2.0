@@ -92,11 +92,12 @@ function Snippet(props) {
     }
     catch(err)
     {
+      console.log(err.message);
     }
   }
 
   const editSnippet = async()=>
-  { if(editData.title && editData.language && editData.content ){ 
+  { if(editData.title.trim() && editData.content.trim() && editData.language.trim() ){ 
       if(editData.title !== props.title || editData.language !== props.language || editData.content !== props.content)
       {
         setIsEditModalOpen(false);
@@ -105,7 +106,6 @@ function Snippet(props) {
         } catch(err)
         {
           console.error(err.message);
-          notify('Failed to edit snippet');
       }}
       else{
         closeEditModal();
@@ -353,6 +353,8 @@ function Snippet(props) {
                         name='title'
                         value={editData.title}
                         onChange={handleEditChange}
+                        spellCheck='false'
+
                       />
                       <input
                         className='filter-input form-control bg-transparent'
@@ -360,6 +362,8 @@ function Snippet(props) {
                         name='language'
                         value={editData.language}
                         onChange={handleEditChange}
+                        spellCheck='false'
+
                       />
                     </div>
                     <textarea
@@ -369,6 +373,7 @@ function Snippet(props) {
                       onChange={handleEditChange}
                       value={editData.content}
                       style={{height:'250px'}}
+                      spellCheck='false'
                     ></textarea>
                   </div>
                 </form>
