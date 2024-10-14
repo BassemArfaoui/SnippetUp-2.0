@@ -83,6 +83,18 @@
     bottom: 0;
   }
 
+
+  .guide-icon
+  {
+    margin: 9px;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-weight: bold; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .collection-input::placeholder
   {
     color: rgb(184, 177, 177);

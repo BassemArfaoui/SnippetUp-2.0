@@ -211,6 +211,7 @@ function Snippet(props) {
   }
   
 
+
   useEffect(()=>{
     if(props.isPosted)
     {
@@ -570,7 +571,7 @@ function Snippet(props) {
           <div className='d-flex flex-column gap-1'>
             <div className='fs-5 fw-bold'><span className='text-primary'>Title :</span> {props.title}</div>
             <div className='fs-5 fw-bold'><span className='text-primary'>Language :</span> {props.language}</div>
-            <div className='fs-5 fw-bold'><span className='text-primary'>Status :</span> {props.isPosted ? 'Posted' : 'Local'}</div>
+            <div className='fs-5 fw-bold'><span className='text-primary'>Status :</span> {props.isPosted || isPosting==='success' ? 'Posted' : 'Local'}</div>
             <div className='fs-5 fw-bold'><span className='text-primary'>Created at :</span> {formatTimestamp(props.createdAt)} </div>
             {(props.createdAt !== props.modifiedAt ) && <div className='fs-5 fw-bold'><span className='text-primary'>Modified at : </span>{formatTimestamp(props.modifiedAt)} </div>}
           </div> 

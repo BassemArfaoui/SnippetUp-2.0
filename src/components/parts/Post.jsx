@@ -27,7 +27,12 @@ import { FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import axios from 'axios';
 import SpinnerSpan from '../tools/SpinnerSpan';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import "../tools/styles/driver.css"
 const CommentSection = lazy(() => import('./CommentSection'));
+
 
 
 
@@ -58,6 +63,10 @@ export default function Post(props) {
   const [commentCount, setCommentCount] = useState(props.commentCount);
   const [shareCount, setShareCount] = useState(props.shareCount);
   const [language, setLanguage] = useState(props.language);
+
+
+ 
+  
 
 
 
@@ -367,6 +376,50 @@ export default function Post(props) {
       notify("Can't Add an Empty Collection")
     }
   }
+
+
+  function startGuide()
+  {
+
+    const steps = [
+      { element: '#interested-btn', popover: { title: 'Follow Content', description: "Show interest in this author's snippets to see more of their posts in your feed." }},
+      { element: '#language-btn', popover: { title: 'Programming Language', description: 'Displays the programming language or framework used in the snippet.' }},
+      { element: '#snippet-title', popover: { title: 'Post Title', description: 'This section displays the title of the code snippet.' }},
+      { element: '#fullscreen-btn', popover: { title: 'Enter Full Screen', description: 'Expand the snippet to full screen for an enhanced viewing experience.' }},
+      { element: '#copy-btn', popover: { title: 'Copy Code', description: 'Quickly copy the code to your clipboard for immediate use.' }},
+      { element: '#save-btn', popover: { title: 'Save Snippet', description: 'Bookmark this snippet to easily access it later.' }},
+      { element: '#desc-btn', popover: { title: 'Code Description', description: 'A brief explanation of the code, including its purpose and required dependencies.' }},
+      { element: '#code-block', popover: { title: 'Code Snippet', description: 'The full code snippet is displayed here with syntax highlighting for clarity.' }},
+      { element: '#like-btn', popover: { title: 'Like This Post', description: "Found this post helpful? Show your appreciation by liking it." }},
+      { element: '#dislike-btn', popover: { title: 'Dislike This Post', description: "If this post has issues or doesn't work as expected, flag it by disliking." }},
+      { element: '#comment-btn', popover: { title: 'Leave a Comment', description: "Have feedback or questions? Share your thoughts in the comments section." }},
+      { element: '#share-btn', popover: { title: 'Share This Post', description: "Think this post might benefit others? Share it with your network." }},
+    ]
+
+    if(props.githubLink)
+    {
+      steps.push({ element: '#gitub-btn', popover: { title: 'Github Repository', description: 'View the associated GitHub repository for additional resources and information.' }})
+    }
+
+    if(props.savedAt)
+    {
+      steps.push({ element: '#saved-at', popover: { title: 'Saved At', description: 'Displays the exact time you saved this Post' } })
+    }
+  
+    //driver
+    const driverObj = driver({
+      showProgress: true,
+      steps: steps
+    });
+
+    driverObj.drive();
+  }
+
+
+
+  
+  
+  
   
   
   
@@ -392,103 +445,117 @@ export default function Post(props) {
             <div>
               <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
                 <span className="p-0 m-0">{props.firstname +' '+props.lastname}</span>
-                {!isInterested ? (
-                  <span
-                    className="text-light p-0 mb-1 ms-2 intrested-icon"
-                    onClick={becomeInterested}
-                  >
-                    <CustomTooltip title='Intrested' placement='top'>
-                      <StarBorderIcon style={{ fontSize: '30px' }} />
-                    </CustomTooltip>
-                  </span>
-                ) : (
-                  <span
-                    className="text-primary p-0 mb-1 ms-2 intrested-icon"
-                    onClick={becomeUninterested}
-                  >
-                    <StarIcon style={{ fontSize: '30px' }} />
-                  </span>
-                )}
+                <span id="interested-btn" className='ms-3 mb-1'>
+                  {!isInterested ? (
+                    <span
+                      className="text-light p-0 mb-1  intrested-icon"
+                      onClick={becomeInterested}
+                    >
+                      <CustomTooltip title='Intrested' placement='top'>
+                        <StarBorderIcon style={{ fontSize: '30px' }} />
+                      </CustomTooltip>
+                    </span>
+                  ) : (
+                    <span
+                      className="text-primary p-0 mb-1 intrested-icon"
+                      onClick={becomeUninterested}
+                    >
+                      <StarIcon style={{ fontSize: '30px' }} />
+                    </span>
+                  )}
+                </span>
               </div>
               <div className="text-secondary fs-5">@{props.username}</div>
             </div>
           </div>
-          <div className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
+          <div id='language-btn' className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
             {language}
           </div>
         </div>
         {/* Snippet Title and Buttons */}
         <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
-          <h3 className="snippet-title fw-bold text-center">{snippetTitle}</h3>
+          <h3 id='snippet-title' className="snippet-title fw-bold text-center">{snippetTitle}</h3>
           <div className="buttons align-self-end d-flex gap-3 align-items-center">
             {/*github proj link*/}
             {props.githubLink && (
               <CustomTooltip title='See Related Repo' placement='top'>
-                  <a target='_blank' href={props.githubLink} className="btn btn-outline-light post-btn" >
+                  <a id='gitub-btn' target='_blank' href={props.githubLink} className="btn btn-outline-light post-btn" >
                     <GitHubIcon style={{ fontSize: '28px' }} />
                   </a>
               </CustomTooltip>
       
             ) }
+
+
             {/* Description Button */}
             <CustomTooltip title='Description' placement='top'>
-              <button className="btn btn-outline-light post-btn" onClick={openDescription}>
+              <button id='desc-btn' className="btn btn-outline-light post-btn" onClick={openDescription}>
                 <LightbulbIcon style={{ fontSize: '27px' }} />
               </button>
             </CustomTooltip>
+
+
             {/* Save, Copy, and Fullscreen Buttons */}
-            {isSaved ? (
-              !isUnsaving ? <button
-                className="btn btn-outline-primary post-btn"
-                onClick={unsaveSnippet}
-              >
-                <BookmarkAddedIcon style={{ fontSize: '28px' }} />
-              </button> :
-                <CustomTooltip title='Unsaving...' placement='top'>
+            <span id='save-btn'>
+              {isSaved ? (
+                !isUnsaving ? <button
+                  className="btn btn-outline-primary post-btn"
+                  onClick={unsaveSnippet}
+                >
+                  <BookmarkAddedIcon style={{ fontSize: '28px' }} />
+                </button> :
+                  <CustomTooltip title='Unsaving...' placement='top'>
+                    <button
+                      className="btn btn-outline-light post-btn"
+                    >
+                    <SpinnerSpan color='text-primary' spanStyle={{width:'25px',height:'25px'}}/>
+                    </button>
+                  </CustomTooltip>
+              ) : ( !isSaving ?
+                <CustomTooltip title='Save Snippet' placement='top'>
+                  <button
+                    className="btn btn-outline-light post-btn"
+                    onClick={openCollectionModal}
+                  >
+                    <BookmarkAddIcon style={{ fontSize: '28px' }} />
+                  </button>
+                </CustomTooltip> :
+                <CustomTooltip title='Saving...' placement='top'>
                   <button
                     className="btn btn-outline-light post-btn"
                   >
                   <SpinnerSpan color='text-primary' spanStyle={{width:'25px',height:'25px'}}/>
                   </button>
                 </CustomTooltip>
-            ) : ( !isSaving ?
-              <CustomTooltip title='Save Snippet' placement='top'>
-                <button
-                  className="btn btn-outline-light post-btn"
-                  onClick={openCollectionModal}
-                >
-                  <BookmarkAddIcon style={{ fontSize: '28px' }} />
-                </button>
-              </CustomTooltip> :
-              <CustomTooltip title='Saving...' placement='top'>
-                <button
-                  className="btn btn-outline-light post-btn"
-                >
-                <SpinnerSpan color='text-primary' spanStyle={{width:'25px',height:'25px'}}/>
-                </button>
-              </CustomTooltip>
+              )}
+            </span>
 
-            )}
-            {isCopied ? (
-              <button className="btn btn-outline-primary post-btn">
-                <DoneIcon />
-              </button>
-            ) : (
-              <CustomTooltip title='Copy Snippet' placement='top'>
-                <button className="btn btn-outline-light post-btn" onClick={copyCode}>
-                  <ContentCopyIcon />
+            <span id='copy-btn'>
+              {isCopied ? (
+                <button className="btn btn-outline-primary post-btn">
+                  <DoneIcon />
+                </button>
+              ) : (
+                <CustomTooltip title='Copy Snippet' placement='top'>
+                  <button className="btn btn-outline-light post-btn" onClick={copyCode}>
+                    <ContentCopyIcon />
+                  </button>
+                </CustomTooltip>
+              )}
+            </span>
+
+            <span id='fullscreen-btn'>
+              <CustomTooltip title='Full Screen' placement='top'>
+                <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
+                  <FullscreenIcon style={{ fontSize: '34px' }} />
                 </button>
               </CustomTooltip>
-            )}
-            <CustomTooltip title='Full Screen' placement='top'>
-              <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
-                <FullscreenIcon style={{ fontSize: '34px' }} />
-              </button>
-            </CustomTooltip>
+            </span>
+
           </div>
         </div>
         {/* Code Block */}
-        <div className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
+        <div id='code-block' className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
           <pre className="text-white " style={{fontSize:'22px'}}>
             <code>
               <CodeHighlighter codeSnippet={snippetCode} />
@@ -582,7 +649,7 @@ export default function Post(props) {
               <CloseIcon className='fs-2'/>
             </IconButton>
             <h3 id="description-modal-title" className="fw-bold mb-5 text-center text-warning">{snippetTitle}</h3>
-            <div id="description-modal-content " className="fs-5 text-center mt-4" style={{ whiteSpace: 'pre-wrap' }}>
+            <div id="description-modal-content " className="fs-5 text-start mt-4" style={{ whiteSpace: 'pre-wrap' }}>
               {snippetDescription}
             </div>
           </Box>
@@ -714,7 +781,7 @@ export default function Post(props) {
 
         {/* Reactions */}
         <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
-          <div className="text-center">
+          <div id='like-btn' className="text-center">
             {react === 'like' ? (
               <button className="btn btn-primary p-2 px-3 fw-bolder fs-5 like-btn" onClick={unlikeSnippet}>
                 <ThumbUpIcon />
@@ -726,7 +793,7 @@ export default function Post(props) {
             )}
             <div className="text-light mt-1">{likeCount}</div>
           </div>
-          <div className="text-center">
+          <div id='dislike-btn' className="text-center">
             {react === 'dislike' ? (
               <button className="btn btn-danger p-2 px-3 fw-bolder fs-5 like-btn" onClick={undislikeSnippet}>
                 <ThumbDownIcon />
@@ -738,13 +805,13 @@ export default function Post(props) {
             )}
             <div className="text-light mt-1">{dislikeCount}</div>
           </div>
-          <div className="text-center">
+          <div id='comment-btn' className="text-center">
             <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openComments}>
               <CommentIcon />
             </button>
             <div className="text-light mt-1">{commentCount}</div>
           </div>
-          <div className="text-center">
+          <div id='share-btn' className="text-center">
             <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openShareModal}>
               <ShareIcon />
             </button>
@@ -766,23 +833,33 @@ export default function Post(props) {
         </Modal>
       </Suspense>
       </div>
-      {
-        props.savedAt && 
-        <InfoTooltip 
-  title={
-    <div style={{ whiteSpace: 'pre-line' }}>
-      {`Saved at :
-        ${formatTimestamp(props.savedAt)}`
-      }
-    </div>
-  } 
-  placement='top'
->
-          <span className="saved-at text-light rounded-5 position-absolute fs-4">
-            <AccessTimeIcon  fontSize='50px'/>
-          </span>
-        </InfoTooltip>
-      }
+      <span  className='position-absolute bottom-0 end-0 d-flex gap-0 align-items-center me-2 mb-2' >
+        {
+          props.savedAt &&
+          <InfoTooltip  title={
+          <div style={{ whiteSpace: 'pre-line' }}>
+            {`Saved at :
+              ${formatTimestamp(props.savedAt)}`
+            }
+          </div>
+          }
+            placement='top'
+          >
+            <span id='saved-at' className="saved-at text-light rounded-5 fs-4">
+              <AccessTimeIcon  fontSize='50px'/>
+            </span>
+          </InfoTooltip>
+        }
+      </span>
+
+      <span onClick={startGuide}  className="text-light rounded-5 d-flex justify-content-center align-items-center fw-light border-light position-absolute top-0 end-0 me-1 mt-1" style={{fontSize:'16px',cursor:'pointer',aspectRatio:'1',padding:'1pt',border:'0.5pt solid gray',opacity:'0.65'}}>
+            <QuestionMarkIcon  fontSize='50px'/>
+      </span>
+
+
+
+
+
     </div>
   );
 }
