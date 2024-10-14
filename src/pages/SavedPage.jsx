@@ -294,8 +294,6 @@ function SavedPage() {
         </Modal>
 
         {filterLoading && filterPage==1 && <LoadingSpinner />}
-
-
       </>
     </div>
   );

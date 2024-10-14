@@ -278,7 +278,7 @@ function SavedLocal({ setShowChoice }) {
 
       {/* add btn */}
       <CustomTooltip title="Add Snippet" placement="right">
-        <IconButton
+        <IconButton id='add-snippet'
           onClick={openAddModel}
           aria-label="Scroll to End"
           className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"

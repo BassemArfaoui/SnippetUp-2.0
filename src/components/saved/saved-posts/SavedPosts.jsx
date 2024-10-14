@@ -101,7 +101,7 @@ function SavedPosts(props) {
     >
 
 
-        <span
+        <span id='saved-options'
           variant="contained"
           onClick={toggleOptions}
           aria-label="Toggle notifications"
