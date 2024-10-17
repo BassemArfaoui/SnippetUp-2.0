@@ -129,20 +129,13 @@ function Snippet(props) {
       editData.content.trim() &&
       editData.language.trim()
     ) {
-      if (
-        editData.title !== props.title ||
-        editData.language !== props.language ||
-        editData.content !== props.content
-      ) {
+
         setIsEditModalOpen(false);
         try {
           await props.editSnippet({ id: props.id, updatedSnippet: editData });
         } catch (err) {
           console.error(err.message);
         }
-      } else {
-        closeEditModal();
-      }
     } else {
       notify("Please Fill all the Fields");
     }
@@ -153,7 +146,7 @@ function Snippet(props) {
     setIsPosting(true);
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:4000/${userId}/add/post/${props.id}`,
         {
           title: props.title,
@@ -269,6 +262,9 @@ function Snippet(props) {
     };
   }, [optionsRef]);
 
+
+
+  
   return (
     <div className="post rounded-4 p-4 position-relative">
       {/* Snippet Title and Buttons */}
@@ -796,9 +792,11 @@ function Snippet(props) {
 
 
       
-      <span onClick={startGuide}  className="text-light rounded-5 d-flex justify-content-center align-items-center fw-light border-light position-absolute top-0 end-0 me-1 mt-1" style={{fontSize:'16px',cursor:'pointer',aspectRatio:'1',padding:'1pt',border:'0.5pt solid gray',opacity:'0.65'}}>
-            <QuestionMarkIcon  fontSize='50px'/>
-      </span>
+      <CustomTooltip title='Explain' placement='right'>
+        <span onClick={startGuide}  className="text-light rounded-5 d-flex justify-content-center align-items-center fw-light border-light position-absolute top-0 end-0 me-2 mt-2" style={{fontSize:'10px',cursor:'pointer',aspectRatio:'1',padding:'1pt',border:'0.5pt solid gray',opacity:'0.65'}}>
+              <QuestionMarkIcon  fontSize='50px'/>
+        </span>
+      </CustomTooltip>
     </div>
   );
 }

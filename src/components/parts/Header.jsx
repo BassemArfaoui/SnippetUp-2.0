@@ -130,9 +130,22 @@ return (
                         </ul>
                 </div>
 
-                <span onClick={startGuide}  className="text-secondary rounded-5 d-flex justify-content-center align-items-center fw-light border-secondary position-absolute top-0 end-0 me-1 mt-1" style={{fontSize:'16px',cursor:'pointer',aspectRatio:'1',padding:'1pt',border:'0.5pt solid gray',opacity:'0.65'}}>
-                    <QuestionMarkIcon  fontSize='50px'/>
-              </span>
+                <CustomTooltip title='Explain' placement='right'>
+                  <span
+                    onClick={startGuide}
+                    className="text-secondary rounded-5 d-flex justify-content-center align-items-center fw-light border-secondary position-absolute top-0 end-0 me-1 mt-1"
+                    style={{
+                      fontSize: "10px",
+                      cursor: "pointer",
+                      aspectRatio: "1",
+                      padding: "1pt",
+                      border: "0.5pt solid gray",
+                      opacity: "0.65",
+                    }}
+                  >
+                    <QuestionMarkIcon fontSize="50px" />
+                  </span>
+              </CustomTooltip>
 
         </header>
     )

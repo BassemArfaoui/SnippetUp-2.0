@@ -5,6 +5,7 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "../tools/styles/driver.css"
+import CustomTooltip from '../tools/CustomTooltip';
 
 
 
@@ -93,21 +94,26 @@ function SavedChoice(props) {
           cancelFilter={props.cancelFilter}
         />
       </span>
+      
 
-      <span
-        onClick={startGuide}
-        className="text-secondary rounded-5 d-flex justify-content-center align-items-center fw-light border-secondary position-absolute top-0 end-0 me-1 mt-1"
-        style={{
-          fontSize: "16px",
-          cursor: "pointer",
-          aspectRatio: "1",
-          padding: "1pt",
-          border: "0.5pt solid gray",
-          opacity: "0.65",
-        }}
-      >
-        <QuestionMarkIcon fontSize="50px" />
-      </span>
+      <CustomTooltip title='Explain' placement='right'>
+        <span
+          onClick={startGuide}
+          className="text-secondary rounded-5 d-flex justify-content-center align-items-center fw-light border-secondary position-absolute top-0 end-0 me-2 mt-1"
+          style={{
+            fontSize: "10px",
+            cursor: "pointer",
+            aspectRatio: "1",
+            padding: "1pt",
+            border: "0.5pt solid gray",
+            opacity: "0.65",
+          }}
+        >
+          <QuestionMarkIcon fontSize="50px" />
+        </span>
+      </CustomTooltip>
+
+
     </div>
   );
 }

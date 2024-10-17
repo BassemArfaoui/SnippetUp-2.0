@@ -49,8 +49,6 @@ function SavedPosts(props) {
   };
 
 
-
-
   useEffect(() => {
     if(props.showChoice ===false)
     {
@@ -94,6 +92,8 @@ function SavedPosts(props) {
     };
   }, [loading, props.setShowChoice]);
 
+
+  
   return (
     <div
       className="saved-posts d-flex flex-column gap-4 pt-3 position-relative"
