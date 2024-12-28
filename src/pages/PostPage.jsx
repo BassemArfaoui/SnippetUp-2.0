@@ -4,6 +4,7 @@ import axios from 'axios';
 import Post from '../components/parts/Post';
 import '../css/PostPage.css'
 import Spinner from '../components/tools/Spinner';
+import { Helmet } from 'react-helmet';
 
 
 function PostPage() {
@@ -38,6 +39,9 @@ function PostPage() {
 
   return (
     <div className='post-container px-3 '>
+      <Helmet>
+        <title>{`SnippetUp : ${post.title}`}</title>
+      </Helmet>
       <div className='px-4 my-4 mb-5'>
           {post && (
             <Post

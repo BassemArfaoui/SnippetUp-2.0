@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../css/SavedPage.css';
 import SavedChoice from '../components/saved/SavedChoice';
 import SavedPosts from '../components/saved/saved-posts/SavedPosts';
@@ -13,8 +13,8 @@ import SpinnerSpan from '../components/tools/SpinnerSpan';
 import SavedPostsFilter from '../components/saved/saved-posts/SavedPostsFilter';
 import LocalPostsFilter from '../components/saved/local-snippets/LocalPostsFilter';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 import { notify } from '../components/tools/CustomToaster';
-import SavedPostsCollections from '../components/saved/saved-posts/SavedPostsCollections';
 import LoadingSpinner from '../components/tools/LoadingSpinner';
 
 function SavedPage() {
@@ -143,6 +143,9 @@ function SavedPage() {
 
   return (
     <div className='saved-page'>
+      <Helmet>
+        <title>SnippetUp : Saved Items</title>
+      </Helmet>
       <>
         {showChoice && (
           <SavedChoice

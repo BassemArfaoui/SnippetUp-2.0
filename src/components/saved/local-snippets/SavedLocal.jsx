@@ -6,7 +6,7 @@ import '../styles/saves.css';
 import SpinnerSpan from '../../tools/SpinnerSpan';
 import Spinner from '../../tools/Spinner';
 import { notify, successNotify } from '../../tools/CustomToaster';
-import LoadingSpinner from '../../tools/LoadingSpinner'; // Importing LoadingSpinner
+import LoadingSpinner from '../../tools/LoadingSpinner';
 import CustomTooltip from '../../tools/CustomTooltip';
 import { Modal, Box, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';

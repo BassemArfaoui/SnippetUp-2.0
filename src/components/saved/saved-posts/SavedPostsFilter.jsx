@@ -41,7 +41,7 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
   }, [hasMoreFilteredPosts, loadMoreFilteredPosts]);
 
   return (
-    <div className='search-result-container d-flex flex-column gap-3' ref={containerRef}
+    <div className='posts-filter-result d-flex flex-column gap-3' ref={containerRef}
           onScroll={(e) => {
         const { scrollTop} = e.target;
 

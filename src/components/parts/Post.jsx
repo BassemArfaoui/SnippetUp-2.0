@@ -432,18 +432,18 @@ export default function Post(props) {
     <div className='position-relative'>
       <div className="post rounded-4 p-4">
         {/* Post Header */}
-        <div className="d-flex align-items-center justify-content-between mb-3">
+        <div className="d-flex align-items-center justify-content-between mb-0">
           <div className="d-flex align-items-center gap-3">
             <div className="avatar">
               <img
                 src={profile_pic}
                 alt="user"
                 className="rounded-circle"
-                style={{ width: '60px', height: '60px' }}
+                style={{ width: '50px', height: '50px' }}
               />
             </div>
             <div>
-              <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
+              <div className="text-white fs-5 fw-bolder d-flex align-items-center m-0 p-0">
                 <span className="p-0 m-0">{props.firstname +' '+props.lastname}</span>
                 <span id="interested-btn" className='ms-3 mb-1'>
                   {!isInterested ? (
@@ -452,7 +452,7 @@ export default function Post(props) {
                       onClick={becomeInterested}
                     >
                       <CustomTooltip title='Intrested' placement='top'>
-                        <StarBorderIcon style={{ fontSize: '30px' }} />
+                        <StarBorderIcon style={{ fontSize: '26px' }} />
                       </CustomTooltip>
                     </span>
                   ) : (
@@ -460,12 +460,12 @@ export default function Post(props) {
                       className="text-primary p-0 mb-1 intrested-icon"
                       onClick={becomeUninterested}
                     >
-                      <StarIcon style={{ fontSize: '30px' }} />
+                      <StarIcon style={{ fontSize: '26px' }} />
                     </span>
                   )}
                 </span>
               </div>
-              <div className="text-secondary fs-5">@{props.username}</div>
+              <div className="text-secondary fs-6">@{props.username}</div>
             </div>
           </div>
           <div id='language-btn' className="px-2 py-1 bg-secondary fs-6 fw-bold text-light rounded">
@@ -474,13 +474,13 @@ export default function Post(props) {
         </div>
         {/* Snippet Title and Buttons */}
         <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
-          <h3 id='snippet-title' className="snippet-title fw-bold text-center">{snippetTitle}</h3>
+          <h3 id='snippet-title' className="snippet-title fw-bold text-center fs-6">{snippetTitle}</h3>
           <div className="buttons align-self-end d-flex gap-3 align-items-center">
             {/*github proj link*/}
             {props.githubLink && (
               <CustomTooltip title='See Related Repo' placement='top'>
                   <a id='gitub-btn' target='_blank' href={props.githubLink} className="btn btn-outline-light post-btn" >
-                    <GitHubIcon style={{ fontSize: '28px' }} />
+                    <GitHubIcon style={{ fontSize: '22px' }} />
                   </a>
               </CustomTooltip>
       
@@ -490,7 +490,7 @@ export default function Post(props) {
             {/* Description Button */}
             <CustomTooltip title='Description' placement='top'>
               <button id='desc-btn' className="btn btn-outline-light post-btn" onClick={openDescription}>
-                <LightbulbIcon style={{ fontSize: '27px' }} />
+                <LightbulbIcon style={{ fontSize: '22px' }} />
               </button>
             </CustomTooltip>
 
@@ -502,13 +502,13 @@ export default function Post(props) {
                   className="btn btn-outline-primary post-btn"
                   onClick={unsaveSnippet}
                 >
-                  <BookmarkAddedIcon style={{ fontSize: '28px' }} />
+                  <BookmarkAddedIcon style={{ fontSize: '22px' }} />
                 </button> :
                   <CustomTooltip title='Unsaving...' placement='top'>
                     <button
                       className="btn btn-outline-light post-btn"
                     >
-                    <SpinnerSpan color='text-primary' spanStyle={{width:'25px',height:'25px'}}/>
+                    <SpinnerSpan color='text-primary' spanStyle={{width:'22px',height:'22px'}}/>
                     </button>
                   </CustomTooltip>
               ) : ( !isSaving ?
@@ -517,14 +517,14 @@ export default function Post(props) {
                     className="btn btn-outline-light post-btn"
                     onClick={openCollectionModal}
                   >
-                    <BookmarkAddIcon style={{ fontSize: '28px' }} />
+                    <BookmarkAddIcon style={{ fontSize: '22px' }} />
                   </button>
                 </CustomTooltip> :
                 <CustomTooltip title='Saving...' placement='top'>
                   <button
                     className="btn btn-outline-light post-btn"
                   >
-                  <SpinnerSpan color='text-primary' spanStyle={{width:'25px',height:'25px'}}/>
+                  <SpinnerSpan color='text-primary' spanStyle={{width:'22px',height:'22px'}}/>
                   </button>
                 </CustomTooltip>
               )}
@@ -533,12 +533,12 @@ export default function Post(props) {
             <span id='copy-btn'>
               {isCopied ? (
                 <button className="btn btn-outline-primary post-btn">
-                  <DoneIcon />
+                  <DoneIcon style={{ fontSize: '22px' }} />
                 </button>
               ) : (
                 <CustomTooltip title='Copy Snippet' placement='top'>
                   <button className="btn btn-outline-light post-btn" onClick={copyCode}>
-                    <ContentCopyIcon />
+                    <ContentCopyIcon style={{ fontSize: '22px' }}/>
                   </button>
                 </CustomTooltip>
               )}
@@ -547,7 +547,7 @@ export default function Post(props) {
             <span id='fullscreen-btn'>
               <CustomTooltip title='Full Screen' placement='top'>
                 <button className="btn btn-outline-light post-btn" onClick={openFullScreen}>
-                  <FullscreenIcon style={{ fontSize: '34px' }} />
+                  <FullscreenIcon style={{ fontSize: '29px' }} />
                 </button>
               </CustomTooltip>
             </span>
@@ -555,8 +555,8 @@ export default function Post(props) {
           </div>
         </div>
         {/* Code Block */}
-        <div id='code-block' className="border border-secondary rounded p-3" style={{ height: '200px', overflowY: 'auto' }}>
-          <pre className="text-white " style={{fontSize:'22px'}}>
+        <div id='code-block' className="border border-secondary rounded p-3" style={{ height: '180px', overflowY: 'auto' }}>
+          <pre className="text-white " style={{fontSize:'17px'}}>
             <code>
               <CodeHighlighter codeSnippet={snippetCode} />
             </code>
@@ -603,7 +603,7 @@ export default function Post(props) {
             </IconButton>
             <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">{snippetTitle}</h2>
             <pre id="modal-description" style={{ whiteSpace: 'pre-wrap' }}>
-              <code style={{fontSize:'25px'}}>
+              <code style={{fontSize:'20px'}}>
                 <CodeHighlighter codeSnippet={snippetCode} />
               </code>
             </pre>
@@ -695,13 +695,13 @@ export default function Post(props) {
             >
               <CloseIcon className='fs-2'/>
             </IconButton>
-            <h3 id="share-modal-title" className="fw-bold mb-5 text-center text-warning px-3">Share this post with :</h3>
+            <h3 id="share-modal-title" className="fw-bold mb-4 text-center text-warning px-3 fs-4">Share this Post with :</h3>
             <div id="share-modal-content " className="fs-5  mt-4 d-flex justify-content-center gap-3 flex-wrap">
-               <span className='share-option bg-primary' style={{fontSize:'38px'}}><FaFacebook/></span>
-               <span className='share-option' style={{fontSize:'38px',backgroundColor:'#25D366'}}><IoLogoWhatsapp/></span>
-               <span className='share-option instagram-option' style={{fontSize:'38px'}}><FaInstagram/></span>
-               <span className='share-option x-option' style={{fontSize:'33px'}} > <FaXTwitter/></span>
-               <span className='share-option bg-danger' style={{fontSize:'31px'}} onClick={()=>{copyLink(`http://localhost:3000/post/${props.id}`)}}><FaLink/></span>
+               <span className='share-option bg-primary' style={{fontSize:'30px'}}><FaFacebook/></span>
+               <span className='share-option' style={{fontSize:'30px',backgroundColor:'#25D366'}}><IoLogoWhatsapp/></span>
+               <span className='share-option instagram-option' style={{fontSize:'30px'}}><FaInstagram/></span>
+               <span className='share-option x-option' style={{fontSize:'26px'}} > <FaXTwitter/></span>
+               <span className='share-option bg-danger' style={{fontSize:'25px'}} onClick={()=>{copyLink(`http://localhost:3000/post/${props.id}`)}}><FaLink/></span>
       
             </div>
           </Box>
@@ -780,15 +780,15 @@ export default function Post(props) {
 
 
         {/* Reactions */}
-        <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-3">
+        <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-2">
           <div id='like-btn' className="text-center">
             {react === 'like' ? (
               <button className="btn btn-primary p-2 px-3 fw-bolder fs-5 like-btn" onClick={unlikeSnippet}>
-                <ThumbUpIcon />
+                <ThumbUpIcon style={{ fontSize: '20px' }}/>
               </button>
             ) : (
               <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={likeSnippet}>
-                <ThumbUpIcon />
+                <ThumbUpIcon style={{ fontSize: '20px' }}/>
               </button>
             )}
             <div className="text-light mt-1">{likeCount}</div>
@@ -796,24 +796,24 @@ export default function Post(props) {
           <div id='dislike-btn' className="text-center">
             {react === 'dislike' ? (
               <button className="btn btn-danger p-2 px-3 fw-bolder fs-5 like-btn" onClick={undislikeSnippet}>
-                <ThumbDownIcon />
+                <ThumbDownIcon style={{ fontSize: '20px' }}/>
               </button>
             ) : (
               <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={dislikeSnippet}>
-                <ThumbDownIcon />
+                <ThumbDownIcon style={{ fontSize: '20px' }}/>
               </button>
             )}
             <div className="text-light mt-1">{dislikeCount}</div>
           </div>
           <div id='comment-btn' className="text-center">
             <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openComments}>
-              <CommentIcon />
+              <CommentIcon style={{ fontSize: '20px' }}/>
             </button>
             <div className="text-light mt-1">{commentCount}</div>
           </div>
           <div id='share-btn' className="text-center">
             <button className="btn btn-light p-2 px-3 fw-bolder fs-5 like-btn" onClick={openShareModal}>
-              <ShareIcon />
+              <ShareIcon style={{ fontSize: '20px' }}/>
             </button>
             <div className="text-light mt-1">{shareCount}</div>
           </div>

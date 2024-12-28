@@ -4,7 +4,7 @@
    border: 2pt solid rgb(132, 126, 126);
    color: rgb(132, 126, 126)   ;
    border-radius: 18px;
-   height: 55px;
+   height: 50px;
    font-size: 21px;
 
 }
@@ -14,6 +14,7 @@
 {
    outline: none !important;
    color: #0d6efd   ;
+   height: 50px;
    border: 2pt solid #0d6efd ;
 
 }

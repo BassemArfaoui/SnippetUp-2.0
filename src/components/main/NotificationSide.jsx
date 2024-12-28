@@ -4,6 +4,7 @@ import Notification from '../parts/Notification';
 import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // Material-UI Icon
 
+
 export default function NotificationSide() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,19 +58,18 @@ export default function NotificationSide() {
       setError('Failed to fetch notifications');
     } finally {
       setLoading(false);
-      setInitialLoading(false); // Disable the initial loading state after first load
+      setInitialLoading(false); 
     }
   };
 
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
-      fetchNotifications(); // Fetch notifications on the first render
+      fetchNotifications(); 
     }
-  }, []); // Empty dependency array to only run once
+  }, []); 
 
   if (initialLoading) {
-    // Show a centered spinner during the first loading
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
         <div className="spinner-border text-primary" role="status">

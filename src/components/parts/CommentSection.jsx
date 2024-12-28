@@ -187,7 +187,7 @@ const refreshAndScroll = () => {
             className="comments"
             style={{ height: "80vh", overflowY: "auto" }}
           >
-            <h2 className="text-center p-0 text-warning fw-bold mt-4 mx-3 lh-base">
+            <h2 className="text-center p-0 text-warning fw-bold mt-4 mx-3 lh-base fs-4">
               {props.postTitle}
               <span className="text-light"> Comments</span>
             </h2>

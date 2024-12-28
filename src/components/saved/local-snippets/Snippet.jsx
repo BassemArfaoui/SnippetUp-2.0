@@ -277,7 +277,7 @@ function Snippet(props) {
         className="border border-secondary rounded p-3"
         style={{ height: "200px", overflowY: "auto" }}
       >
-        <pre className="text-white " style={{ fontSize: "22px" }}>
+        <pre className="text-white " style={{ fontSize: "17px" }}>
           <code>
             <CodeHighlighter codeSnippet={props.content} />
           </code>
@@ -298,14 +298,14 @@ function Snippet(props) {
                   className="btn btn-outline-light post-btn"
                   onClick={openOptions}
                 >
-                  <MoreVertIcon style={{ fontSize: "27px" }} />
+                  <MoreVertIcon style={{ fontSize: "22px" }} />
                 </button>
               ) : (
                 <button
                   className="btn btn-outline-primary post-btn"
                   onClick={closeOptions}
                 >
-                  <MoreVertIcon style={{ fontSize: "27px" }} />
+                  <MoreVertIcon style={{ fontSize: "22px" }} />
                 </button>
               )}
             </span>
@@ -320,7 +320,7 @@ function Snippet(props) {
                     className="btn btn-outline-light post-btn"
                     onClick={openInfosModal}
                   >
-                    <InfoIcon style={{ fontSize: "27px" }} />
+                    <InfoIcon style={{ fontSize: "22px" }} />
                   </button>
                 </CustomTooltip>
 
@@ -329,7 +329,7 @@ function Snippet(props) {
                     className="btn btn-outline-light post-btn"
                     onClick={openEditModal}
                   >
-                    <EditIcon style={{ fontSize: "28px" }} />
+                    <EditIcon style={{ fontSize: "21px" }} />
                   </button>
                 </CustomTooltip>
 
@@ -339,7 +339,7 @@ function Snippet(props) {
                     onClick={openConfirmModal}
                     style={{ backgroundColor: "#eb4334" }}
                   >
-                    <DeleteIcon style={{ fontSize: "27px" }} />
+                    <DeleteIcon style={{ fontSize: "22px" }} />
                   </button>
                 </CustomTooltip>
               </div>
@@ -349,7 +349,7 @@ function Snippet(props) {
           <span id="copy-btn">
             {isCopied ? (
               <button className="btn btn-outline-primary post-btn">
-                <DoneIcon />
+                <DoneIcon style={{ fontSize: "22px" }}/>
               </button>
             ) : (
               <CustomTooltip title="Copy Snippet" placement="top">
@@ -357,7 +357,7 @@ function Snippet(props) {
                   className="btn btn-outline-light post-btn"
                   onClick={copyCode}
                 >
-                  <ContentCopyIcon style={{ fontSize: "27px" }} />
+                  <ContentCopyIcon style={{ fontSize: "20px" }} />
                 </button>
               </CustomTooltip>
             )}
@@ -369,7 +369,7 @@ function Snippet(props) {
               className="btn btn-outline-light post-btn"
               onClick={openFullScreen}
             >
-              <FullscreenIcon style={{ fontSize: "34px" }} />
+              <FullscreenIcon style={{ fontSize: "26px" }} />
             </button>
           </CustomTooltip>
 
@@ -390,7 +390,7 @@ function Snippet(props) {
                     className="btn btn-outline-primary post-btn"
                     onClick={openOptionDataModal}
                   >
-                    <ArrowUpwardIcon style={{ fontSize: "37px" }} />
+                    <ArrowUpwardIcon style={{ fontSize: "26px" }} />
                   </button>
                 ) : (
                   <>
@@ -398,7 +398,7 @@ function Snippet(props) {
                       <button className="btn btn-outline-primary post-btn p-2">
                         <SpinnerSpan
                           color="text-light"
-                          spanStyle={{ width: "25px", height: "25px" }}
+                          spanStyle={{ width: "22px", height: "22px" }}
                         />
                       </button>
                     ) : (
@@ -408,7 +408,7 @@ function Snippet(props) {
                           notify("Snippet already posted");
                         }}
                       >
-                        <DoneRoundedIcon />
+                        <DoneRoundedIcon style={{ fontSize: "22px" }}/>
                       </button>
                     )}
                   </>
