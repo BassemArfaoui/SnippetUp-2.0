@@ -464,7 +464,7 @@ function Snippet(props) {
             {props.title}
           </h2>
           <pre id="modal-description" style={{ whiteSpace: "pre-wrap" }}>
-            <code style={{ fontSize: "25px" }}>
+            <code style={{ fontSize: "19px" }}>
               <CodeHighlighter codeSnippet={props.content} />
             </code>
           </pre>

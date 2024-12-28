@@ -3,15 +3,23 @@
 
 .feed-side
 {
-    height: 87vh;
+    height: 90vh;
     overflow-x: hidden;
     overflow-y: auto;
-    padding:10px 49px 10px 53px;
+    padding:10px 40px 10px 56px;
     background-color: rgba(200, 198, 196, 0.658);
 }
 
 
+.feed-cont
+{
+    overflow-x: hidden;
+}
 
+.ads-bar
+{
+    box-sizing: border-box !important;
+}
 
 
 .scroll-to-end-btn {
