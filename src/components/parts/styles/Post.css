@@ -1,6 +1,7 @@
 .post
 {
     background-color: rgb(24, 22, 22) !important;
+    border: 1px rgba(200, 198, 196, 0.658) solid;
 }
 .post-btn
 {

@@ -15,6 +15,7 @@ import CodeHighlighter from "../../tools/CodeHighliter";
 import { notify, successNotify } from "../../tools/CustomToaster";
 import SpinnerSpan from "../../tools/SpinnerSpan";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -22,6 +23,9 @@ import "../../tools/styles/driver.css";
 
 function Snippet(props) {
   const userId = 1;
+
+  const navigate = useNavigate()
+
   const [editData, setEditData] = useState({
     title: props.title,
     content: props.content,
@@ -162,6 +166,7 @@ function Snippet(props) {
         description: "",
         gitHubLink: "",
       });
+      navigate('/profile')
       successNotify("post uploaded successfully");
     } catch (err) {
       notify("Couldn't post the Snippet");

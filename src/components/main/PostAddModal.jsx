@@ -1,15 +1,22 @@
 import React from "react";
 import { useState } from "react";
-import { notify } from "../tools/CustomToaster";
+import { notify, successNotify } from "../tools/CustomToaster";
 import { Modal , Box , IconButton } from "@mui/material";
 import CustomTooltip from "../tools/CustomTooltip";
 import CloseIcon from '@mui/icons-material/Close';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+import SpinnerSpan from '../tools/SpinnerSpan'
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './styles/add-modal.css'
 
 
 function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setStage}) {
+   const userId=1;
 
+   const navigate = useNavigate();
 
     const [addData, setAddData] = useState({
       title: "",
@@ -17,11 +24,12 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
       language: "",
     });
 
-
     const [optionalData, setOptionalData] = useState({
       description: "",
       gitHubLink: "",
     });
+
+    const [loading, setLoading ]= useState(false)
 
     const [isOptionalDataModalOpen, setIsOptionalDataModalOpen] = useState(false);
 
@@ -36,18 +44,37 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
     {
       if(addData.title.trim() && addData.content.trim() && addData.language.trim())
       {
-        closeAddModal()
-        // try
-        // {
-        // await addSnippet.mutateAsync({newSnippet:addData})
-        // }
-        // catch(err)
-        // {
-        //   console.error(err)
-        // }
+        try{
+          setLoading(true)
+          await axios.post(`http://localhost:4000/${userId}/add-post/`,
+          {
+            ...addData , 
+            ...optionalData
+          })
 
-        setAddData({});
-        setOptionalData({})
+          setAddData({
+            title: "",
+            content: "",
+            language: "",
+          })
+
+          setOptionalData({
+            description: "",
+            gitHubLink: "",
+          })
+
+          setLoading(false)
+          closeAddModal();
+          navigate('/profile');
+
+          successNotify('Post Published Successfully')
+        }
+        catch(err)
+        {
+          notify('Something Went Wrong')
+          setLoading(false)
+          setStage(1)
+        }
       }else{
         notify('All fields are required')
       }
@@ -127,22 +154,19 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
           </IconButton>
 
           {stage === 1 ? (
-            <h2
-              id="modal-title"
-              className="fw-bold mb-4 fs-3 text-center"
-            >
+            <h2 id="modal-title" className="fw-bold mb-4 fs-3 text-center">
               Publish a Post
             </h2>
           ) : (
             <h2
-            id="modal-title"
-            className="fw-bold text-warning fs-3 mb-4 text-center"
-          >
-            Add Extra Infos{" "}
-            <span className="small" style={{ color: "rgb(153, 143, 143)" }}>
-              (Optional)
-            </span>
-          </h2>
+              id="modal-title"
+              className="fw-bold text-warning fs-3 mb-4 text-center"
+            >
+              Add Extra Infos{" "}
+              <span className="small" style={{ color: "rgb(153, 143, 143)" }}>
+                (Optional)
+              </span>
+            </h2>
           )}
 
           {stage === 1 ? (
@@ -224,7 +248,7 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
                   style={{ backgroundColor: "#f8f9fa" }}
                   onClick={nextStage}
                 >
-                  <DoneRoundedIcon
+                  <ArrowForwardIcon
                     fontSize="large"
                     className="text-dark fw-bolder"
                   />
@@ -232,23 +256,44 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
               </CustomTooltip>
             </div>
           ) : (
-            <div className="d-flex justify-content-center mt-5">
-              <CustomTooltip title="Publish" placement="top">
+            <>
+              <div className="d-flex justify-content-center mt-5 gap-3">
+              
+              <CustomTooltip title='Previous Stage'  placement="top">
                 <IconButton
-                  className="mx-4 mt-0 bg-warning"
-                  style={{ backgroundColor: "#f8f9fa" }}
-                  onClick={handleAddSubmit}
-                >
-                  <DoneRoundedIcon
-                    fontSize="large"
-                    className="text-dark fw-bolder"
-                  />
-                </IconButton>
-              </CustomTooltip>
-            </div>
-          )}
+                    className="mx-2 mt-0 bg-muted"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                    onClick={()=>{if(!loading) setStage(1)}}
+                  >
+                    
+                      <ArrowBackIcon
+                        fontSize="large"
+                        className="text-dark fw-bolder"
+                      />
+                    
+                  </IconButton>
+                </CustomTooltip>
 
-          
+                <CustomTooltip title="Publish" placement="top">
+                  <IconButton
+                    className="mx-2 mt-0 bg-warning"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                    onClick={handleAddSubmit}
+                  >
+                    {!loading ? (
+                      <DoneRoundedIcon
+                        fontSize="large"
+                        className="text-dark fw-bolder"
+                      />
+                    ) : (
+                      <SpinnerSpan/>
+                    )}
+                  </IconButton>
+                </CustomTooltip>
+
+              </div>
+            </>
+          )}
         </Box>
       </Modal>
     </div>

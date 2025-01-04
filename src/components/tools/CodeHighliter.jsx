@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import hljs from 'highlight.js';  // Import full highlight.js with all languages
+import hljs from 'highlight.js';  
 
-// Import a dark theme
-import 'highlight.js/styles/atom-one-dark.css';  // Dark theme
+import 'highlight.js/styles/atom-one-dark.css';  
 
-// Define the array of languages
 const languages = [
   'javascript',
   'python',
@@ -30,17 +28,14 @@ const languages = [
 
 const CodeHighlighter = ({ codeSnippet }) => {
   const [language, setLanguage] = useState(null);
-  const codeRef = useRef(null);  // Reference to the <code> block
-
+  const codeRef = useRef(null); 
   useEffect(() => {
     if (codeSnippet && typeof codeSnippet === 'string') {
-      // Detect the language and highlight
       const detectionResult = hljs.highlightAuto(codeSnippet, languages);
       setLanguage(detectionResult.language);
 
-      // Apply the highlighting
       if (codeRef.current) {
-        codeRef.current.innerHTML = detectionResult.value;  // Set the highlighted HTML
+        codeRef.current.innerHTML = detectionResult.value;  
       }
     }
   }, [codeSnippet]);

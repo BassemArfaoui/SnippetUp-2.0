@@ -2,7 +2,6 @@ import React, {lazy, Suspense, useState , useEffect, useCallback} from 'react';
 import InfoTooltip from '../tools/InfoTooltip';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import './styles/Post.css';
-import profile_pic from '../../imgs/profile_pic.jpg';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
@@ -38,6 +37,8 @@ const CommentSection = lazy(() => import('./CommentSection'));
 
 export default function Post(props) {
   const userId=1;
+  const profile_pic = `https://picsum.photos/${Math.floor(Math.random() * 100) + 100}`;
+
   // bool states
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving,setIsSaving]=useState(false);
@@ -650,7 +651,7 @@ export default function Post(props) {
             </IconButton>
             <h3 id="description-modal-title" className="fw-bold mb-5 text-center text-warning">{snippetTitle}</h3>
             <div id="description-modal-content " className="fs-5 text-start mt-4" style={{ whiteSpace: 'pre-wrap' }}>
-              {snippetDescription}
+              {snippetDescription ? snippetDescription : <div className='text-center text-secondary mt-2 text-6 small w-100'>No Description Added</div>}
             </div>
           </Box>
         </Modal>

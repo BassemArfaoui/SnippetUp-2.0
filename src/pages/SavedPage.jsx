@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/SavedPage.css';
+import './css/SavedPage.css';
 import SavedChoice from '../components/saved/SavedChoice';
 import SavedPosts from '../components/saved/saved-posts/SavedPosts';
 import SavedLocal from '../components/saved/local-snippets/SavedLocal';
