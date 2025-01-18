@@ -151,7 +151,7 @@ function Snippet(props) {
 
     try {
       await axios.post(
-        `http://localhost:4000/${userId}/add/post/${props.id}`,
+        `${process.env.REACT_APP_API_URL}/${userId}/add/post/${props.id}`,
         {
           title: props.title,
           content: props.content,

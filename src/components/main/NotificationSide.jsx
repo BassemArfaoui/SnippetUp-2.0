@@ -40,7 +40,7 @@ export default function NotificationSide() {
   const fetchNotifications = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:4000/notifications/1', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/notifications/1`, {
         params: { limit, offset }
       });
       const newNotifications = response.data;

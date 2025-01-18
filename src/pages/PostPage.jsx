@@ -16,7 +16,7 @@ function PostPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/post/${postId}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/post/${postId}`);
         setPost(response.data); 
         setLoading(false);
       } catch (err) {

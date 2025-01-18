@@ -50,7 +50,7 @@ function CommentReply(props) {
           if (commentReact === 'dislike') {
               await undislikeComment();
           }
-          await axios.get(`http://localhost:4000/likeComment/${userId}/${props.id}`);
+          await axios.get(`${process.env.REACT_APP_API_URL}/likeComment/${userId}/${props.id}`);
           setCommentReact('like');
           setLikeCount((prev) => prev + 1);
       } catch (err) {
@@ -60,7 +60,7 @@ function CommentReply(props) {
 
   const unlikeComment = async () => {
       try {
-          await axios.get(`http://localhost:4000/unlikeComment/${userId}/${props.id}`);
+          await axios.get(`${process.env.REACT_APP_API_URL}/unlikeComment/${userId}/${props.id}`);
           setCommentReact('none');
           setLikeCount((prev) => prev - 1);
       } catch (err) {
@@ -73,7 +73,7 @@ function CommentReply(props) {
           if (commentReact === 'like') {
               await unlikeComment();
           }
-          await axios.get(`http://localhost:4000/dislikeComment/${userId}/${props.id}`);
+          await axios.get(`${process.env.REACT_APP_API_URL}/dislikeComment/${userId}/${props.id}`);
           setCommentReact('dislike');
           setDislikeCount((prev) => prev + 1);
       } catch (err) {
@@ -83,7 +83,7 @@ function CommentReply(props) {
 
   const undislikeComment = async () => {
       try {
-          await axios.get(`http://localhost:4000/undislikeComment/${userId}/${props.id}`);
+          await axios.get(`${process.env.REACT_APP_API_URL}/undislikeComment/${userId}/${props.id}`);
           setCommentReact('none');
           setDislikeCount((prev) => prev - 1);
       } catch (err) {

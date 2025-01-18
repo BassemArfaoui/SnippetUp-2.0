@@ -19,7 +19,7 @@
     const containerRef = useRef(null);
 
     const fetchCollectionPosts = async ({ pageParam = 1 }) => {
-      const response = await axios.get(`http://localhost:4000/${userId}/collection/posts/${collection}`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/collection/posts/${collection}`, {
         params: {
           page: pageParam,
           limit: 10,

@@ -11,6 +11,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { notify } from '../tools/CustomToaster';
 
 function Comment(props) {
+    
+    const apiUrl = process.env.REACT_APP_API_URL; 
     const [commentReact, setCommentReact] = useState('none');
     const [likeCount, setLikeCount] = useState(props.likeCount);
     const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
@@ -37,7 +39,7 @@ function Comment(props) {
         {
             try 
             {
-                const response = await axios.get(`http://localhost:4000/comments/${props.id}/repliesCount`);
+                const response = await axios.get(`${apiUrl}/comments/${props.id}/repliesCount`);
                 setRepliesCount(response.data.totalReplies);
             }
             catch(err)
@@ -55,7 +57,7 @@ function Comment(props) {
 
         setLoadingReplies(true);
         try {
-            const response = await axios.get(`http://localhost:4000/comments/${props.id}/replies`, {
+            const response = await axios.get(`${apiUrl}/comments/${props.id}/replies`, {
                 params: {
                     limit: limit,
                     offset: (repliesPage - 1) * limit
@@ -94,7 +96,7 @@ function Comment(props) {
             if (commentReact === 'dislike') {
                 await undislikeComment();
             }
-            await axios.get(`http://localhost:4000/likeComment/${userId}/${props.id}`);
+            await axios.get(`${apiUrl}/likeComment/${userId}/${props.id}`);
             setCommentReact('like');
             setLikeCount(prev => prev + 1);
         } catch (err) {
@@ -104,7 +106,7 @@ function Comment(props) {
 
     const unlikeComment = async () => {
         try {
-            await axios.get(`http://localhost:4000/unlikeComment/${userId}/${props.id}`);
+            await axios.get(`${apiUrl}/unlikeComment/${userId}/${props.id}`);
             setCommentReact('none');
             setLikeCount(prev => prev - 1);
         } catch (err) {
@@ -117,7 +119,7 @@ function Comment(props) {
             if (commentReact === 'like') {
                 await unlikeComment();
             }
-            await axios.get(`http://localhost:4000/dislikeComment/${userId}/${props.id}`);
+            await axios.get(`${apiUrl}/dislikeComment/${userId}/${props.id}`);
             setCommentReact('dislike');
             setDislikeCount(prev => prev + 1);
         } catch (err) {
@@ -127,7 +129,7 @@ function Comment(props) {
 
     const undislikeComment = async () => {
         try {
-            await axios.get(`http://localhost:4000/undislikeComment/${userId}/${props.id}`);
+            await axios.get(`${apiUrl}/undislikeComment/${userId}/${props.id}`);
             setCommentReact('none');
             setDislikeCount(prev => prev - 1);
         } catch (err) {

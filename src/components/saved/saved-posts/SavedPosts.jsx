@@ -28,7 +28,7 @@ function SavedPosts(props) {
   const loadSavedPosts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:4000/${userId}/saved-posts`, {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/saved-posts`, {
         params: { limit, page },
       });
       if (res.data.length < limit) setHasMore(false);

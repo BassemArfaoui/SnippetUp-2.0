@@ -16,7 +16,7 @@ function FeedSide() {
 
   // Function to fetch posts with pagination
   const fetchPosts = async ({ pageParam = 1 }) => {
-    const response = await axios.get(`http://localhost:4000/${userId}/posts`, {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/posts`, {
       params: { limit, page: pageParam },
     });
     return response.data;

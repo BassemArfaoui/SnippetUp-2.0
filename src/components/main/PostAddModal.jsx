@@ -46,7 +46,7 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
       {
         try{
           setLoading(true)
-          await axios.post(`http://localhost:4000/${userId}/add-post/`,
+          await axios.post(`${process.env.REACT_APP_API_URL}/${userId}/add-post/`,
           {
             ...addData , 
             ...optionalData

@@ -18,7 +18,7 @@ function PostsSearch({ postsSearch, setShowChoice}) {
     try {
       console.log(`Loading posts for searchTerm: "${searchTerm}" on page: ${pageNum}`);
       setLoading(true);
-      const res = await axios.get(`http://localhost:4000/${userId}/search-saved-posts`, {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/search-saved-posts`, {
         params: { keyword: searchTerm, limit, page: pageNum },
       });
 

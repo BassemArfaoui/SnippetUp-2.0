@@ -77,7 +77,7 @@ function SavedLocal({ setShowChoice }) {
   // Fetch snippets using React Query
   const fetchSnippets = async ({ pageParam = 1 }) => {
     const response = await axios.get(
-      `http://localhost:4000/${userId}/snippets`,
+      `${process.env.REACT_APP_API_URL}/${userId}/snippets`,
       {
         params: {
           page: pageParam,
@@ -88,28 +88,26 @@ function SavedLocal({ setShowChoice }) {
     return response.data;
   };
 
-  // Delete mutation
   const deleteSnippet = useMutation({
     mutationFn: async (id) => {
-      setDeletingId(id); // Track the ID of the snippet being deleted
-      await axios.delete(`http://localhost:4000/${userId}/delete/snippet/${id}`);
+      setDeletingId(id); 
+      await axios.delete(`${process.env.REACT_APP_API_URL}/${userId}/delete/snippet/${id}`);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries(["snippets"]);
-      setDeletingId(null); // Reset deleting state after success
+      setDeletingId(null);
       successNotify("Snippet deleted successfully");
     },
     onError: () => {
-      setDeletingId(null); // Reset deleting state after error
+      setDeletingId(null); 
       notify(`Failed to delete snippet`);
     },
   });
 
-  // Edit mutation
   const editSnippet = useMutation({
     mutationFn: async ({ id, updatedSnippet }) => {
-      setEditingId(id); // Track the ID of the snippet being edited
-      await axios.put(`http://localhost:4000/${userId}/edit/snippet/${id}`, updatedSnippet);
+      setEditingId(id); 
+      await axios.put(`${process.env.REACT_APP_API_URL}/${userId}/edit/snippet/${id}`, updatedSnippet);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries(["snippets"]);
@@ -126,7 +124,7 @@ function SavedLocal({ setShowChoice }) {
     const addSnippet = useMutation({
       mutationFn: async ({newSnippet }) => {
         setIsAdding(true);
-        await axios.post(`http://localhost:4000/${userId}/add/snippet`, newSnippet);
+        await axios.post(`${process.env.REACT_APP_API_URL}/${userId}/add/snippet`, newSnippet);
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(["snippets"]);
@@ -168,10 +166,9 @@ function SavedLocal({ setShowChoice }) {
     }
   }, [isError, error]);
 
-  // Handle scrolling to trigger loading more snippets
   useEffect(() => {
     const handleScroll = () => {
-      if (!savedLocalRef.current) return; // Check if ref is set
+      if (!savedLocalRef.current) return; 
       const scrollTop = savedLocalRef.current.scrollTop;
       const scrollDifference = Math.abs(scrollTop - lastScrollTop.current);
 
@@ -184,7 +181,6 @@ function SavedLocal({ setShowChoice }) {
         lastScrollTop.current = scrollTop;
       }
 
-      // Load more snippets when scrolled to bottom
       if (
         savedLocalRef.current.scrollHeight - scrollTop <=
           savedLocalRef.current.clientHeight + 100 &&
@@ -250,7 +246,6 @@ function SavedLocal({ setShowChoice }) {
                   deleteSnippet={deleteSnippet.mutate}
                   editSnippet={editSnippet.mutate}
                 />
-                {/* Show spinner next to the snippet being deleted or edited */}
                 {deletingId === snippet.id && <LoadingSpinner bg="bg-primary" />}
                 {editingId === snippet.id && <LoadingSpinner bg="bg-primary" />}
               </div>

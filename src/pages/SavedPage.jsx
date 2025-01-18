@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './css/SavedPage.css';
+import '../css/SavedPage.css';
 import SavedChoice from '../components/saved/SavedChoice';
 import SavedPosts from '../components/saved/saved-posts/SavedPosts';
 import SavedLocal from '../components/saved/local-snippets/SavedLocal';
@@ -65,13 +65,13 @@ function SavedPage() {
     setFilteredPosts([]);
 
     try {
-      const response = await axios.get(`http://localhost:4000/${userId}/saved-posts/filter`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/saved-posts/filter`, {
         params: {
           title: filterTitle,
           language: filterLanguage,
           content: filterContent,
-          page: 1, // start from page 1 when applying filters
-          limit: 10, // adjust as needed
+          page: 1, 
+          limit: 10, 
         },
       });
 
@@ -103,7 +103,7 @@ function SavedPage() {
     setFilterPage(nextPage);
 
     try {
-      const response = await axios.get(`http://localhost:4000/${userId}/saved-posts/filter`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/saved-posts/filter`, {
         params: {
           title: filterTitle,
           language: filterLanguage,

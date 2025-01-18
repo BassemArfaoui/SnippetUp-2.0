@@ -13,13 +13,11 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 function SavedPostsCollections() {
   const userId = 1;
 
-  // Function to fetch collections using axios
   const fetchCollections = async () => {
-    const response = await axios.get(`http://localhost:4000/${userId}/collections`);
-    return response.data; // assuming the collections are returned as an array
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/collections`);
+    return response.data; 
   };
 
-  // Use react-query to fetch collections
   const { data: collections, isLoading, isError, isFetching, refetch } = useQuery({
     queryKey: ['collections', userId],
     queryFn: fetchCollections,
@@ -27,7 +25,6 @@ function SavedPostsCollections() {
 
   });
 
-  // Optional useEffect for error notification
   useEffect(() => {
     if (isError) {
       notify("Error loading collections");
@@ -55,7 +52,6 @@ function SavedPostsCollections() {
 
   return (
     <div className='collections-page'>
-      {/* Spinner at the top if refetching, while still showing the old data */}
       {isFetching && (
         <div className="d-flex justify-content-center align-items-center my-2">
           <Spinner size="small" />

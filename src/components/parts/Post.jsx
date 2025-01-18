@@ -106,7 +106,7 @@ export default function Post(props) {
                     isReply:is_reply ,
                     replyToId:reply_to_id
                   }
-      await axios.post(`http://localhost:4000/add/comment`,data)
+      await axios.post(`${process.env.REACT_APP_API_URL}/add/comment`,data)
     }
     catch(err)
     {
@@ -118,7 +118,7 @@ export default function Post(props) {
   const skipCollection = async () => {
     try {
       setIsSaving(true);
-      await axios.get(`http://localhost:4000/save/${userId}/${props.id}`);
+      await axios.get(`${process.env.REACT_APP_API_URL}/save/${userId}/${props.id}`);
       setIsSaving(false);
       setIsSaved(true);
       successNotify('Snippet Saved');
@@ -132,7 +132,7 @@ export default function Post(props) {
     try {
   
       setIsUnsaving(true);
-      await axios.get(`http://localhost:4000/unsave/${userId}/${props.id}`);
+      await axios.get(`${process.env.REACT_APP_API_URL}/unsave/${userId}/${props.id}`);
       setIsUnsaving(false);
       setIsSaved(false);
 
@@ -184,26 +184,26 @@ export default function Post(props) {
   const becomeInterested = async () => {
     try
     {
-      await axios.get(`http://localhost:4000/interested/${userId}/${props.posterId}`);
+      await axios.get(`${process.env.REACT_APP_API_URL}/interested/${userId}/${props.posterId}`);
       setisInterested(true);
-      successNotify(`You are now Interested in ${props.firstname + ' '+props.lastname }'s Snippets`)
+      successNotify(`You are now Subscribed to ${props.firstname + ' '+props.lastname }'s Snippets`)
     }
     catch(err)
     {
-      notify(`Couldn't add interest`)
+      notify(`Couldn't subscribe`)
     }
   };
   
   const becomeUninterested = async () => {
     try
     {
-      await axios.get(`http://localhost:4000/uninterested/${userId}/${props.posterId}`);
+      await axios.get(`${process.env.REACT_APP_API_URL}/uninterested/${userId}/${props.posterId}`);
       setisInterested(false);
-      successNotify(`No Longer Interested in ${props.firstname + ' '+props.lastname }'s Snippets`)
+      successNotify(`No Longer Subscribed to  ${props.firstname + ' '+props.lastname }'s Snippets`)
     }
     catch(err)
     {
-      notify(`Couldn't delete interest`)
+      notify(`Couldn't unsubscribe`)
     }
   };
 
@@ -212,7 +212,7 @@ export default function Post(props) {
     {if (react === 'dislike') {
       await undislikeSnippet();
     }
-    const result=await axios.get(`http://localhost:4000/like/${userId}/${props.id}`)
+    const result=await axios.get(`${process.env.REACT_APP_API_URL}/like/${userId}/${props.id}`)
     setReact('like');
     setLikeCount((prev) => parseInt(prev) + 1);
    }catch(err)
@@ -224,7 +224,7 @@ export default function Post(props) {
   const unlikeSnippet = async () => {
     try
       {
-      const result=await axios.get(`http://localhost:4000/unlike/${userId}/${props.id}`)
+      const result=await axios.get(`${process.env.REACT_APP_API_URL}/unlike/${userId}/${props.id}`)
       setReact('none');
       setLikeCount((prev) => parseInt(prev) - 1);
       }catch(err)
@@ -239,7 +239,7 @@ export default function Post(props) {
         await unlikeSnippet();
       }
       
-      const result = await axios.get(`http://localhost:4000/dislike/${userId}/${props.id}`);
+      const result = await axios.get(`${process.env.REACT_APP_API_URL}/dislike/${userId}/${props.id}`);
       
       setReact('dislike');
       setDislikeCount((prev) => parseInt(prev) + 1);
@@ -251,7 +251,7 @@ export default function Post(props) {
   const undislikeSnippet = async () => {
     try {
     
-      await axios.get(`http://localhost:4000/undislike/${userId}/${props.id}`);
+      await axios.get(`${process.env.REACT_APP_API_URL}/undislike/${userId}/${props.id}`);
       
       setReact('none'); 
       setDislikeCount((prev) => parseInt(prev) - 1);
@@ -362,7 +362,7 @@ export default function Post(props) {
         try {
           setIsCollectionModalOpen(false);
           setIsSaving(true);
-          await axios.get(`http://localhost:4000/save/${userId}/${props.id}?collection=${collection}`);
+          await axios.get(`${process.env.REACT_APP_API_URL}/save/${userId}/${props.id}?collection=${collection}`);
           setIsSaving(false);
           setIsSaved(true);
           setCollection('');
@@ -702,7 +702,7 @@ export default function Post(props) {
                <span className='share-option' style={{fontSize:'30px',backgroundColor:'#25D366'}}><IoLogoWhatsapp/></span>
                <span className='share-option instagram-option' style={{fontSize:'30px'}}><FaInstagram/></span>
                <span className='share-option x-option' style={{fontSize:'26px'}} > <FaXTwitter/></span>
-               <span className='share-option bg-danger' style={{fontSize:'25px'}} onClick={()=>{copyLink(`http://localhost:3000/post/${props.id}`)}}><FaLink/></span>
+               <span className='share-option bg-danger' style={{fontSize:'25px'}} onClick={()=>{copyLink(`${process.env.REACT_APP_DOMAIN_NAME}/post/${props.id}`)}}><FaLink/></span>
       
             </div>
           </Box>
