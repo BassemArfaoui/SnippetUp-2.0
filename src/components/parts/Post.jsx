@@ -39,7 +39,7 @@ export default function Post(props) {
   const userId=1;
   const profile_pic = `https://picsum.photos/${Math.floor(Math.random() * 100) + 100}`;
 
-  // bool states
+  //bool states
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving,setIsSaving]=useState(false);
   const [isUnsaving,setIsUnsaving]=useState(false);
@@ -51,13 +51,13 @@ export default function Post(props) {
   const [isShareModalOpen,setIsShareModalOpen]=useState(false)
   const [isCollectionModalOpen,setIsCollectionModalOpen]=useState(false)
 
-  // post states
+  //post states
   const [snippetCode, setSnippetCode] = useState(props.snippet);
   const [snippetTitle, setSnippetTitle] = useState(props.title);
   const [snippetDescription, setSnippetDescription] = useState(props.description);
   const [collection, setCollection]=useState('')
 
-  // reactions counts
+  //reactions counts
   const [react, setReact] = useState('none');
   const [likeCount, setLikeCount] = useState(props.likeCount);
   const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);

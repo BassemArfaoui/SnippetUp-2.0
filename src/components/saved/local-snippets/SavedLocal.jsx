@@ -215,7 +215,7 @@ function SavedLocal({ setShowChoice }) {
     return (
       <div
         style={{ height: '85vh' }}
-        className="fw-bolder text-danger fs-2 d-flex justify-content-center align-items-center"
+        className="fw-bolder text-danger fs-5 d-flex justify-content-center align-items-center"
       >
         Couldn't Load Snippets 😿 !
       </div>

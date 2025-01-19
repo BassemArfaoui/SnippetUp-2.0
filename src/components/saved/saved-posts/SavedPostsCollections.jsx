@@ -58,9 +58,9 @@ function SavedPostsCollections() {
         </div>
       )}
 
-     {collections && collections.length > 0 && <h2 className="text-center my-5 fw-bolder fs-2">Saved Posts Collections :</h2>}
+     {collections && collections.length > 0 && <h2 className="text-center mb-4 mt-3 fw-bolder" style={{fontSize:'28px'}}>Collections :</h2>}
 
-      <div className="collections-list d-flex justify-content-center gap-3 m-0 flex-wrap px-3">
+      <div className="collections-list d-flex justify-content-center gap-3 m-0 flex-wrap mt-4 px-3">
         {collections && collections.length > 0 ? (
           collections.map((collection, index) => (
             <div key={index + collection}>
