@@ -250,7 +250,6 @@ function Snippet(props) {
     }
   }, [props.isPosted]);
 
-  // Handle click outside of options div
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (optionsRef.current && !optionsRef.current.contains(event.target)) {
@@ -258,11 +257,9 @@ function Snippet(props) {
       }
     };
 
-    // Add event listener for clicks
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      // Clean up event listener on unmount
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [optionsRef]);
@@ -272,12 +269,10 @@ function Snippet(props) {
   
   return (
     <div className="post rounded-4 p-4 position-relative">
-      {/* Snippet Title and Buttons */}
       <div id="snippet-title" className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
         <h3 className="snippet-title fw-bold text-center">{props.title}</h3>
       </div>
 
-      {/* Code Block */}
       <div id="code-block"
         className="border border-secondary rounded p-3"
         style={{ height: "200px", overflowY: "auto" }}
@@ -295,7 +290,6 @@ function Snippet(props) {
         </div>
 
         <div className="buttons justify-content-end d-flex gap-3 align-items-center me-2">
-          {/* Action Buttons */}
           <div className="options-holder position-relative" ref={optionsRef}>
             <span id="snippet-options" className="m-0 p-0">
               {!showOptions ? (
@@ -495,7 +489,7 @@ function Snippet(props) {
             borderRadius: "16px",
             maxHeight: "90vh",
             overflowY: "auto",
-            width: "90%",
+            width: "80%",
             backgroundColor: "#1E1E1E",
             color: "white",
           }}
@@ -607,20 +601,20 @@ function Snippet(props) {
             <CloseIcon className="fs-2" />
           </IconButton>
 
-          <h3 id="modal-title" className="fw-bold mb-4 mt-4 text-center fs-4">
+          <h3 id="modal-title" className="fw-bold mb-4 mt-4 text-center fs-5">
             Are you sure you want to Delete this Snippet ?
           </h3>
 
           <div className="d-flex gap-3  justify-content-center align-items-center mt-4">
             <button
-              className="btn border-2 rounded-4  border-secondary text-secondary fs-5 lh-base small"
+              className="btn border-2 rounded-4 fw-bold border-secondary text-secondary fs-6 lh-base small"
               onClick={closeConfirmModal}
             >
               Cancel
             </button>
 
             <button
-              className=" btn border-2 border-danger text-danger fw-bold fs-5 lh-base rounded-4"
+              className=" btn border-2 border-danger text-danger fw-bold fs-6 lh-base rounded-4"
               onClick={deleteSnippet}
             >
               Delete

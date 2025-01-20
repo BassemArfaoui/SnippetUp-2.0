@@ -13,7 +13,32 @@ function formatNumber(num) {
   }
 }
 
+// Function to determine the profile color based on the credit
+const getProfileColor = (credit) => {
+
+  if (credit >= 10000) {
+    return '#4d4dff'; 
+  } else if (credit >= 5000) {
+    return  '#9999ff'; 
+  } else if (credit >= 3000) {
+    return  '#0d6efd';
+  } else if (credit >= 1000) {
+    return '#00aaff'; 
+  } else if (credit >= 100) {
+    return '#80d4ff'; 
+  } else if (credit >0){
+    return '#ffffff';
+  } else {
+    return "gray"
+  }
+};
+
+
+
 export default function ProfileCard({ activeTab, setActiveTab ,firstname , lastname , username  , profilePicture , posts, subs , credit}) {
+
+
+  const profileColor = getProfileColor(credit)
 
 
   return (
@@ -28,8 +53,8 @@ export default function ProfileCard({ activeTab, setActiveTab ,firstname , lastn
                   style={{
                     width: "155px",
                     height: "155px",
-                    padding: "3px",
-                    background: "#8cbce7",
+                    padding: "2.5pt",
+                    background: profileColor,
                   }}
                 >
                   <img
@@ -58,43 +83,43 @@ export default function ProfileCard({ activeTab, setActiveTab ,firstname , lastn
                   <div className="profile-stat">
                     <p
                       className="m-0 fw-bold text-light"
-                      style={{ fontSize: "23px" }}
+                      style={{ fontSize: "23px" , color: "#ffffff" }}
                     >
-                      {posts}
+                      {formatNumber(posts)}
                     </p>
                     <p
-                      className="m-0 small text-secondary"
-                      style={{ fontSize: "22px" }}
+                      className="m-0 small"
+                      style={{ fontSize: "22px"  , color: "#ffffff"}}
                     >
-                      Posts
+                      posts
                     </p>
                   </div>
                   <div className="profile-stat">
                     <p
                       className="m-0 fw-bold text-light"
-                      style={{ fontSize: "23px" }}
+                      style={{ fontSize: "23px" , color: "#ffffff" }}
                     >
                       {formatNumber(subs)}
                     </p>
                     <p
-                      className="m-0 small text-secondary"
-                      style={{ fontSize: "22px" }}
+                      className="m-0 small"
+                      style={{ fontSize: "22px" , color: "#ffffff"}}
                     >
-                      Subscribers
+                      subscribers
                     </p>
                   </div>
                   <div className="profile-stat">
                     <p
-                      className="m-0 fw-bold "
-                      style={{ fontSize: "23px", color: "#8cbce7" }}
+                      className="m-0 fw-bold"
+                      style={{ fontSize: "23px", color: profileColor }}
                     >
                       {formatNumber(credit)}
                     </p>
                     <p
                       className="m-0 small "
-                      style={{ fontSize: "22px", color: "#8cbce7" }}
+                      style={{ fontSize: "22px", color: profileColor }}
                     >
-                      credit
+                      points
                     </p>
                   </div>
                 </div>

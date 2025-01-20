@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import ProfileBody from "../components/profile/ProfileBody";
 import ProfileCard from "../components/profile/ProfileCard";
-import { Card, Divider, Skeleton } from "@mui/material"; // Import Skeleton
 import "../css/ProfilePage.css";
 import { Helmet } from "react-helmet";
 import React, { useEffect } from "react";

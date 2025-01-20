@@ -31,7 +31,6 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
 
     const [loading, setLoading ]= useState(false)
 
-    const [isOptionalDataModalOpen, setIsOptionalDataModalOpen] = useState(false);
 
 ;
 
@@ -160,7 +159,7 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
           ) : (
             <h2
               id="modal-title"
-              className="fw-bold text-warning fs-3 mb-4 text-center"
+              className="fw-bold text-light fs-3 mb-4 text-center"
             >
               Add Extra Infos{" "}
               <span className="small" style={{ color: "rgb(153, 143, 143)" }}>

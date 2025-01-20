@@ -8,10 +8,10 @@ import { Helmet } from 'react-helmet';
 
 
 function PostPage() {
-  const { postId } = useParams(); // get postId from the URL
-  const [post, setPost] = useState(null); // state to hold the post data
-  const [loading, setLoading] = useState(true); // loading state
-  const [error, setError] = useState(null); // error state
+  const { postId } = useParams(); 
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {

@@ -304,7 +304,7 @@ function SavedLocal({ setShowChoice }) {
             borderRadius: '16px',
             maxHeight: '90vh',
             overflowY: 'auto',
-            width: '90%',
+            width: '80%',
             backgroundColor: '#1E1E1E',
             color: 'white',
           }}
