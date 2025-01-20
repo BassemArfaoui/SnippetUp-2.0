@@ -1,21 +1,40 @@
 import { useState, useRef } from "react";
 import ProfileBody from "../components/profile/ProfileBody";
 import ProfileCard from "../components/profile/ProfileCard";
-import { Card, Divider } from "@mui/material";
+import { Card, Divider, Skeleton } from "@mui/material"; // Import Skeleton
 import "../css/ProfilePage.css";
 import { Helmet } from "react-helmet";
 import React, { useEffect } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Post from "../components/parts/Post";
 import SpinnerSpan from "../components/tools/SpinnerSpan";
 import MoreInfos from "../components/profile/MoreInfos";
 import ReplayIcon from "@mui/icons-material/Replay";
+import ProfileSkeleton from "../components/profile/ProfileSkeleton";
 
 function ProfilePage() {
   const containerRef = useRef(null);
   const [activeTab, setActiveTab] = useState("Posts");
   const userId = 1;
+
+  // Fetch profile data
+  const fetchProfile = async () => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/profile/${userId}`
+    );
+    return response.data;
+  };
+
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    refetch : refetchProfile,
+  } = useQuery({
+    queryKey: ["profile", userId],
+    queryFn: fetchProfile,
+  });
 
   const fetchPosts = async ({ pageParam = 1 }) => {
     const response = await axios.get(
@@ -37,6 +56,7 @@ function ProfilePage() {
     isFetchingNextPage,
     isLoading,
     isError,
+    refetch : refetchPosts,
     error,
   } = useInfiniteQuery({
     queryKey: ["posts"],
@@ -82,11 +102,45 @@ function ProfilePage() {
         <title>SnippetUp : Profile</title>
       </Helmet>
       <div ref={containerRef} className="profile-page py-3 pb-2 px-3 ">
-        <ProfileCard activeTab={activeTab} setActiveTab={setActiveTab} />
+        {/* ProfileCard */}
+        {isProfileLoading ? (
+          <ProfileSkeleton />
+        ) : isProfileError ? (
+          <div>
+            <p className="fw-bolder text-danger fs-5 mt-5 text-center mb-4">
+              Couldn't load the profile
+            </p>
+            <div className="d-flex justify-content-center">
+              <button
+                onClick={() => refetchProfile()}
+                className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center p-3"
+                style={{ width: "40px", height: "40px" }}
+              >
+                <ReplayIcon />
+              </button>
+            </div>
+          </div>
+        ) : (
+          profileData && (
+            <ProfileCard
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              username={profileData.username}
+              firstname={profileData.firstname}
+              lastname={profileData.lastname}
+              email={profileData.email}
+              createdAt={profileData.created_at}
+              profilePicture={profileData.profile_pic}
+              subs={profileData.subs_count}
+              posts={profileData.posts_count}
+              credit={profileData.credit}
+            />
+          )
+        )}
 
         {/* Shared Posts */}
         <div className="mb-5">
-          {activeTab === "Posts" && (
+          {activeTab === "Posts" && !isProfileError && !isProfileLoading &&  (
             <div className="d-flex flex-column align-items-stretch gap-3 m-0 mt-3 px-1">
               {/* Loading State */}
               {isLoading && (
@@ -103,7 +157,7 @@ function ProfilePage() {
                   </p>
                   <div className="d-flex justify-content-center">
                     <button
-                      onClick={() => window.location.reload()}
+                      onClick={() => refetchPosts()}
                       className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center p-3"
                       style={{ width: "40px", height: "40px" }}
                     >
@@ -115,7 +169,7 @@ function ProfilePage() {
 
               {/* Posts */}
               {!isLoading &&
-                !isError &&
+                !isError && 
                 (data?.pages?.length > 0 &&
                 data.pages.some((page) => page.posts.length > 0) ? (
                   data.pages.map((page) =>

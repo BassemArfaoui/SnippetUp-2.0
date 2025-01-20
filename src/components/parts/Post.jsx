@@ -446,7 +446,7 @@ export default function Post(props) {
             <div>
               <div className="text-white fs-5 fw-bolder d-flex align-items-center m-0 p-0">
                 <span className="p-0 m-0">{props.firstname +' '+props.lastname}</span>
-                <span id="interested-btn" className='ms-3 mb-1'>
+                {props.posterId != userId && <span id="interested-btn" className='ms-3 mb-1'>
                   {!isInterested ? (
                     <span
                       className="text-light p-0 mb-1  intrested-icon"
@@ -464,7 +464,7 @@ export default function Post(props) {
                       <StarIcon style={{ fontSize: '26px' }} />
                     </span>
                   )}
-                </span>
+                </span>}
               </div>
               <div className="text-secondary fs-6">@{props.username}</div>
             </div>
