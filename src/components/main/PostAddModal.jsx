@@ -263,6 +263,7 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
                     className="mx-2 mt-0 bg-muted"
                     style={{ backgroundColor: "#f8f9fa" }}
                     onClick={()=>{if(!loading) setStage(1)}}
+                    disabled={loading}
                   >
                     
                       <ArrowBackIcon

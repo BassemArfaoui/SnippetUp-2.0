@@ -9,8 +9,8 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import AdsSideBar from '../tools/AdsSideBar';
 
 function FeedSide() {
-  const feedSideRef = useRef(null); // Reference to the feed container
-  const observerRef = useRef(null); // Reference to the observer for infinite scroll
+  const feedSideRef = useRef(null); 
+  const observerRef = useRef(null); 
   const userId = 1;
   const limit = 10;
 
@@ -30,7 +30,8 @@ function FeedSide() {
     isFetchingNextPage,
     isLoading,
     isError,
-    isFetching, // This flag is true when refetching data
+    isFetching, 
+    refetch : refetchFeed , 
   } = useInfiniteQuery({
     queryKey: ['posts', userId],
     queryFn: fetchPosts,
@@ -98,7 +99,6 @@ function FeedSide() {
         ) : (
           <div className="feed-side d-flex flex-column gap-2" ref={feedSideRef}>
             <div className="pt-3"></div>
-            {/* Show a loading overlay on top of the old data while refetching */}
               {isFetching && (
                 <div className="d-flex justify-content-center my-3 mb-5">
                     <div className="spinner-border text-primary" role="status">
@@ -128,10 +128,10 @@ function FeedSide() {
                   firstname={post.poster_firstname}
                   lastname={post.poster_lastname}
                   username={post.poster_username}
+                  refetchFeed={refetchFeed}
                 />
               ))
             )}
-            {/* Observer-triggered element (Spinner for loading more posts) */}
             <div ref={observerRef} className="d-flex justify-content-center my-3">
               {isFetchingNextPage && (
                 <div className="spinner-border text-primary mb-5" role="status">
@@ -139,7 +139,6 @@ function FeedSide() {
                 </div>
               )}
             </div>
-            {/* Error state */}
             {isError && (
               <div className="d-flex justify-content-center">
                 <p>Error loading posts. Please try again.</p>
@@ -159,9 +158,6 @@ function FeedSide() {
         </CustomTooltip>
       </div>
 
-      <div className='ads-bar col-lg-0 overflow-x-hidden pe-3 pt-1'>
-        <AdsSideBar />
-      </div>
     </div>
   );
 }

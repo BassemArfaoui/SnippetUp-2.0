@@ -418,7 +418,7 @@ function Snippet(props) {
         </div>
       </div>
 
-
+            
 
       {/* Fullscreen Modal */}
       <Modal
@@ -788,8 +788,6 @@ function Snippet(props) {
           </div>
         </Box>
       </Modal>
-
-
       
       <CustomTooltip title='Explain' placement='right'>
         <span onClick={startGuide}  className="text-light rounded-5 d-flex justify-content-center align-items-center fw-light border-light position-absolute top-0 end-0 me-2 mt-2" style={{fontSize:'10px',cursor:'pointer',aspectRatio:'1',padding:'1pt',border:'0.5pt solid gray',opacity:'0.65'}}>

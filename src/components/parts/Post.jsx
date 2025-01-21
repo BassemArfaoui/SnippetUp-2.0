@@ -37,6 +37,7 @@ import "../tools/styles/driver.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useLocation } from "react-router-dom";
 const CommentSection = lazy(() => import("./CommentSection"));
 
 export default function Post(props) {
@@ -44,6 +45,8 @@ export default function Post(props) {
   const profile_pic = `https://picsum.photos/${
     Math.floor(Math.random() * 100) + 100
   }`;
+
+  const location = useLocation();
 
   //bool states
   const [isSaved, setIsSaved] = useState(false);
@@ -59,28 +62,32 @@ export default function Post(props) {
   const [showOptions, setShowOptions] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
 
   //post states
   const [snippetCode, setSnippetCode] = useState(props.snippet);
   const [snippetTitle, setSnippetTitle] = useState(props.title);
   const [snippetDescription, setSnippetDescription] = useState(
     props.description
-  );
-  const [collection, setCollection] = useState("");
+    );
+    const [language, setLanguage] = useState(props.language);
+    const [gitHubLink, setGitHubLink] = useState(props.githubLink);
+    const [collection, setCollection] = useState("");
 
   //data states
   const [editData, setEditData] = useState({
-    title: props.title,
-    content: props.snippet,
-    language: props.language,
+    title: snippetTitle,
+    content: snippetCode,
+    language: language,
   });
-
   const [optionalData, setOptionalData] = useState({
-    description: props.description,
-    gitHubLink: props.githubLink,
+    description: snippetDescription,
+    gitHubLink: gitHubLink,
   });
-
   const [stage, setStage] = useState(1);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
 
   //reactions counts
   const [react, setReact] = useState("none");
@@ -88,7 +95,8 @@ export default function Post(props) {
   const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
   const [commentCount, setCommentCount] = useState(props.commentCount);
   const [shareCount, setShareCount] = useState(props.shareCount);
-  const [language, setLanguage] = useState(props.language);
+
+
 
   useEffect(() => {
     if (props.isLiked) {
@@ -138,45 +146,39 @@ export default function Post(props) {
     }));
   };
 
-  // const handleEditSubmit =async () =>
-  // {
-  //   if(addData.title.trim() && addData.content.trim() && addData.language.trim())
-  //   {
-  //     try{
-  //       setLoading(true)
-  //       await axios.post(`${process.env.REACT_APP_API_URL}/${userId}/add-post/`,
-  //       {
-  //         ...addData ,
-  //         ...optionalData
-  //       })
+  const handleEditSubmit =async () =>
+  {
+    if(editData.title.trim() && editData.content.trim() && editData.language.trim())
+    {
+      try{
+        setEditLoading(true)
+        await axios.put(`${process.env.REACT_APP_API_URL}/${userId}/edit-post/${props.id}`,{...editData, ...optionalData})
 
-  //       setAddData({
-  //         title: "",
-  //         content: "",
-  //         language: "",
-  //       })
+           setSnippetCode(editData.content)
+           setSnippetTitle(editData.title)
+           setSnippetDescription(optionalData.description)
+           setLanguage(editData.language)
+          setGitHubLink(optionalData.gitHubLink)
+           
+  
 
-  //       setOptionalData({
-  //         description: "",
-  //         gitHubLink: "",
-  //       })
+        setStage(1)
+        setEditLoading(false)
+        closeOptions()
+        closeEditModal();
 
-  //       setLoading(false)
-  //       closeAddModal();
-  //       navigate('/profile');
-
-  //       successNotify('Post Published Successfully')
-  //     }
-  //     catch(err)
-  //     {
-  //       notify('Something Went Wrong')
-  //       setLoading(false)
-  //       setStage(1)
-  //     }
-  //   }else{
-  //     notify('All fields are required')
-  //   }
-  // }
+        successNotify('Post Updated Successfully')
+      }
+      catch(err)
+      {
+        notify('Something Went Wrong')
+        setEditLoading(false)
+        setStage(1)
+      }
+    }else{
+      notify('All fields are required')
+    }
+  }
 
   const nextStage = () => {
     if (
@@ -187,6 +189,57 @@ export default function Post(props) {
       setStage(2);
     } else {
       notify("All fields are required");
+    }
+  };
+
+  const openConfirmModal = () => {
+    closeOptions();
+    setIsConfirmModalOpen(true);
+  };
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
+
+  const deletePost = async () => {
+    try {
+      setDeleteLoading(true);
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/${userId}/delete-post/${props.id}`
+      );
+      if (location.pathname === "/profile") {
+        await props.refetchPosts();
+        await props.refetchProfile();
+      } else if (location.pathname === "/") {
+        await props.refetchFeed();
+      }
+
+      if (props.refetchcollectionPosts) {
+        await props.refetchcollectionPosts();
+      }
+
+      if (props.setSavedPosts) {
+        props.setSavedPosts((prev) => {
+          return prev.filter((post) => post.id !== props.id);
+        });
+      }
+      if (props.setSearchResults) {
+        props.setSearchResults((prev) => {
+          return prev.filter((post) => post.id !== props.id);
+        });
+      }
+
+      if (props.setFilteredPosts) {
+        props.setFilteredPosts((prev) => {
+          return prev.filter((post) => post.id !== props.id);
+        });
+      }
+      setDeleteLoading(false);
+      setIsConfirmModalOpen(false);
+      successNotify("Post Deleted Successfully");
+    } catch (err) {
+      setDeleteLoading(false);
+      notify("Couldn't Delete the Post");
     }
   };
 
@@ -230,10 +283,9 @@ export default function Post(props) {
       setIsUnsaving(false);
       setIsSaved(false);
 
-      // if(props.filterPost)
-      // {
-      //   props.filterPost(props.id);
-      // }
+      if (props.refetchcollectionPosts) {
+        await props.refetchcollectionPosts();
+      }
 
       if (props.setSavedPosts) {
         props.setSavedPosts((prev) => {
@@ -251,6 +303,7 @@ export default function Post(props) {
           return prev.filter((post) => post.id !== props.id);
         });
       }
+
       successNotify("Snippet Unsaved");
     } catch (err) {
       setIsUnsaving(false);
@@ -574,7 +627,7 @@ export default function Post(props) {
       },
     ];
 
-    if (props.githubLink) {
+    if (gitHubLink) {
       steps.push({
         element: "#gitub-btn",
         popover: {
@@ -655,6 +708,7 @@ export default function Post(props) {
             {language}
           </div>
         </div>
+
         {/* Snippet Title and Buttons */}
         <div className="d-flex flex-column gap-1 align-items-center justify-content-between mb-3">
           <h3
@@ -665,12 +719,12 @@ export default function Post(props) {
           </h3>
           <div className="buttons align-self-end d-flex gap-3 align-items-center">
             {/*github proj link*/}
-            {props.githubLink && (
+            {gitHubLink && (
               <CustomTooltip title="See Related Repo" placement="top">
                 <a
                   id="gitub-btn"
                   target="_blank"
-                  href={props.githubLink}
+                  href={gitHubLink}
                   className="btn btn-outline-light post-btn"
                 >
                   <GitHubIcon style={{ fontSize: "22px" }} />
@@ -730,6 +784,7 @@ export default function Post(props) {
               )}
             </span>
 
+              {/* copy */}
             <span id="copy-btn">
               {isCopied ? (
                 <button className="btn btn-outline-primary post-btn">
@@ -758,8 +813,8 @@ export default function Post(props) {
               </CustomTooltip>
             </span>
 
+            {/* options */}
             <div className="options-holder position-relative">
-              {/* options */}
               {userId === props.posterId && (
                 <span id="post-options" className="m-0 p-0">
                   {!showOptions ? (
@@ -781,7 +836,7 @@ export default function Post(props) {
               )}
               {showOptions && (
                 <div
-                  className="d-inline-flex justify-content-center  align-items-center gap-3 position-absolute bottom-100 mb-3 start-50 bg-primary p-2 rounded-3"
+                  className="d-inline-flex justify-content-center  align-items-center gap-2 px-2 position-absolute bottom-100 mb-3 start-50 bg-primary p-2 rounded-3"
                   style={{ transform: "translateX(-50%)" }}
                 >
                   <CustomTooltip title="Edit Post" placement="top">
@@ -797,6 +852,7 @@ export default function Post(props) {
                     <button
                       className="btn text-light post-btn"
                       style={{ backgroundColor: "#eb4334" }}
+                      onClick={openConfirmModal}
                     >
                       <DeleteIcon style={{ fontSize: "22px" }} />
                     </button>
@@ -1143,7 +1199,7 @@ export default function Post(props) {
 
             {stage === 1 ? (
               <h2 id="modal-title" className="fw-bold mb-4 fs-3 text-center">
-                Editing the Post 
+                Editing the Post
               </h2>
             ) : (
               <h2
@@ -1271,6 +1327,7 @@ export default function Post(props) {
                         <DoneRoundedIcon
                           fontSize="large"
                           className="text-dark fw-bolder"
+                          onClick={handleEditSubmit}
                         />
                       ) : (
                         <SpinnerSpan />
@@ -1282,6 +1339,70 @@ export default function Post(props) {
             )}
           </Box>
         </Modal>
+
+        {/* delete confirmtion modal */}
+      <Modal
+        open={isConfirmModalOpen}
+        onClose={closeConfirmModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: "16px",
+            maxHeight: "95vh",
+            overflowY: "auto",
+            width: "clamp(400px , 100% , 500px)",
+            backgroundColor: "#1E1E1E",
+            color: "white",
+            border: "2px solid darkgray",
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeConfirmModal}
+            sx={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              color: "white",
+            }}
+            disabled={deleteLoading}
+          >
+            <CloseIcon className="fs-2" />
+          </IconButton>
+
+          <h3 id="modal-title" className="fw-bold mb-4 mt-4 text-center fs-5">
+            Are you sure you want to Delete this post ?
+          </h3>
+
+          <div className="d-flex gap-3  justify-content-center align-items-center mt-4">
+            <button
+              className="btn border-2 rounded-4 fw-bold border-secondary text-secondary fs-6 lh-base small"
+              onClick={closeConfirmModal}
+              disabled={deleteLoading}
+            >
+              Cancel
+            </button>
+
+            <button
+              className=" btn border-2 border-danger text-danger fw-bold fs-6 lh-base rounded-4"
+              onClick={deletePost}
+            >
+             {
+                deleteLoading ? <SpinnerSpan color="text-danger" spanStyle={{width : "22px" , height : "22px"}} /> : "Delete"
+             }
+            </button>
+          </div>
+        </Box>
+      </Modal>
 
         {/* Reactions */}
         <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-2">
@@ -1360,6 +1481,8 @@ export default function Post(props) {
           </Modal>
         </Suspense>
       </div>
+
+      {/* saved at */}
       <span className="position-absolute bottom-0 end-0 d-flex gap-0 align-items-center me-2 mb-2">
         {props.savedAt && (
           <InfoTooltip
@@ -1378,6 +1501,7 @@ export default function Post(props) {
         )}
       </span>
 
+      {/* explain */}
       <CustomTooltip title="Explain" placement="right">
         <span
           onClick={startGuide}

@@ -194,6 +194,8 @@ function ProfilePage() {
                             firstname={post.poster_firstname}
                             lastname={post.poster_lastname}
                             username={post.poster_username}
+                            refetchPosts={refetchPosts}
+                            refetchProfile={refetchProfile}
                           />
                         ))
                       : null

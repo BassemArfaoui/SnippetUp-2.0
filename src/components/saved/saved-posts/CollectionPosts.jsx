@@ -79,9 +79,7 @@
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
 
-    function filterPosts(posts, postId) {
-      return posts.filter(post => post.id !== postId);
-    }
+
     
 
     if (isLoading) {
@@ -162,7 +160,7 @@
                     lastname={post.poster_lastname}
                     username={post.poster_username}
                     savedAt={post.saved_at}
-                    filterPosts={filterPosts}
+                    refetchcollectionPosts={refetch}
                   />
                 ))
               )
