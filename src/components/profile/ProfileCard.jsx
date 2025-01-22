@@ -150,14 +150,14 @@ export default function ProfileCard({ activeTab, setActiveTab ,firstname , lastn
             <span>
               {activeTab === "Infos" ? (
                 <div className="right-choice fs-5 px-3 text-light fw-bold bg-primary text-light d-flex align-items-center justify-content-center">
-                  Infos
+                  About
                 </div>
               ) : (
                 <div
                   className="right-choice bg-light text-dark fs-5 px-3 fw-bold d-flex align-items-center justify-content-center"
                   onClick={() => setActiveTab("Infos")}
                 >
-                  Infos
+                  About
                 </div>
               )}
             </span>

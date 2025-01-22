@@ -133,6 +133,11 @@ const refreshAndScroll = () => {
     }
   }
 
+  const handleFilter = (id) => {
+    setComments((prevComments) => prevComments.filter((comment) => comment.id !== id)); 
+  };
+
+
   return (
     <div>
       <Box
@@ -249,6 +254,8 @@ const refreshAndScroll = () => {
                     isLiked={comment.liked}
                     isDisliked={comment.disliked}
                     updateCommentToReply={updateCommentToReply}
+                    filterComments={handleFilter}
+                    refreshComments={handleRefresh}
                   />
                 ))
               )}

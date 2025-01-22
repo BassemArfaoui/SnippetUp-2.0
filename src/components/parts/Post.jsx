@@ -65,6 +65,8 @@ export default function Post(props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
 
 
   //post states
@@ -88,7 +90,6 @@ export default function Post(props) {
     gitHubLink: gitHubLink,
   });
   const [stage, setStage] = useState(1);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
 
   //reactions counts

@@ -3,11 +3,13 @@ import './styles/AddComment.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { IoSend } from "react-icons/io5";
 import { successNotify } from '../tools/CustomToaster';
+import SpinnerSpan from '../tools/SpinnerSpan';
 
 function AddComment(props) {
   const [commentContent, setCommentContent] = useState('');
   const [placeholder, setPlaceholder] = useState('Add a comment');
   const textareaRef = useRef(null);
+  const [commentLoading , setCommentLoading] = useState(false)
 
   useEffect(() => {
     if (props.reply) {
@@ -32,10 +34,14 @@ function AddComment(props) {
     e.preventDefault();
     if (commentContent.trim()) {
       if (!props.reply) {
+        setCommentLoading(true);
         await props.addComment(commentContent, false, null);
+        setCommentLoading(false);
         props.scrollToTop();
       } else {
+        setCommentLoading(true);
         await props.addComment(commentContent, true, props.commentToReply.commentId);
+        setCommentLoading(false);
         setPlaceholder('Add a comment');
         props.setIsReply(false);
       }
@@ -78,8 +84,8 @@ function AddComment(props) {
       </div>
 
       <span>
-        <button type='submit' className='submit-cmnt bg-warning rounded-circle border-0 fs-4'>
-          <IoSend className='ms-1' />
+        <button type='submit' className='submit-cmnt bg-warning rounded-circle border-0 fs-4' disabled={commentLoading}>
+          {!commentLoading ? <IoSend className='ms-1' /> : <SpinnerSpan color='text-dark'/>}
         </button>
       </span>
 
