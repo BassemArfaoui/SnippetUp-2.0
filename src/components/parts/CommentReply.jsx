@@ -164,6 +164,22 @@ function CommentReply(props) {
     setReplyContent(event.target.value); 
   };
 
+  const editComment = async () => {
+    try {
+      setEditLoading(true);
+      await axios.put(`${apiUrl}/${props.userId}/edit-comment/${props.id}`, {
+        content: replyContent,
+      });
+      setEditLoading(false);
+      setEditing(false);
+      successNotify("Comment edited successfully");
+    } catch (err) {
+      setEditLoading(false);
+      console.error("Couldn't edit the comment", err);  
+      notify("Couldn't edit the comment");
+    }
+  };
+
 
 
   return (
@@ -233,11 +249,12 @@ function CommentReply(props) {
                   type="submit"
                   className="bg-warning rounded-circle border-0 fs-4 edit-cmnt"
                   disabled={editLoading}
+                  onClick={editComment}
                 >
                   {!editLoading ? (
                     <DoneRoundedIcon />
                   ) : (
-                    <SpinnerSpan color="text-dark" />
+                    <SpinnerSpan color="text-dark" spanStyle={{width:'25px' , height : '25px'}} />
                   )}
                 </button>
               </div>
