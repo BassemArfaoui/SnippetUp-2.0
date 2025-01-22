@@ -9,6 +9,8 @@ import { Modal, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SpinnerSpan from '../tools/SpinnerSpan';
 import { notify, successNotify } from '../tools/CustomToaster';
+import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+
 
 
 
@@ -25,9 +27,11 @@ function CommentReply(props) {
     const [dislikeCount,setDislikeCount]=useState(props.dislikeCount)
     const [showMore,setShowMore]=useState(false);
     const [showOptions, setShowOptions] = useState(false);
-    const [editing, setEditing] = useState(false)
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
+    const [replyContent , setReplyContent] = useState(props.content)
+    const [editLoading, setEditLoading] = useState(false);
+    const [editing, setEditing] = useState(false)
 
 
 
@@ -150,6 +154,16 @@ function CommentReply(props) {
   }}
 
 
+  const startEditing = () => {
+    setEditing(true);
+    setShowOptions(false);  
+  }
+
+
+  const handleCommentChange = (event) => {
+    setReplyContent(event.target.value); 
+  };
+
 
 
   return (
@@ -174,9 +188,8 @@ function CommentReply(props) {
               <span className="commentor_name p-0 m-0 text-dark">
                 {props.fullname}
                 <span className="text-secondary small">
-                  {" "}
                   ({props.timeSince})
-                </span>{" "}
+                </span>
               </span>
             </div>
           </div>
@@ -185,22 +198,51 @@ function CommentReply(props) {
 
       <div className="comment-content fs-5 ">
         <div className="comment-content ms-2 mb-2 pe-3 border border-2 border-dark rounded-4 py-2 px-3">
-          <span className="p-0 m-0">
-            {" "}
-            {!showMore ? (
-              <span className="m-0 p-0">
-                {truncateComment(props.content, 100)}{" "}
-                <span
-                  className="text-secondary small fw-bold see-more-btn"
-                  onClick={seeMore}
-                >
-                  See all
+          {!editing ? (
+            <span className="p-0 m-0">
+              {!showMore ? (
+                <span className="m-0 p-0">
+                  {truncateComment(replyContent, 100)}{" "}
+                  <span
+                    className="text-secondary small fw-bold see-more-btn"
+                    onClick={seeMore}
+                  >
+                    See all
+                  </span>
                 </span>
-              </span>
-            ) : (
-              props.content
-            )}
-          </span>
+              ) : (
+                replyContent
+              )}
+            </span>
+          ) : (
+            <div className="d-flex align-items-center">
+              <textarea
+                onChange={handleCommentChange}
+                className="w-100 fw-bold text-dark m-0 p-0 border-0 flex-grow-1 small pe-3"
+                style={{
+                  backgroundColor: "transparent",
+                  resize: "none",
+                  outline: "none",
+                }}
+                spellCheck="false"
+                value={replyContent}
+              />
+
+              <div className='ps-3'>
+                <button
+                  type="submit"
+                  className="bg-warning rounded-circle border-0 fs-4 edit-cmnt"
+                  disabled={editLoading}
+                >
+                  {!editLoading ? (
+                    <DoneRoundedIcon />
+                  ) : (
+                    <SpinnerSpan color="text-dark" />
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -236,15 +278,16 @@ function CommentReply(props) {
         <div ref={optionsRef}>
           {!showOptions ? (
             <IconButton
-              onClick={() => setShowOptions(!showOptions)}
+              onClick={() => setShowOptions(true)}
               className="position-absolute"
               style={{ right: "10px", top: "10px" }}
+              disabled={editing}
             >
               <MoreHorizIcon />
             </IconButton>
           ) : (
             <IconButton
-              onClick={() => setShowOptions(!showOptions)}
+              onClick={() => setShowOptions(false)}
               className="position-absolute"
               style={{ right: "10px", top: "10px" }}
             >
@@ -260,13 +303,16 @@ function CommentReply(props) {
               <div
                 className="option text-center py-1 px-4"
                 style={{ cursor: "pointer" }}
+                onClick={startEditing}
               >
                 Edit
               </div>
               <div
                 className="option text-center py-1 px-4 text-danger"
                 style={{ borderTop: "1.5pt solid darkgray", cursor: "pointer" }}
-                onClick={()=>{setIsConfirmModalOpen(true)}}
+                onClick={() => {
+                  setIsConfirmModalOpen(true);
+                }}
               >
                 Delete
               </div>

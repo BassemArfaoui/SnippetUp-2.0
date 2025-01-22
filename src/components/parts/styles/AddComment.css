@@ -33,7 +33,7 @@
   .submit-cmnt
   {
     width: 50px;
-    aspect-ratio: 1;
+    height: 50px;
     padding: 0;
     margin: 0;
     display: flex;

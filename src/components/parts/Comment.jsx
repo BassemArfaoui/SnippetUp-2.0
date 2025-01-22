@@ -9,9 +9,11 @@ import axios from 'axios';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { CircularProgress, IconButton } from '@mui/material';
 import { notify, successNotify } from '../tools/CustomToaster';
+import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import { Modal, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SpinnerSpan from '../tools/SpinnerSpan';
+
 
 
 function Comment(props) {
@@ -21,6 +23,7 @@ function Comment(props) {
     const [commentReact, setCommentReact] = useState('none');
     const [likeCount, setLikeCount] = useState(props.likeCount);
     const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
+    const [commentContent, setCommentContent] = useState(props.content);
     const [showReplies, setShowReplies] = useState(false);
     const [replies, setReplies] = useState([]);
     const [repliesCount, setRepliesCount] = useState(0);
@@ -31,8 +34,9 @@ function Comment(props) {
     const [showOptions, setShowOptions] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
-
+    const [editLoading, setEditLoading] = useState(false);
     const [editing, setEditing] = useState(false)
+
 
     const limit = 3; 
     const userId = 1;
@@ -77,7 +81,9 @@ function Comment(props) {
       }, [optionsRef]);
     
 
-
+      const handleCommentChange = (event) => {
+        setCommentContent(event.target.value); 
+      };
     
 
     const fetchReplies = useCallback(async () => {
@@ -238,6 +244,11 @@ function Comment(props) {
       setReplies((prevReplies) => prevReplies.filter((reply) => reply.id !== id)); 
       setRepliesCount((prevRepliesCount => prevRepliesCount - 1));
     };
+
+    const startEditing = () => {
+      setEditing(true);
+      setShowOptions(false);  
+    }
   
 
 
@@ -273,22 +284,51 @@ function Comment(props) {
 
         <div className="comment-content fs-5">
           <div className="comment-content ms-2 mb-2 pe-3 border border-2 border-dark rounded-4 py-2 px-3">
-            <span className="p-0 m-0">
-              {" "}
-              {!showMore ? (
-                <span className="m-0 p-0">
-                  {truncateComment(props.content, 100)}{" "}
-                  <span
-                    className="text-secondary small fw-bold see-more-btn"
-                    onClick={seeMore}
-                  >
-                    See all
+            {!editing ? (
+              <span className="p-0 m-0">
+                {!showMore ? (
+                  <span className="m-0 p-0">
+                    {truncateComment(commentContent, 100)}{" "}
+                    <span
+                      className="text-secondary small fw-bold see-more-btn"
+                      onClick={seeMore}
+                    >
+                      See all
+                    </span>
                   </span>
-                </span>
-              ) : (
-                props.content
-              )}
-            </span>
+                ) : (
+                  commentContent
+                )}
+              </span>
+            ) : (
+              <div className="d-flex align-items-center">
+                <textarea
+                  onChange={handleCommentChange}
+                  className="w-100 fw-bold text-dark m-0 p-0 border-0 flex-grow-1 small pe-2"
+                  style={{
+                    backgroundColor: "transparent",
+                    resize: "none",
+                    outline: "none",
+                  }}
+                  spellCheck="false"
+                  value={commentContent}
+                />
+
+                <div className='ps-3'>
+                  <button
+                    type="submit"
+                    className="bg-warning rounded-circle border-0 fs-4 edit-cmnt"
+                    disabled={editLoading}
+                  >
+                    {!editLoading ? (
+                      <DoneRoundedIcon />
+                    ) : (
+                      <SpinnerSpan color="text-dark" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -415,9 +455,7 @@ function Comment(props) {
           </div>
         )}
 
-
-
-          {/* options */}
+        {/* options */}
         {userId === props.userId && (
           <div ref={optionsRef}>
             {!showOptions ? (
@@ -425,6 +463,7 @@ function Comment(props) {
                 onClick={() => setShowOptions(true)}
                 className="position-absolute"
                 style={{ right: "10px", top: "10px" }}
+                disabled={editing}
               >
                 <MoreHorizIcon />
               </IconButton>
@@ -446,6 +485,7 @@ function Comment(props) {
                 <div
                   className="option text-center py-1 px-4"
                   style={{ cursor: "pointer" }}
+                  onClick={startEditing}
                 >
                   Edit
                 </div>
