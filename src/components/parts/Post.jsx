@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect, useCallback } from "react";
+import React, { lazy, Suspense, useState, useEffect,  useRef } from "react";
 import InfoTooltip from "../tools/InfoTooltip";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import "./styles/Post.css";
@@ -47,6 +47,8 @@ export default function Post(props) {
   }`;
 
   const location = useLocation();
+  const optionsRef = useRef(null)
+  
 
   //bool states
   const [isSaved, setIsSaved] = useState(false);
@@ -113,6 +115,22 @@ export default function Post(props) {
       setisInterested(true);
     }
   }, [props.isLiked, props.isDisliked, props.isSaved, props.isInterested]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [optionsRef]);
+
+
 
   const openOptions = () => {
     setShowOptions(true);
@@ -814,7 +832,7 @@ export default function Post(props) {
             </span>
 
             {/* options */}
-            <div className="options-holder position-relative">
+            <div className="options-holder position-relative"  ref={optionsRef} >
               {userId === props.posterId && (
                 <span id="post-options" className="m-0 p-0">
                   {!showOptions ? (
@@ -838,6 +856,7 @@ export default function Post(props) {
                 <div
                   className="d-inline-flex justify-content-center  align-items-center gap-2 px-2 position-absolute bottom-100 mb-3 start-50 bg-primary p-2 rounded-3"
                   style={{ transform: "translateX(-50%)" }}
+                 
                 >
                   <CustomTooltip title="Edit Post" placement="top">
                     <button

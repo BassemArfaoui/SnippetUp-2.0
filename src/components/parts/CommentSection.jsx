@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback , useRef } from 'react';
 import { Box, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
-import RefreshIcon from '@mui/icons-material/Refresh';  // Add the refresh icon
+import RefreshIcon from '@mui/icons-material/Refresh'; 
 import axios from 'axios';
 import Comment from './Comment';
 import './styles/Comment.css';
@@ -239,6 +239,7 @@ const refreshAndScroll = () => {
                     key={comment.id}
                     id={comment.id}
                     content={comment.content}
+                    userId={comment.user_id}
                     likeCount={comment.like_count}
                     dislikeCount={comment.dislike_count}
                     firstname={comment.firstname}

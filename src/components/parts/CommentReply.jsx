@@ -1,8 +1,11 @@
-import React , {useState,useEffect} from 'react'
+import React , {useState,useEffect, useRef} from 'react'
 import profile_pic from '../../imgs/profile_pic.jpg'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import axios from 'axios';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import {  IconButton } from '@mui/material';
+
 
 
 
@@ -12,6 +15,10 @@ function CommentReply(props) {
     const [likeCount,setLikeCount]=useState(props.likeCount)
     const [dislikeCount,setDislikeCount]=useState(props.dislikeCount)
     const [showMore,setShowMore]=useState(false);
+    const [showOptions, setShowOptions] = useState(false);
+    const [editing, setEditing] = useState(false)
+
+    const optionsRef=useRef(null)
     const userId=1;
 
 
@@ -23,6 +30,22 @@ function CommentReply(props) {
       }
 
   }, [props.isLiked, props.isDisliked]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [optionsRef]);
+
+
 
 
    function truncateComment(str, n) {
@@ -137,7 +160,37 @@ function CommentReply(props) {
                 
             </span>
           
+            {userId === props.userId && (
+          <div ref={optionsRef}>
+            {!showOptions ? (
+              <IconButton
+                onClick={() => setShowOptions(!showOptions)}
+                className="position-absolute"
+                style={{ right: "10px", top: "10px" }}
+              >
+                <MoreHorizIcon />
+              </IconButton>
+            ) : (
+              <IconButton
+                onClick={() => setShowOptions(!showOptions)}
+                className="position-absolute"
+                style={{ right: "10px", top: "10px" }}
+              >
+                <MoreHorizIcon className="text-primary" />
+              </IconButton>
+            )}
 
+            {showOptions && (
+              <div
+                className="options position-absolute end-0 bg-light py-2 rounded-4"
+                style={{ top: "45px" }}
+              >
+                <div className="option text-center py-1 px-4" style={{cursor:'pointer'}}>Edit</div>
+                <div className="option text-center py-1 px-4" style={{borderTop:'1.5pt solid darkgray', cursor : 'pointer'}}>Delete</div>
+              </div>
+            )}
+          </div>
+        )}
 
         </div>
   )

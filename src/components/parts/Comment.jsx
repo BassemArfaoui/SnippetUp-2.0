@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import profile_pic from '../../imgs/profile_pic.jpg';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -6,11 +6,12 @@ import { BiSolidCommentDetail } from 'react-icons/bi';
 import { FaReply } from 'react-icons/fa';
 import CommentReply from './CommentReply';
 import axios from 'axios';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { CircularProgress, IconButton } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { notify } from '../tools/CustomToaster';
 
 function Comment(props) {
+
     
     const apiUrl = process.env.REACT_APP_API_URL; 
     const [commentReact, setCommentReact] = useState('none');
@@ -23,282 +24,384 @@ function Comment(props) {
     const [hasMoreReplies, setHasMoreReplies] = useState(true);
     const [repliesPage, setRepliesPage] = useState(1);
     const [showMore,setShowMore]=useState(false);
+    const [showOptions, setShowOptions] = useState(false);
+    const [editing, setEditing] = useState(false)
+
     const limit = 3; 
     const userId = 1;
+    const optionsRef = useRef(null)
 
     useEffect(() => {
-        if (props.isLiked) {
-            setCommentReact('like');
-        } else if (props.isDisliked) {
-            setCommentReact('dislike');
-        }
+      if (props.isLiked) {
+        setCommentReact("like");
+      } else if (props.isDisliked) {
+        setCommentReact("dislike");
+      }
     }, [props.isLiked, props.isDisliked]);
 
     useEffect(() => {
-        const updateRepliesTotal = async () => 
-        {
-            try 
-            {
-                const response = await axios.get(`${apiUrl}/comments/${props.id}/repliesCount`);
-                setRepliesCount(response.data.totalReplies);
-            }
-            catch(err)
-            {
-                notify('Error updating replies total')
-            }
+      const updateRepliesTotal = async () => {
+        try {
+          const response = await axios.get(
+            `${apiUrl}/comments/${props.id}/repliesCount`
+          );
+          setRepliesCount(response.data.totalReplies);
+        } catch (err) {
+          notify("Error updating replies total");
         }
+      };
 
-        updateRepliesTotal();
-        fetchReplies();
+      updateRepliesTotal();
+      fetchReplies();
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+            setShowOptions(false);
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+    
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, [optionsRef]);
+    
+    
+
     const fetchReplies = useCallback(async () => {
-        if (loadingReplies) return;
+      if (loadingReplies) return;
 
-        setLoadingReplies(true);
-        try {
-            const response = await axios.get(`${apiUrl}/comments/${props.id}/replies`, {
-                params: {
-                    limit: limit,
-                    offset: (repliesPage - 1) * limit
-                }
-            });
+      setLoadingReplies(true);
+      try {
+        const response = await axios.get(
+          `${apiUrl}/comments/${props.id}/replies`,
+          {
+            params: {
+              limit: limit,
+              offset: (repliesPage - 1) * limit,
+            },
+          }
+        );
 
-            if (response.data.replies.length < limit) {
-                setHasMoreReplies(false);
-            }
-
-            setReplies(prevReplies => [...prevReplies, ...response.data.replies]);
-            setRepliesPage(prevPage => prevPage + 1);
-        } catch (error) {
-            console.error('Error fetching replies:', error);
-        } finally {
-            setLoadingReplies(false);
+        if (response.data.replies.length < limit) {
+          setHasMoreReplies(false);
         }
+
+        setReplies((prevReplies) => [...prevReplies, ...response.data.replies]);
+        setRepliesPage((prevPage) => prevPage + 1);
+      } catch (error) {
+        console.error("Error fetching replies:", error);
+      } finally {
+        setLoadingReplies(false);
+      }
     }, [loadingReplies, repliesPage, props.id]);
 
-
-    
     const seeReplies = () => {
-        
-        if (repliesCount > 0 ) {
-            setShowReplies(true);
-        }
-      
+      if (repliesCount > 0) {
+        setShowReplies(true);
+      }
     };
 
     const hideReplies = () => {
-        setShowReplies(false);
+      setShowReplies(false);
     };
 
     const likeComment = async () => {
-        try {
-            if (commentReact === 'dislike') {
-                await undislikeComment();
-            }
-            await axios.get(`${apiUrl}/likeComment/${userId}/${props.id}`);
-            setCommentReact('like');
-            setLikeCount(prev => prev + 1);
-        } catch (err) {
-            console.error("Couldn't like the comment", err);
+      try {
+        if (commentReact === "dislike") {
+          await undislikeComment();
         }
+        await axios.get(`${apiUrl}/likeComment/${userId}/${props.id}`);
+        setCommentReact("like");
+        setLikeCount((prev) => prev + 1);
+      } catch (err) {
+        console.error("Couldn't like the comment", err);
+      }
     };
 
     const unlikeComment = async () => {
-        try {
-            await axios.get(`${apiUrl}/unlikeComment/${userId}/${props.id}`);
-            setCommentReact('none');
-            setLikeCount(prev => prev - 1);
-        } catch (err) {
-            console.error("Couldn't unlike the comment", err);
-        }
+      try {
+        await axios.get(`${apiUrl}/unlikeComment/${userId}/${props.id}`);
+        setCommentReact("none");
+        setLikeCount((prev) => prev - 1);
+      } catch (err) {
+        console.error("Couldn't unlike the comment", err);
+      }
     };
 
     const dislikeComment = async () => {
-        try {
-            if (commentReact === 'like') {
-                await unlikeComment();
-            }
-            await axios.get(`${apiUrl}/dislikeComment/${userId}/${props.id}`);
-            setCommentReact('dislike');
-            setDislikeCount(prev => prev + 1);
-        } catch (err) {
-            console.error("Couldn't dislike the comment", err);
+      try {
+        if (commentReact === "like") {
+          await unlikeComment();
         }
+        await axios.get(`${apiUrl}/dislikeComment/${userId}/${props.id}`);
+        setCommentReact("dislike");
+        setDislikeCount((prev) => prev + 1);
+      } catch (err) {
+        console.error("Couldn't dislike the comment", err);
+      }
     };
 
     const undislikeComment = async () => {
-        try {
-            await axios.get(`${apiUrl}/undislikeComment/${userId}/${props.id}`);
-            setCommentReact('none');
-            setDislikeCount(prev => prev - 1);
-        } catch (err) {
-            console.error("Couldn't undislike the comment", err);
-        }
+      try {
+        await axios.get(`${apiUrl}/undislikeComment/${userId}/${props.id}`);
+        setCommentReact("none");
+        setDislikeCount((prev) => prev - 1);
+      } catch (err) {
+        console.error("Couldn't undislike the comment", err);
+      }
     };
 
     const timeSince = (time) => {
-        const now = new Date();
-        const timeDiff = now - new Date(time);
+      const now = new Date();
+      const timeDiff = now - new Date(time);
 
-        const seconds = Math.floor(timeDiff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-        if (days > 0) {
-            return `${days} day${days > 1 ? 's' : ''} ago`;
-        } else if (hours > 0) {
-            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-        } else if (minutes > 0) {
-            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-        } else {
-            return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
-        }
+      const seconds = Math.floor(timeDiff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      if (days > 0) {
+        return `${days} day${days > 1 ? "s" : ""} ago`;
+      } else if (hours > 0) {
+        return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+      } else if (minutes > 0) {
+        return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+      } else {
+        return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
+      }
     };
 
-    const handleReplyClick =() =>
-    {
-        props.updateCommentToReply
-        ({
-            commentId: props.id,
-            commentorName : props.firstname + ' ' + props.lastname
-        })
-    }
+    const handleReplyClick = () => {
+      props.updateCommentToReply({
+        commentId: props.id,
+        commentorName: props.firstname + " " + props.lastname,
+      });
+    };
 
     function truncateComment(str, n) {
-        const lineBreakCount = (str.match(/\n/g) || []).length;
-      
-        if (str.length <= n && lineBreakCount <= 2) {
-          setShowMore(true);
-          return str;
-        } else {
-          const truncatedStr = str.split('\n').slice(0, 2).join('\n') + '\n...';
-          return truncatedStr;
-        }
-      }
-      
-      
-    const seeMore = () =>
-    {
+      const lineBreakCount = (str.match(/\n/g) || []).length;
+
+      if (str.length <= n && lineBreakCount <= 2) {
         setShowMore(true);
+        return str;
+      } else {
+        const truncatedStr = str.split("\n").slice(0, 2).join("\n") + "\n...";
+        return truncatedStr;
+      }
     }
+
+    const seeMore = () => {
+      setShowMore(true);
+    };
 
 
 
     
 
     return (
-        <div id="comment" className="comment rounded-4 pb-3 pt-3 px-3 fs-5 position-relative" style={{ whiteSpace: 'pre-wrap' }}>
-            <div className="d-flex align-items-center mb-2">
-                <div className="poster-info d-flex align-items-center gap-2">
-                    <div className="avatar">
-                        <img
-                            src={profile_pic}
-                            alt="user"
-                            className="rounded-circle"
-                            style={{ width: '45px', height: '45px' }}
-                        />
-                    </div>
-                    <div>
-                        <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
-                            <span className="commentor_name p-0 m-0 text-dark">{props.firstname + ' ' + props.lastname}<span className='text-secondary small'> ({props.time})</span></span>
-                        </div>
-                    </div>
-                </div>
+      <div
+        id="comment"
+        className="comment rounded-4 pb-3 pt-3 px-3 fs-5 position-relative"
+        style={{ whiteSpace: "pre-wrap" }}
+      >
+        <div className="d-flex align-items-center mb-2">
+          <div className="poster-info d-flex align-items-center gap-2">
+            <div className="avatar">
+              <img
+                src={profile_pic}
+                alt="user"
+                className="rounded-circle"
+                style={{ width: "45px", height: "45px" }}
+              />
             </div>
-
-            <div className='comment-content fs-5'>
-                <div className='comment-content ms-2 mb-2 pe-3 border border-2 border-dark rounded-4 py-2 px-3'>
-                  <span className='p-0 m-0'> {!showMore ? <span className='m-0 p-0'>{truncateComment(props.content,100)} <span className='text-secondary small fw-bold see-more-btn' onClick={seeMore}>See all</span></span> : props.content}</span> 
-                </div>
+            <div>
+              <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
+                <span className="commentor_name p-0 m-0 text-dark">
+                  {props.firstname + " " + props.lastname}
+                  <span className="text-secondary small"> ({props.time})</span>
+                </span>
+              </div>
             </div>
-
-            <span className='reactions d-flex justify-content-start gap-3 align-items-center px-3 ms-5'>
-                <span className='d-flex align-items-center'>
-                    {commentReact === 'like' ?
-                        <span onClick={unlikeComment} className='d-flex align-items-center'>
-                            <span className='comment-num m-0 p-0 mt-2 me-1 text-primary'>{likeCount}</span>
-                            <span className='text-primary'><ThumbUpAltIcon /></span>
-                        </span>
-                        :
-                        <span onClick={likeComment} className='d-flex align-items-center'>
-                            <span className='comment-num m-0 p-0 mt-2 mb-0 me-1'>{likeCount}</span>
-                            <span><ThumbUpAltIcon /></span>
-                        </span>
-                    }
-                </span>
-
-                <span className='d-flex align-items-center gap-1'>
-                    {commentReact === 'dislike' ?
-                        <span onClick={undislikeComment}>
-                            <span className='comment-num m-0 p-0 mt-2 me-1 text-danger'>{dislikeCount}</span>
-                            <span className='text-danger'><ThumbDownAltIcon /></span>
-                        </span>
-                        :
-                        <span onClick={dislikeComment}>
-                            <span className='comment-num m-0 p-0 mt-2 me-1'>{dislikeCount}</span>
-                            <span><ThumbDownAltIcon /></span>
-                        </span>
-                    }
-                </span>
-
-                <span className='d-flex align-items-center gap-1'>
-                    {!showReplies ?
-                        <span onClick={seeReplies}>
-                            <span className='comment-num m-0 p-0 mt-1 me-1'>{repliesCount}</span>
-                            <span><BiSolidCommentDetail /></span>
-                        </span>
-                        :
-                        <span onClick={hideReplies}>
-                            <span className='comment-num m-0 p-0 mt-1 me-1 text-secondary'>{repliesCount}</span>
-                            <span className='text-secondary'><BiSolidCommentDetail /></span>
-                        </span>
-                    }
-                </span>
-
-                <span className='reply-btn ms-2' onClick={handleReplyClick}><FaReply /></span>
-            </span>
-
-            {showReplies && (
-                <div className='replies d-flex flex-column gap-2 ms-5 mt-3'>
-                    {replies.map((reply,index) => (
-                        <CommentReply
-                            key={reply.id}
-                            id={reply.id}
-                            fullname={reply.firstname + ' ' + reply.lastname}
-                            content={reply.content}
-                            time={reply.commented_at}
-                            likeCount={reply.like_count}
-                            dislikeCount={reply.dislike_count}
-                            isLiked={reply.liked}
-                            isDisliked={reply.disliked}
-                            timeSince={timeSince(reply.commented_at)}
-                        />
-                    ))}
-
-                    {loadingReplies && (
-                        <div className="d-flex justify-content-center my-3">
-                            <CircularProgress color="primary" />
-                        </div>
-                    )}
-
-                    { !loadingReplies && (!hasMoreReplies || (repliesCount - replies.length ==0)) && (
-                        <div className="d-flex justify-content-center my-3 fw-bold small">
-                            <p className='small text-secondary '>No more replies</p>
-                        </div>
-                    )}
-
-                    {hasMoreReplies && !loadingReplies && (repliesCount - replies.length !==0) && (
-                        <div className="d-flex justify-content-center my-3">
-                            <IconButton onClick={fetchReplies} aria-label="Load More">
-                                {/* <ExpandMoreIcon className='text-primary' style={{ fontSize: '62px' }} /> */}
-                                <p className='text-primary small fw-bold fs-6'>{repliesCount - replies.length} more {((repliesCount - replies.length) != 1) ? 'replies' : 'reply' }</p>
-                            </IconButton>
-                        </div>
-                    )}
-                </div>
-            )}
+          </div>
         </div>
+
+        <div className="comment-content fs-5">
+          <div className="comment-content ms-2 mb-2 pe-3 border border-2 border-dark rounded-4 py-2 px-3">
+            <span className="p-0 m-0">
+              {" "}
+              {!showMore ? (
+                <span className="m-0 p-0">
+                  {truncateComment(props.content, 100)}{" "}
+                  <span
+                    className="text-secondary small fw-bold see-more-btn"
+                    onClick={seeMore}
+                  >
+                    See all
+                  </span>
+                </span>
+              ) : (
+                props.content
+              )}
+            </span>
+          </div>
+        </div>
+
+        <span className="reactions d-flex justify-content-start gap-3 align-items-center px-3 ms-5">
+          <span className="d-flex align-items-center">
+            {commentReact === "like" ? (
+              <span
+                onClick={unlikeComment}
+                className="d-flex align-items-center"
+              >
+                <span className="comment-num m-0 p-0 mt-2 me-1 text-primary">
+                  {likeCount}
+                </span>
+                <span className="text-primary">
+                  <ThumbUpAltIcon />
+                </span>
+              </span>
+            ) : (
+              <span onClick={likeComment} className="d-flex align-items-center">
+                <span className="comment-num m-0 p-0 mt-2 mb-0 me-1">
+                  {likeCount}
+                </span>
+                <span>
+                  <ThumbUpAltIcon />
+                </span>
+              </span>
+            )}
+          </span>
+
+          <span className="d-flex align-items-center gap-1">
+            {commentReact === "dislike" ? (
+              <span onClick={undislikeComment}>
+                <span className="comment-num m-0 p-0 mt-2 me-1 text-danger">
+                  {dislikeCount}
+                </span>
+                <span className="text-danger">
+                  <ThumbDownAltIcon />
+                </span>
+              </span>
+            ) : (
+              <span onClick={dislikeComment}>
+                <span className="comment-num m-0 p-0 mt-2 me-1">
+                  {dislikeCount}
+                </span>
+                <span>
+                  <ThumbDownAltIcon />
+                </span>
+              </span>
+            )}
+          </span>
+
+          <span className="d-flex align-items-center gap-1">
+            {!showReplies ? (
+              <span onClick={seeReplies}>
+                <span className="comment-num m-0 p-0 mt-1 me-1">
+                  {repliesCount}
+                </span>
+                <span>
+                  <BiSolidCommentDetail />
+                </span>
+              </span>
+            ) : (
+              <span onClick={hideReplies}>
+                <span className="comment-num m-0 p-0 mt-1 me-1 text-secondary">
+                  {repliesCount}
+                </span>
+                <span className="text-secondary">
+                  <BiSolidCommentDetail />
+                </span>
+              </span>
+            )}
+          </span>
+
+          <span className="reply-btn ms-2" onClick={handleReplyClick}>
+            <FaReply />
+          </span>
+        </span>
+
+        {showReplies && (
+          <div className="replies d-flex flex-column gap-2 ms-5 mt-3">
+            {replies.map((reply, index) => (
+              <CommentReply
+                key={reply.id}
+                id={reply.id}
+                userId={reply.user_id}
+                fullname={reply.firstname + " " + reply.lastname}
+                content={reply.content}
+                time={reply.commented_at}
+                likeCount={reply.like_count}
+                dislikeCount={reply.dislike_count}
+                isLiked={reply.liked}
+                isDisliked={reply.disliked}
+                timeSince={timeSince(reply.commented_at)}
+              />
+            ))}
+
+            {loadingReplies && (
+              <div className="d-flex justify-content-center my-3">
+                <CircularProgress color="primary" />
+              </div>
+            )}
+
+            {!loadingReplies &&
+              (!hasMoreReplies || repliesCount - replies.length == 0) && (
+                <div className="d-flex justify-content-center my-3 fw-bold small">
+                  <p className="small text-secondary ">No more replies</p>
+                </div>
+              )}
+
+            {hasMoreReplies &&
+              !loadingReplies &&
+              repliesCount - replies.length !== 0 && (
+                <div className="d-flex justify-content-center my-3">
+                  <IconButton onClick={fetchReplies} aria-label="Load More">
+                    <p className="text-primary small fw-bold fs-6">
+                      {repliesCount - replies.length} more{" "}
+                      {repliesCount - replies.length != 1 ? "replies" : "reply"}
+                    </p>
+                  </IconButton>
+                </div>
+              )}
+          </div>
+        )}
+
+        {userId === props.userId && (
+          <div ref={optionsRef}>
+            {!showOptions ? (
+              <IconButton
+                onClick={() => setShowOptions(true)}
+                className="position-absolute"
+                style={{ right: "10px", top: "10px" }}
+              >
+                <MoreHorizIcon />
+              </IconButton>
+            ) : (
+              <IconButton
+                onClick={() => setShowOptions(false)}
+                className="position-absolute"
+                style={{ right: "10px", top: "10px" }}
+              >
+                <MoreHorizIcon className="text-primary" />
+              </IconButton>
+            )}
+
+            {showOptions && (
+              <div
+                className="options position-absolute end-0 bg-light py-2 rounded-4 me-3"
+                style={{ top: "45px" }}
+              >
+                <div className="option text-center py-1 px-4" style={{cursor:'pointer'}}>Edit</div>
+                <div className="option text-center py-1 px-4" style={{borderTop:'1.5pt solid darkgray', cursor : 'pointer'}}>Delete</div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     );
 }
 
