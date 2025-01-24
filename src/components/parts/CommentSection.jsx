@@ -249,6 +249,7 @@ const refreshAndScroll = () => {
                     dislikeCount={comment.dislike_count}
                     firstname={comment.firstname}
                     lastname={comment.lastname}
+                    username={comment.username}
                     profilePic={comment.profile_pic}
                     time={timeSince(comment.commented_at)}
                     isLiked={comment.liked}
@@ -291,6 +292,7 @@ const refreshAndScroll = () => {
               addComment={props.addComment}
               refreshComments={handleRefresh}
               scrollToTop={scrollToTop}
+              incrementCommentCount={props.incrementCommentCount}
               /> :
               <AddComment
               addComment={props.addComment}
@@ -298,6 +300,7 @@ const refreshAndScroll = () => {
               reply 
               commentToReply={commentToReply}
               setIsReply={setIsReply}
+              incrementCommentCount={props.incrementCommentCount}
               />
             }
           </div>

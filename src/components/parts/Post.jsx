@@ -37,14 +37,13 @@ import "../tools/styles/driver.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useLocation } from "react-router-dom";
+import { useLocation , Link } from "react-router-dom";
+
 const CommentSection = lazy(() => import("./CommentSection"));
 
 export default function Post(props) {
   const userId = 1;
-  const profile_pic = `https://picsum.photos/${
-    Math.floor(Math.random() * 100) + 100
-  }`;
+  const profile_pic = props.profilePic ;
 
   const location = useLocation();
   const optionsRef = useRef(null)
@@ -66,6 +65,7 @@ export default function Post(props) {
   const [editLoading, setEditLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
 
 
 
@@ -74,10 +74,10 @@ export default function Post(props) {
   const [snippetTitle, setSnippetTitle] = useState(props.title);
   const [snippetDescription, setSnippetDescription] = useState(
     props.description
-    );
-    const [language, setLanguage] = useState(props.language);
-    const [gitHubLink, setGitHubLink] = useState(props.githubLink);
-    const [collection, setCollection] = useState("");
+  );
+  const [language, setLanguage] = useState(props.language);
+  const [gitHubLink, setGitHubLink] = useState(props.githubLink);
+  const [collection, setCollection] = useState("");
 
   //data states
   const [editData, setEditData] = useState({
@@ -132,6 +132,10 @@ export default function Post(props) {
   }, [optionsRef]);
 
 
+
+  const incrementCommentCount = () => {
+    setCommentCount((prev) => parseInt(prev) + 1);
+  };
 
   const openOptions = () => {
     setShowOptions(true);
@@ -344,32 +348,36 @@ export default function Post(props) {
     }
   };
 
-  const becomeInterested = async () => {
+  const subscribe = async () => {
     try {
+      setSubLoading(true);
       await axios.get(
         `${process.env.REACT_APP_API_URL}/interested/${userId}/${props.posterId}`
       );
+      setSubLoading(false);
       setisInterested(true);
       successNotify(
         `You are now Subscribed to ${
           props.firstname + " " + props.lastname
-        }'s Snippets`
+        }`
       );
     } catch (err) {
       notify(`Couldn't subscribe`);
     }
   };
 
-  const becomeUninterested = async () => {
+  const unsubscribe = async () => {
     try {
+      setSubLoading(true);
       await axios.get(
         `${process.env.REACT_APP_API_URL}/uninterested/${userId}/${props.posterId}`
       );
+      setSubLoading(false);
       setisInterested(false);
       successNotify(
         `No Longer Subscribed to  ${
           props.firstname + " " + props.lastname
-        }'s Snippets`
+        }`
       );
     } catch (err) {
       notify(`Couldn't unsubscribe`);
@@ -555,7 +563,7 @@ export default function Post(props) {
         popover: {
           title: "Follow Content",
           description:
-            "Show interest in this author's snippets to see more of their posts in your feed.",
+            "subscribe to this author to see more of their posts in your feed.",
         },
       },
       {
@@ -682,42 +690,65 @@ export default function Post(props) {
         {/* Post Header */}
         <div className="d-flex align-items-center justify-content-between mb-0">
           <div className="d-flex align-items-center gap-3">
-            <div className="avatar">
-              <img
-                src={profile_pic}
-                alt="user"
-                className="rounded-circle"
-                style={{ width: "50px", height: "50px" }}
-              />
-            </div>
+            <Link to={`/${props.username}`} className="text-decoration-none text-dark">
+              <div className="avatar">
+                <img
+                  src={profile_pic}
+                  alt="user"
+                  className="rounded-circle"
+                  style={{ width: "50px", height: "50px" }}
+                />
+              </div>
+            </Link>
             <div>
               <div className="text-white fs-5 fw-bolder d-flex align-items-center m-0 p-0">
-                <span className="p-0 m-0">
-                  {props.firstname + " " + props.lastname}
-                </span>
-                {props.posterId != userId && (
+                <Link
+                  to={`/${props.username}`}
+                  className="text-decoration-none text-light"
+                >
+                  <span className="p-0 m-0">
+                    {props.firstname + " " + props.lastname}
+                  </span>
+                </Link>
+                {props.posterId != userId && !props.refetchProfile && (
                   <span id="interested-btn" className="ms-3 mb-1">
-                    {!isInterested ? (
-                      <span
-                        className="text-light p-0 mb-1  intrested-icon"
-                        onClick={becomeInterested}
-                      >
-                        <CustomTooltip title="Intrested" placement="top">
-                          <StarBorderIcon style={{ fontSize: "26px" }} />
-                        </CustomTooltip>
-                      </span>
+                    {!subLoading ? (
+                      !isInterested ? (
+                        <span
+                          className="text-light p-0 mb-1  intrested-icon"
+                          onClick={subscribe}
+                        >
+                          <CustomTooltip title="Subscribe" placement="top">
+                            <StarBorderIcon style={{ fontSize: "26px" }} />
+                          </CustomTooltip>
+                        </span>
+                      ) : (
+                        <span
+                          className="text-primary p-0 mb-1 intrested-icon"
+                          onClick={unsubscribe}
+                        >
+                          <CustomTooltip title="Unsubscribe" placement="top">
+                            <StarIcon style={{ fontSize: "26px" }} />
+                          </CustomTooltip>
+                        </span>
+                      )
                     ) : (
                       <span
-                        className="text-primary p-0 mb-1 intrested-icon"
-                        onClick={becomeUninterested}
-                      >
-                        <StarIcon style={{ fontSize: "26px" }} />
-                      </span>
+                          className="text-light "
+                        >
+                        <SpinnerSpan
+                          color="text-primary"
+                          spanStyle={{ width: "20px", height: "20px" }}
+                        />
+                        </span>
+                  
                     )}
                   </span>
                 )}
               </div>
-              <div className="text-secondary fs-6">@{props.username}</div>
+              <Link to={`/${props.username}`} className="text-decoration-none">
+                <div className="text-secondary fs-6">@{props.username}</div>
+              </Link>
             </div>
           </div>
           <div
@@ -803,7 +834,7 @@ export default function Post(props) {
               )}
             </span>
 
-              {/* copy */}
+            {/* copy */}
             <span id="copy-btn">
               {isCopied ? (
                 <button className="btn btn-outline-primary post-btn">
@@ -833,7 +864,7 @@ export default function Post(props) {
             </span>
 
             {/* options */}
-            <div className="options-holder position-relative"  ref={optionsRef} >
+            <div className="options-holder position-relative" ref={optionsRef}>
               {userId === props.posterId && (
                 <span id="post-options" className="m-0 p-0">
                   {!showOptions ? (
@@ -857,7 +888,6 @@ export default function Post(props) {
                 <div
                   className="d-inline-flex justify-content-center  align-items-center gap-2 px-2 position-absolute bottom-100 mb-3 start-50 bg-primary p-2 rounded-3"
                   style={{ transform: "translateX(-50%)" }}
-                 
                 >
                   <CustomTooltip title="Edit Post" placement="top">
                     <button
@@ -1361,68 +1391,73 @@ export default function Post(props) {
         </Modal>
 
         {/* delete confirmtion modal */}
-      <Modal
-        open={isConfirmModalOpen}
-        onClose={closeConfirmModal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: "16px",
-            maxHeight: "95vh",
-            overflowY: "auto",
-            width: "clamp(400px , 100% , 500px)",
-            backgroundColor: "#1E1E1E",
-            color: "white",
-            border: "2px solid darkgray",
-          }}
+        <Modal
+          open={isConfirmModalOpen}
+          onClose={closeConfirmModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
         >
-          <IconButton
-            aria-label="close"
-            onClick={closeConfirmModal}
+          <Box
             sx={{
               position: "absolute",
-              top: "10px",
-              right: "10px",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: "16px",
+              maxHeight: "95vh",
+              overflowY: "auto",
+              width: "clamp(400px , 100% , 500px)",
+              backgroundColor: "#1E1E1E",
               color: "white",
+              border: "2px solid darkgray",
             }}
-            disabled={deleteLoading}
           >
-            <CloseIcon className="fs-2" />
-          </IconButton>
-
-          <h3 id="modal-title" className="fw-bold mb-4 mt-4 text-center fs-5">
-            Are you sure you want to Delete this post ?
-          </h3>
-
-          <div className="d-flex gap-3  justify-content-center align-items-center mt-4">
-            <button
-              className="btn border-2 rounded-4 fw-bold border-secondary text-secondary fs-6 lh-base small"
+            <IconButton
+              aria-label="close"
               onClick={closeConfirmModal}
+              sx={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                color: "white",
+              }}
               disabled={deleteLoading}
             >
-              Cancel
-            </button>
+              <CloseIcon className="fs-2" />
+            </IconButton>
 
-            <button
-              className=" btn border-2 border-danger text-danger fw-bold fs-6 lh-base rounded-4"
-              onClick={deletePost}
-            >
-             {
-                deleteLoading ? <SpinnerSpan color="text-danger" spanStyle={{width : "22px" , height : "22px"}} /> : "Delete"
-             }
-            </button>
-          </div>
-        </Box>
-      </Modal>
+            <h3 id="modal-title" className="fw-bold mb-4 mt-4 text-center fs-5">
+              Are you sure you want to Delete this post ?
+            </h3>
+
+            <div className="d-flex gap-3  justify-content-center align-items-center mt-4">
+              <button
+                className="btn border-2 rounded-4 fw-bold border-secondary text-secondary fs-6 lh-base small"
+                onClick={closeConfirmModal}
+                disabled={deleteLoading}
+              >
+                Cancel
+              </button>
+
+              <button
+                className=" btn border-2 border-danger text-danger fw-bold fs-6 lh-base rounded-4"
+                onClick={deletePost}
+              >
+                {deleteLoading ? (
+                  <SpinnerSpan
+                    color="text-danger"
+                    spanStyle={{ width: "22px", height: "22px" }}
+                  />
+                ) : (
+                  "Delete"
+                )}
+              </button>
+            </div>
+          </Box>
+        </Modal>
 
         {/* Reactions */}
         <div className="d-flex justify-content-start align-items-center gap-3 mt-2 pt-2">
@@ -1496,6 +1531,7 @@ export default function Post(props) {
                 postId={props.id}
                 postTitle={snippetTitle}
                 addComment={addComment}
+                incrementCommentCount={incrementCommentCount}
               />
             </div>
           </Modal>

@@ -15,6 +15,7 @@ import './styles/add-modal.css'
 
 function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setStage}) {
    const userId=1;
+   const username="arfBassem"
 
    const navigate = useNavigate();
 
@@ -64,7 +65,7 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
 
           setLoading(false)
           closeAddModal();
-          navigate('/profile');
+          navigate(`/${username}`);
 
           successNotify('Post Published Successfully')
         }

@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { CardContent, Card } from "@mui/material";
 import "../../css/ProfilePage.css";
 import "../saved/styles/choice.css";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import CustomTooltip from "../tools/CustomTooltip";
+import SpinnerSpan from "../tools/SpinnerSpan";
+import { notify, successNotify } from "../tools/CustomToaster";
+import axios from "axios";
+
 
 function formatNumber(num) {
   if (num >= 1000000) {
@@ -35,10 +42,55 @@ const getProfileColor = (credit) => {
 
 
 
-export default function ProfileCard({ activeTab, setActiveTab ,firstname , lastname , username  , profilePicture , posts, subs , credit}) {
+export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , lastname , username  , profilePicture , posts, subs , credit , subscribed}) {
 
 
   const profileColor = getProfileColor(credit)
+  const myUsername = "arfBassem"
+  const userId = 1
+  const [subLoading , setSubLoading] = useState(false)
+  const [isSubscribed , setIsSubscribed] = useState(subscribed)
+  const [subsCount , setSubsCount] = useState(subs)
+
+
+  const subscribe = async () => {
+    try {
+      setSubLoading(true);
+      await axios.get(
+        `${process.env.REACT_APP_API_URL}/interested/${userId}/${uid}`
+      );
+      setSubsCount(prevCount => prevCount + 1);
+      setSubLoading(false);
+      setIsSubscribed(true);
+      successNotify(
+        `You are now Subscribed to ${
+          firstname + " " + lastname
+        }`
+      );
+    } catch (err) {
+      notify(`Couldn't subscribe`);
+    }
+  };
+
+  const unsubscribe = async () => {
+    try {
+      setSubLoading(true);
+      await axios.get(
+        `${process.env.REACT_APP_API_URL}/uninterested/${userId}/${uid}`
+      );
+      setSubsCount(prevCount => prevCount - 1);
+      setSubLoading(false);
+      setIsSubscribed(false);
+      successNotify(
+        `No Longer Subscribed to  ${
+         firstname + " " + lastname
+        }`
+      );
+    } catch (err) {
+      notify(`Couldn't unsubscribe`);
+    }
+  };
+
 
 
   return (
@@ -66,30 +118,53 @@ export default function ProfileCard({ activeTab, setActiveTab ,firstname , lastn
               </div>
               <div>
                 <div className="mb-3">
-                  <h2
-                    className="fw-bolder text-start text-light my-0"
-                    style={{ fontSize: "28px" }}
-                  >
-                    {firstname + " " + lastname}
-                  </h2>
+                  <div className="d-flex gap-3 align-items-center">
+                    <h2
+                      className="fw-bolder text-start text-light my-0"
+                      style={{ fontSize: "28px" }}
+                    >
+                      {firstname + " " + lastname}
+                    </h2>
+                    {username != myUsername && <span>
+                      {!subLoading ? (
+                        !isSubscribed ? (
+                          <span style={{cursor:'pointer'}} onClick={subscribe}>
+                            <CustomTooltip title="Subscribe" placement="top">
+                              <StarBorderIcon style={{ fontSize: "33px" }} />
+                            </CustomTooltip>
+                          </span>
+                        ) : (
+                          <span style={{cursor:'pointer'}} onClick={unsubscribe}>
+                            <CustomTooltip title="Unsubscribe" placement="top">
+                              <StarIcon style={{ fontSize: "33px" }} />
+                            </CustomTooltip>
+                          </span>
+                        )
+                      ) : (
+                        <SpinnerSpan
+                          spanStyle={{ width: "25px", height: "25px" }}
+                        />
+                      )}
+                    </span>}
+                  </div>
                   <p
                     className="text-start text-secondary  my-0"
                     style={{ fontSize: "20px" }}
                   >
-                   {"@"+username}
+                    {"@" + username}
                   </p>
                 </div>
                 <div className="d-flex justify-content-around w-100 mt-0 gap-5">
                   <div className="profile-stat">
                     <p
                       className="m-0 fw-bold text-light"
-                      style={{ fontSize: "23px" , color: "#ffffff" }}
+                      style={{ fontSize: "23px", color: "#ffffff" }}
                     >
                       {formatNumber(posts)}
                     </p>
                     <p
                       className="m-0 small"
-                      style={{ fontSize: "22px"  , color: "#ffffff"}}
+                      style={{ fontSize: "22px", color: "#ffffff" }}
                     >
                       posts
                     </p>
@@ -97,13 +172,13 @@ export default function ProfileCard({ activeTab, setActiveTab ,firstname , lastn
                   <div className="profile-stat">
                     <p
                       className="m-0 fw-bold text-light"
-                      style={{ fontSize: "23px" , color: "#ffffff" }}
+                      style={{ fontSize: "23px", color: "#ffffff" }}
                     >
-                      {formatNumber(subs)}
+                      {formatNumber(subsCount)}
                     </p>
                     <p
                       className="m-0 small"
-                      style={{ fontSize: "22px" , color: "#ffffff"}}
+                      style={{ fontSize: "22px", color: "#ffffff" }}
                     >
                       subscribers
                     </p>

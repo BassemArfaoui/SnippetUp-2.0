@@ -23,6 +23,7 @@ import "../../tools/styles/driver.css";
 
 function Snippet(props) {
   const userId = 1;
+  const username = "arfBassem";
 
   const navigate = useNavigate()
 
@@ -166,7 +167,7 @@ function Snippet(props) {
         description: "",
         gitHubLink: "",
       });
-      navigate('/profile')
+      navigate(`/${username}`)
       successNotify("post uploaded successfully");
     } catch (err) {
       notify("Couldn't post the Snippet");

@@ -33,7 +33,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/saved" element={<SavedPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/:username" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/post/:postId" element={<PostPage />} />
             <Route path="/demands" element={<DemandsPage />} />

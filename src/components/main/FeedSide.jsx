@@ -128,6 +128,7 @@ function FeedSide() {
                   firstname={post.poster_firstname}
                   lastname={post.poster_lastname}
                   username={post.poster_username}
+                  profilePic={post.poster_profile_pic}
                   refetchFeed={refetchFeed}
                 />
               ))

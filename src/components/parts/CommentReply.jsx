@@ -10,6 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SpinnerSpan from '../tools/SpinnerSpan';
 import { notify, successNotify } from '../tools/CustomToaster';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+import { Link } from 'react-router-dom';
 
 
 
@@ -190,7 +191,8 @@ function CommentReply(props) {
     >
       <div className="d-flex align-items-center mb-2">
         <div className="poster-info d-flex align-items-center gap-2">
-          <div className="avatar">
+        <Link to={`/${props.username}`} className="text-decoration-none text-dark">
+        <div className="avatar">
             <img
               src={profile_pic}
               alt="user"
@@ -198,11 +200,19 @@ function CommentReply(props) {
               style={{ width: "45px", height: "45px" }}
             />
           </div>
+        </Link>
+
 
           <div>
             <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
               <span className="commentor_name p-0 m-0 text-dark">
-                {props.fullname}
+                <Link
+                  to={`/${props.username}`}
+                  className="text-decoration-none text-dark"
+                >
+                  {props.fullname}
+                </Link>
+
                 <span className="text-secondary small">
                   ({props.timeSince})
                 </span>
@@ -244,7 +254,7 @@ function CommentReply(props) {
                 value={replyContent}
               />
 
-              <div className='ps-3'>
+              <div className="ps-3">
                 <button
                   type="submit"
                   className="bg-warning rounded-circle border-0 fs-4 edit-cmnt"
@@ -254,7 +264,10 @@ function CommentReply(props) {
                   {!editLoading ? (
                     <DoneRoundedIcon />
                   ) : (
-                    <SpinnerSpan color="text-dark" spanStyle={{width:'25px' , height : '25px'}} />
+                    <SpinnerSpan
+                      color="text-dark"
+                      spanStyle={{ width: "25px", height: "25px" }}
+                    />
                   )}
                 </button>
               </div>

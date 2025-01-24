@@ -13,6 +13,7 @@ import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import { Modal, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SpinnerSpan from '../tools/SpinnerSpan';
+import { Link } from 'react-router-dom';
 
 
 
@@ -279,7 +280,8 @@ function Comment(props) {
       >
         <div className="d-flex align-items-center mb-2">
           <div className="poster-info d-flex align-items-center gap-2">
-            <div className="avatar">
+          <Link to={`/${props.username}`} className="text-decoration-none text-dark">
+          <div className="avatar">
               <img
                 src={profile_pic}
                 alt="user"
@@ -287,10 +289,14 @@ function Comment(props) {
                 style={{ width: "45px", height: "45px" }}
               />
             </div>
+          </Link>
+
             <div>
               <div className="text-white fs-4 fw-bolder d-flex align-items-center m-0 p-0">
                 <span className="commentor_name p-0 m-0 text-dark">
-                  {props.firstname + " " + props.lastname}
+                  <Link to={`/${props.username}`} className="text-decoration-none text-dark">
+                   {props.firstname + " " + props.lastname}
+                  </Link>
                   <span className="text-secondary small"> ({props.time})</span>
                 </span>
               </div>
@@ -432,6 +438,7 @@ function Comment(props) {
                 id={reply.id}
                 userId={reply.user_id}
                 fullname={reply.firstname + " " + reply.lastname}
+                username={reply.username}
                 content={reply.content}
                 time={reply.commented_at}
                 likeCount={reply.like_count}

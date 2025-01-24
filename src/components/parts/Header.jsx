@@ -23,6 +23,7 @@ const PostAddModal = lazy(() => import("../main/PostAddModal"));
 function Header()
 {
 
+  const username = "arfBassem"
   const [isAdding, setIsAdding] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const[stage,setStage]=useState(1)
@@ -53,7 +54,7 @@ function Header()
             navigate("/saved");
             break;
           case "p":
-            navigate("/profile");
+            navigate(`/${username}`);
             break;
           case "t":
             navigate("/settings");
@@ -193,9 +194,9 @@ return (
 
         <Link
           id="profile"
-          to="/profile"
+          to={`/${username}`}
           className="btn menu-btn  d-flex align-items-center"
-          name="/profile"
+          name={`/${username}`}
         >
           <PersonIcon style={{ fontSize: "39px" }} />
         </Link>

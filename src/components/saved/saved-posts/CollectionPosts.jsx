@@ -158,6 +158,7 @@
                     githubLink={post.github_link}
                     firstname={post.poster_firstname}
                     lastname={post.poster_lastname}
+                    profilePic={post.poster_profile_pic}
                     username={post.poster_username}
                     savedAt={post.saved_at}
                     refetchcollectionPosts={refetch}

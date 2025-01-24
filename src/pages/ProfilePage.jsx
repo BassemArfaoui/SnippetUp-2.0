@@ -11,16 +11,18 @@ import SpinnerSpan from "../components/tools/SpinnerSpan";
 import MoreInfos from "../components/profile/MoreInfos";
 import ReplayIcon from "@mui/icons-material/Replay";
 import ProfileSkeleton from "../components/profile/ProfileSkeleton";
+import { useParams } from "react-router-dom";
 
 function ProfilePage() {
   const containerRef = useRef(null);
   const [activeTab, setActiveTab] = useState("Posts");
   const userId = 1;
+  const {username} = useParams()
 
   // Fetch profile data
   const fetchProfile = async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/profile/${userId}`
+      `${process.env.REACT_APP_API_URL}/profile/${username}?uid=${userId}`
     );
     return response.data;
   };
@@ -30,14 +32,22 @@ function ProfilePage() {
     isLoading: isProfileLoading,
     isError: isProfileError,
     refetch : refetchProfile,
+    isFetching: isProfileFetching,
+    
+
   } = useQuery({
     queryKey: ["profile", userId],
     queryFn: fetchProfile,
+    keepPreviousData: false, 
+    staleTime: 0, 
+    cacheTime: 0, 
+    refetchOnWindowFocus: false, 
+
   });
 
   const fetchPosts = async ({ pageParam = 1 }) => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/published/posts/${userId}`,
+      `${process.env.REACT_APP_API_URL}/published/posts/${username}?uid=${userId}`,
       {
         params: {
           page: pageParam,
@@ -98,11 +108,11 @@ function ProfilePage() {
   return (
     <>
       <Helmet>
-        <title>SnippetUp : Profile</title>
+        <title>{`${username}`}</title>
       </Helmet>
       <div ref={containerRef} className="profile-page py-3 pb-2 px-3 ">
         {/* ProfileCard */}
-        {isProfileLoading ? (
+        {isProfileLoading || isProfileFetching ? (
           <ProfileSkeleton />
         ) : isProfileError ? (
           <div>
@@ -124,6 +134,7 @@ function ProfilePage() {
             <ProfileCard
               activeTab={activeTab}
               setActiveTab={setActiveTab}
+              uid={profileData.id}
               username={profileData.username}
               firstname={profileData.firstname}
               lastname={profileData.lastname}
@@ -133,6 +144,7 @@ function ProfilePage() {
               subs={profileData.subs_count}
               posts={profileData.posts_count}
               credit={profileData.credit}
+              subscribed={profileData.is_subscribed}
             />
           )
         )}
@@ -167,7 +179,7 @@ function ProfilePage() {
               )}
 
               {/* Posts */}
-              {!isLoading &&
+              {!isLoading && !isProfileFetching &&
                 !isError && 
                 (data?.pages?.length > 0 &&
                 data.pages.some((page) => page.posts.length > 0) ? (
@@ -194,6 +206,7 @@ function ProfilePage() {
                             firstname={post.poster_firstname}
                             lastname={post.poster_lastname}
                             username={post.poster_username}
+                            profilePic={post.poster_profile_pic}
                             refetchPosts={refetchPosts}
                             refetchProfile={refetchProfile}
                           />

@@ -36,11 +36,13 @@ function AddComment(props) {
       if (!props.reply) {
         setCommentLoading(true);
         await props.addComment(commentContent, false, null);
+        props.incrementCommentCount();
         setCommentLoading(false);
         props.scrollToTop();
       } else {
         setCommentLoading(true);
         await props.addComment(commentContent, true, props.commentToReply.commentId);
+        props.incrementCommentCount();
         setCommentLoading(false);
         setPlaceholder('Add a comment');
         props.setIsReply(false);

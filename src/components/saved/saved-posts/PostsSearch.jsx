@@ -114,6 +114,7 @@ function PostsSearch({ postsSearch, setShowChoice}) {
                 firstname={post.poster_firstname}
                 lastname={post.poster_lastname}
                 username={post.poster_username}
+                profilePic={post.poster_profile_pic}
                 savedAt={post.saved_at}
                 setSearchResults={setSearchResults}
               />

@@ -80,6 +80,7 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
               lastname={post.poster_lastname}
               username={post.poster_username}
               savedAt={post.saved_at}
+              profilePic={post.poster_profile_pic}
               setFilteredPosts={setFilteredPosts}
             />
         ))
