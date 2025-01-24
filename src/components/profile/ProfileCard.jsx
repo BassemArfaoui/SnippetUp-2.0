@@ -199,6 +199,8 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
                   </div>
                 </div>
               </div>
+
+        
             </div>
 
             {/* Toggle Section */}
@@ -223,16 +225,16 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
             </span>
 
             <span>
-              {activeTab === "Infos" ? (
+              {activeTab === "Solves" ? (
                 <div className="right-choice fs-5 px-3 text-light fw-bold bg-primary text-light d-flex align-items-center justify-content-center">
-                  About
+                  Demands
                 </div>
               ) : (
                 <div
                   className="right-choice bg-light text-dark fs-5 px-3 fw-bold d-flex align-items-center justify-content-center"
-                  onClick={() => setActiveTab("Infos")}
+                  onClick={() => setActiveTab("Solves")}
                 >
-                  About
+                  Demands
                 </div>
               )}
             </span>

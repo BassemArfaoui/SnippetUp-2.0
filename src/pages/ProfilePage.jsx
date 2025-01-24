@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import ProfileBody from "../components/profile/ProfileBody";
 import ProfileCard from "../components/profile/ProfileCard";
 import "../css/ProfilePage.css";
 import { Helmet } from "react-helmet";
@@ -8,14 +7,18 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Post from "../components/parts/Post";
 import SpinnerSpan from "../components/tools/SpinnerSpan";
-import MoreInfos from "../components/profile/MoreInfos";
 import ReplayIcon from "@mui/icons-material/Replay";
 import ProfileSkeleton from "../components/profile/ProfileSkeleton";
 import { useParams } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import SettingsIcon from '@mui/icons-material/Settings';import SolvedDemands from "../components/profile/SolvedDemands";
+import { Box, IconButton, Modal } from "@mui/material";
+import CustomTooltip from "../components/tools/CustomTooltip";
 
 function ProfilePage() {
   const containerRef = useRef(null);
   const [activeTab, setActiveTab] = useState("Posts");
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const userId = 1;
   const {username} = useParams()
 
@@ -33,8 +36,6 @@ function ProfilePage() {
     isError: isProfileError,
     refetch : refetchProfile,
     isFetching: isProfileFetching,
-    
-
   } = useQuery({
     queryKey: ["profile", userId],
     queryFn: fetchProfile,
@@ -105,6 +106,18 @@ function ProfilePage() {
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+
+
+  const openSettings = () => {
+    setIsSettingsModalOpen(true);
+  }
+
+
+  const closeSettings = () => {
+    setIsSettingsModalOpen(false);
+  }
+
+
   return (
     <>
       <Helmet>
@@ -150,8 +163,8 @@ function ProfilePage() {
         )}
 
         {/* Shared Posts */}
-        <div className="mb-5">
-          {activeTab === "Posts" && !isProfileError && !isProfileLoading &&  (
+        {activeTab === "Posts" && !isProfileError && !isProfileLoading && (
+          <div className="mb-5">
             <div className="d-flex flex-column align-items-stretch gap-3 m-0 mt-3 px-1">
               {/* Loading State */}
               {isLoading && (
@@ -179,8 +192,9 @@ function ProfilePage() {
               )}
 
               {/* Posts */}
-              {!isLoading && !isProfileFetching &&
-                !isError && 
+              {!isLoading &&
+                !isProfileFetching &&
+                !isError &&
                 (data?.pages?.length > 0 &&
                 data.pages.some((page) => page.posts.length > 0) ? (
                   data.pages.map((page) =>
@@ -226,11 +240,68 @@ function ProfilePage() {
                 </div>
               )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* More Infos */}
-        {activeTab === "Infos" && <MoreInfos />}
+        {/* solved demands */}
+        {activeTab === "Solves" && <SolvedDemands    />}
+
+
+
+        {/* settings button */}
+      <CustomTooltip title="Add Snippet" placement="right">
+        <IconButton id='settings'
+          onClick={openSettings}
+          aria-label="Scroll to End"
+          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
+          style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }}
+        >
+          <SettingsIcon fontSize="large" className="text-dark" />
+        </IconButton>
+      </CustomTooltip>
+
+
+        {/* Settings Modal */}
+        <Modal
+        open={isSettingsModalOpen}
+        onClose={closeSettings}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '16px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            width: '80%',
+            backgroundColor: '#1E1E1E',
+            color: 'white',
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={closeSettings}
+            sx={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              color: 'white'
+            }}
+          >
+            <CloseIcon className='fs-2'/>
+          </IconButton>
+
+          <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">Settings</h2>
+         
+        </Box>
+      </Modal>
       </div>
     </>
   );
