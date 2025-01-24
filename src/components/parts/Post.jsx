@@ -230,7 +230,7 @@ export default function Post(props) {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/${userId}/delete-post/${props.id}`
       );
-      if (location.pathname === "/profile") {
+      if (props.refetchPosts() && props.refetchProfile()) {
         await props.refetchPosts();
         await props.refetchProfile();
       } else if (location.pathname === "/") {
