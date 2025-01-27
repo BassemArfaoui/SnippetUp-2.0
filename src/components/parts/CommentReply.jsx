@@ -1,5 +1,4 @@
 import React , {useState,useEffect, useRef} from 'react'
-import profile_pic from '../../imgs/profile_pic.jpg'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import axios from 'axios';
@@ -194,7 +193,7 @@ function CommentReply(props) {
         <Link to={`/${props.username}`} className="text-decoration-none text-dark">
         <div className="avatar">
             <img
-              src={profile_pic}
+              src={props.profilePic}
               alt="user"
               className="rounded-circle"
               style={{ width: "45px", height: "45px" }}

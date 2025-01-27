@@ -129,111 +129,108 @@ function Header()
 
 
 return (
-  <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative">
-    <h1
-      className="ms-3 fw-bold position-absolute text-primary d-flex align-items-center d-flex align-items-center"
-      style={{ fontSize: "36px" }}
-    >
-      <span className="me-2 my-0">
-        <FaCode style={{fontSize:'45px'}}/>
-      </span>
-      <span style={{fontSize:'35px'}}>SnippetUp</span>
-    </h1>
-    <div className="d-flex gap-4 me-4 align-items-center position-absolute end-0">
-      <CustomTooltip title="Search">
-        <h4 id="search">
-          <SearchIcon
-            className="mt-1 text-primary"
-            style={{ fontSize: "43px" }}
-          />
-        </h4>
-      </CustomTooltip>
-
-      <CustomTooltip title="Logout">
-        <h4 id="logout">
-          <LogoutIcon
-            className="mt-1 text-primary"
-            style={{ fontSize: "35px" }}
-          />
-        </h4>
-      </CustomTooltip>
-    </div>
-    <div className="d-flex justify-content-center w-100 gap-5">
-      <ul className="d-flex gap-4 m-0">
-        <Link
-          id="home"
-          to="/"
-          className="btn ms-3 menu-btn d-flex align-items-center active"
-          name="/"
-        >
-          <HomeIcon style={{ fontSize: "39px" }} />
-        </Link>
-
-        <Link
-          id="saved"
-          to="/saved"
-          className="btn menu-btn  d-flex align-items-center"
-          name="/saved"
-        >
-          <BookmarkIcon style={{ fontSize: "35px" }} />
-        </Link>
-        <li
-          id="add-btn"
-          className="add-btn btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 "
-          style={{ width: "59px", height: "59px" }}
-          onClick={openAddModel}
-        >
-          <AddIcon style={{ fontSize: "52px" }} />
-        </li>
-        <Link
-          id="demands"
-          to="/demands"
-          className="btn menu-btn  d-flex align-items-center"
-          name="/demands"
-        >
-          <HandshakeIcon style={{ fontSize: "35px" }} />
-        </Link>
-
-        <Link
-          id="profile"
-          to={`/${username}`}
-          className="btn menu-btn  d-flex align-items-center"
-          name={`/${username}`}
-        >
-          <PersonIcon style={{ fontSize: "39px" }} />
-        </Link>
-      </ul>
-    </div>
-
-    <CustomTooltip title="Explain" placement="right">
-      <span
-        onClick={startGuide}
-        className="text-secondary rounded-5 d-flex justify-content-center align-items-center fw-light border-secondary position-absolute top-0 end-0 me-1 mt-1"
-        style={{
-          fontSize: "10px",
-          cursor: "pointer",
-          aspectRatio: "1",
-          padding: "1pt",
-          border: "0.5pt solid gray",
-          opacity: "0.65",
-        }}
+  <>
+    {location.pathname !== '/login' && <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative">
+      <h1
+        className="ms-3 fw-bold position-absolute text-primary d-flex align-items-center d-flex align-items-center"
+        style={{ fontSize: "36px" }}
       >
-        <QuestionMarkIcon fontSize="50px" />
-      </span>
-    </CustomTooltip>
-
-    <div>
-      <Suspense fallback="test">
-        <PostAddModal
-          closeAddModal={closeAddModal}
-          openAddModel={openAddModel}
-          isAddModalOpen={isAddModalOpen}
-          stage={stage}
-          setStage={setStage}
-        />
-      </Suspense>
-    </div>
-  </header>
+        <span className="me-2 my-0">
+          <FaCode style={{fontSize:'45px'}}/>
+        </span>
+        <span style={{fontSize:'35px'}}>SnippetUp</span>
+      </h1>
+      <div className="d-flex gap-4 me-4 align-items-center position-absolute end-0">
+        <CustomTooltip title="Search">
+          <h4 id="search">
+            <SearchIcon
+              className="mt-1 text-primary"
+              style={{ fontSize: "43px" }}
+            />
+          </h4>
+        </CustomTooltip>
+        <CustomTooltip title="Logout">
+          <h4 id="logout">
+            <LogoutIcon
+              className="mt-1 text-primary"
+              style={{ fontSize: "35px" }}
+            />
+          </h4>
+        </CustomTooltip>
+      </div>
+      <div className="d-flex justify-content-center w-100 gap-5">
+        <ul className="d-flex gap-4 m-0">
+          <Link
+            id="home"
+            to="/"
+            className="btn ms-3 menu-btn d-flex align-items-center active"
+            name="/"
+          >
+            <HomeIcon style={{ fontSize: "39px" }} />
+          </Link>
+          <Link
+            id="saved"
+            to="/saved"
+            className="btn menu-btn  d-flex align-items-center"
+            name="/saved"
+          >
+            <BookmarkIcon style={{ fontSize: "35px" }} />
+          </Link>
+          <li
+            id="add-btn"
+            className="add-btn btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 "
+            style={{ width: "59px", height: "59px" }}
+            onClick={openAddModel}
+          >
+            <AddIcon style={{ fontSize: "52px" }} />
+          </li>
+          <Link
+            id="demands"
+            to="/demands"
+            className="btn menu-btn  d-flex align-items-center"
+            name="/demands"
+          >
+            <HandshakeIcon style={{ fontSize: "35px" }} />
+          </Link>
+          <Link
+            id="profile"
+            to={`/${username}`}
+            className="btn menu-btn  d-flex align-items-center"
+            name={`/${username}`}
+          >
+            <PersonIcon style={{ fontSize: "39px" }} />
+          </Link>
+        </ul>
+      </div>
+      <CustomTooltip title="Explain" placement="right">
+        <span
+          onClick={startGuide}
+          className="text-secondary rounded-5 d-flex justify-content-center align-items-center fw-light border-secondary position-absolute top-0 end-0 me-1 mt-1"
+          style={{
+            fontSize: "10px",
+            cursor: "pointer",
+            aspectRatio: "1",
+            padding: "1pt",
+            border: "0.5pt solid gray",
+            opacity: "0.65",
+          }}
+        >
+          <QuestionMarkIcon fontSize="50px" />
+        </span>
+      </CustomTooltip>
+      <div>
+        <Suspense fallback="test">
+          <PostAddModal
+            closeAddModal={closeAddModal}
+            openAddModel={openAddModel}
+            isAddModalOpen={isAddModalOpen}
+            stage={stage}
+            setStage={setStage}
+          />
+        </Suspense>
+      </div>
+    </header>}
+  </>
 );
 }
 

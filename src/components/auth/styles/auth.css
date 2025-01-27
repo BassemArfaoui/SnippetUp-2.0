@@ -3,7 +3,7 @@
     box-shadow: 0 0 13px rgba(0, 0, 0, 0.2);
 
 }
-.btn {
+.btn.btn-left , .btn.btn-right {
     font-size: 21px;
     font-weight: bold;
     border: none;

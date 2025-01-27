@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import profile_pic from '../../imgs/profile_pic.jpg';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { BiSolidCommentDetail } from 'react-icons/bi';
@@ -283,7 +282,7 @@ function Comment(props) {
           <Link to={`/${props.username}`} className="text-decoration-none text-dark">
           <div className="avatar">
               <img
-                src={profile_pic}
+                src={props.profilePic}
                 alt="user"
                 className="rounded-circle"
                 style={{ width: "45px", height: "45px" }}

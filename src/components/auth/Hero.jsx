@@ -1,4 +1,5 @@
 import { FaCode } from "react-icons/fa6";
+import illustration from '../../utils/svg/programmer.svg'
 
 const Hero = () => {
   return (
@@ -17,6 +18,8 @@ const Hero = () => {
           snippets
         </p>
       </p>
+
+      <img src={illustration} width={250}/> 
     </div>
   );
 };

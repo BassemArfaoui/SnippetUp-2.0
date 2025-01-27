@@ -18,6 +18,7 @@ const SavedPostsCollections = lazy (()=> import("../components/saved/saved-posts
 const CollectionPosts = lazy (()=> import("../components/saved/saved-posts/CollectionPosts"))
 const PostPage = lazy (()=> import("../pages/PostPage"))
 const DemandsPage = lazy (()=> import("../pages/DemandsPage"))
+const AuthPage = lazy (()=> import("../pages/AuthPage"))
 
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ function App() {
             <Route path="/saved/posts/collections" element={<SavedPostsCollections />} />
             <Route path="/saved/posts/collection/:collection" element={<CollectionPosts/>} />
             <Route path="/test" element={<TestPage />} />
+            <Route path="/login" element={<AuthPage />} />
           </Routes>
         </Suspense>
       </Router>

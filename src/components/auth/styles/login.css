@@ -10,7 +10,7 @@
     height: 53px !important;
     font-weight: bold;
     outline: none;
-    font-size: 20px;
+    font-size: 18px;
     background-color: #f8f8f8;
     border: 3px solid lightgray;
     transition: all 0.3s ease;
@@ -20,18 +20,57 @@
 {
     height: 53px !important;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
     outline: none;
     background-color: #f8f8f8;
-    border: 3px solid rgb(88, 166, 211);
     transition: all 0.3s ease;
 }
-.login-input::placeholder {
+.login-input-inside::placeholder {
 
     color: rgb(171, 165, 165);
     font-style: italic;
 }
 
-.login-input:focus::placeholder {
+.login-input-inside:focus::placeholder {
     color: transparent;
 }
+
+.login-input-inside
+{
+    border: none !important;
+    outline: none ;
+    margin-right: 20px !important;
+    background-color: #f8f8f8;
+    font-size: 18px;
+    width: 90%;
+    font-weight: bold;
+
+}
+
+
+
+.login-input-inside:focus
+{
+    border: none !important;
+    outline: none ;
+}
+
+.oauth-btn
+{
+    height: 51px !important;
+    font-weight: bold;
+    outline: none;
+    font-size: 18px;
+    background-color: #f8f8f8;
+    border: 3px solid lightgray;
+    transition: all 0.3s ease;
+}
+
+.focused-container {
+    border: 3px solid rgb(88, 166, 211);
+  }
+  
+  .login-input-inside:focus {
+    outline: none;
+  }
+  
