@@ -121,7 +121,7 @@ function ProfilePage() {
   return (
     <>
       <Helmet>
-        <title>{`${username}`}</title>
+        <title>{`SnippetUp : ${username}`}</title>
       </Helmet>
       <div ref={containerRef} className="profile-page py-3 pb-2 px-3 ">
         {/* ProfileCard */}

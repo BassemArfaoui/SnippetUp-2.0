@@ -1,0 +1,37 @@
+.login-btn.btn {
+    font-size: 20px;
+    font-weight: bold;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.login-input
+{
+    height: 53px !important;
+    font-weight: bold;
+    outline: none;
+    font-size: 20px;
+    background-color: #f8f8f8;
+    border: 3px solid lightgray;
+    transition: all 0.3s ease;
+}
+
+.login-input:focus
+{
+    height: 53px !important;
+    font-weight: bold;
+    font-size: 20px;
+    outline: none;
+    background-color: #f8f8f8;
+    border: 3px solid rgb(88, 166, 211);
+    transition: all 0.3s ease;
+}
+.login-input::placeholder {
+
+    color: rgb(171, 165, 165);
+    font-style: italic;
+}
+
+.login-input:focus::placeholder {
+    color: transparent;
+}

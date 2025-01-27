@@ -1,0 +1,16 @@
+
+.auth-container {
+    box-shadow: 0 0 13px rgba(0, 0, 0, 0.2);
+
+}
+.btn {
+    font-size: 21px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+
+
+

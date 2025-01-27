@@ -7,7 +7,7 @@ function DemandsPage() {
       <Helmet>
         <title>SnippetUp : Demands</title>
       </Helmet>
-    DemandsPage
+      <div className='mt-5 text-center text-secondary fw-bold mb-5' style={{fontSize:'23px'}}>Demands are coming Soon ⏳</div>
     </div>
   )
 }

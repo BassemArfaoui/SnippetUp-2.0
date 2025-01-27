@@ -9,6 +9,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import AddIcon from '@mui/icons-material/Add';
 import CodeIcon from '@mui/icons-material/Code';
+import { FaCode } from "react-icons/fa6";
+
 import { Link , useLocation } from "react-router-dom";
 import {useNavigate} from 'react-router-dom'
 import CustomTooltip from "../tools/CustomTooltip";
@@ -129,13 +131,13 @@ function Header()
 return (
   <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative">
     <h1
-      className="ms-3 fw-bold position-absolute text-primary d-flex align-items-center"
+      className="ms-3 fw-bold position-absolute text-primary d-flex align-items-center d-flex align-items-center"
       style={{ fontSize: "36px" }}
     >
       <span className="me-2 my-0">
-        <CodeIcon style={{fontSize:'50px'}}/>
+        <FaCode style={{fontSize:'45px'}}/>
       </span>
-      SnippetUp
+      <span style={{fontSize:'35px'}}>SnippetUp</span>
     </h1>
     <div className="d-flex gap-4 me-4 align-items-center position-absolute end-0">
       <CustomTooltip title="Search">
