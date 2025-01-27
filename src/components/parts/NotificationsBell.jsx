@@ -4,6 +4,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationSide from '../main/NotificationSide';
 import CustomTooltip from '../tools/CustomTooltip';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -11,7 +12,7 @@ export default function NotificationBell() {
   const [open, setOpen] = useState(false);
 
 
-  
+  const location = useLocation()
 
 
   //open/close func
@@ -42,7 +43,9 @@ export default function NotificationBell() {
 
   return (
     <>
-        <CustomTooltip title="Notifications" placement="left">
+        { location.pathname !== '/login' &&
+          <>
+          <CustomTooltip title="Notifications" placement="left">
             <IconButton
                 variant="contained"
                 onClick={toggleDrawer(true)}
@@ -68,6 +71,8 @@ export default function NotificationBell() {
           </div>
         </div>
       </Drawer>
+          </>
+        }
     </>
   );
 }
