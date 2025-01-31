@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useContext } from 'react'
 import './styles/choice.css'
 import SavedPostsSearch from './saved-posts/SavedPostsSearch'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
@@ -6,10 +6,16 @@ import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "../tools/styles/driver.css"
 import CustomTooltip from '../tools/CustomTooltip';
+import userContext from "../contexts/userContext";
+
 
 
 
 function SavedChoice(props) {
+
+
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
 
 
   function startGuide()

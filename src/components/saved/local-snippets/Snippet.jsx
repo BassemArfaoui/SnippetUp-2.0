@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef , useContext} from "react";
 import CustomTooltip from "../../tools/CustomTooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
@@ -20,10 +20,14 @@ import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "../../tools/styles/driver.css";
+import userContext from "../../contexts/userContext";
+
+
 
 function Snippet(props) {
-  const userId = 1;
-  const username = "arfBassem";
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
+  const username = user.username ;
 
   const navigate = useNavigate()
 

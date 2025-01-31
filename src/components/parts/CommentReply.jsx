@@ -1,4 +1,4 @@
-import React , {useState,useEffect, useRef} from 'react'
+import React , {useState,useEffect, useRef , useContext} from 'react'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import SpinnerSpan from '../tools/SpinnerSpan';
 import { notify, successNotify } from '../tools/CustomToaster';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import { Link } from 'react-router-dom';
+import userContext from "..//contexts/userContext";
 
 
 
@@ -32,11 +33,13 @@ function CommentReply(props) {
     const [replyContent , setReplyContent] = useState(props.content)
     const [editLoading, setEditLoading] = useState(false);
     const [editing, setEditing] = useState(false)
+    
 
 
 
     const optionsRef=useRef(null)
-    const userId=1;
+    const {user}= useContext(userContext) ;
+    const userId=user.id ;
 
 
     useEffect(() => {

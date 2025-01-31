@@ -1,7 +1,13 @@
-import React from 'react'
+import React , {useContext} from 'react'
 import { Helmet } from 'react-helmet'
+import userContext from "../components/contexts/userContext";
+
+
 
 function DemandsPage() {
+
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   return (
     <div>
       <Helmet>

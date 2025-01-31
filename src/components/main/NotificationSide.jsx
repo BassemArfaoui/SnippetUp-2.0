@@ -1,21 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import Notification from '../parts/Notification';
 import IconButton from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // Material-UI Icon
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
+import userContext from "../contexts/userContext";
+
 
 
 export default function NotificationSide() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [initialLoading, setInitialLoading] = useState(true); // For the first loading state
+  const [initialLoading, setInitialLoading] = useState(true); 
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
   const limit = 10;
-  const isInitialMount = useRef(true); // Track if it's the first render
+  const isInitialMount = useRef(true);
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
 
-  // Function to calculate the time since the notification
   const timeSince = (notificationTime) => {
     const now = new Date();
     const timeDiff = now - new Date(notificationTime);
@@ -40,7 +43,7 @@ export default function NotificationSide() {
   const fetchNotifications = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/notifications/1`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/notifications/${userId}`, {
         params: { limit, offset }
       });
       const newNotifications = response.data;

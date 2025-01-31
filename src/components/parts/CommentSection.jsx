@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback , useRef } from 'react';
+import React, { useState, useEffect, useCallback , useRef , useContext} from 'react';
 import { Box, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
@@ -8,9 +8,13 @@ import Comment from './Comment';
 import './styles/Comment.css';
 import { notify } from '../tools/CustomToaster';
 import AddComment from './AddComment';
+import userContext from "../contexts/userContext";
+
+
 
 function CommentSection(props) {
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); 

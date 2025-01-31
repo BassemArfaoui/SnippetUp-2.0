@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState , useContext} from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import Snippet from './Snippet';
@@ -12,6 +12,8 @@ import { Modal, Box, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+import userContext from "../../contexts/userContext";
+
 
 
 
@@ -19,7 +21,8 @@ import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 
 
 function SavedLocal({ setShowChoice }) {
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const savedLocalRef = useRef(null);
   const lastScrollTop = useRef(0);
   const scrollThreshold = 40;

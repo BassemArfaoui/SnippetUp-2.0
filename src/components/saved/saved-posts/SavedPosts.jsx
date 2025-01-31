@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState , useContext } from 'react';
 import axios from 'axios';
 import Post from '../../parts/Post';
 import Spinner from '../../tools/Spinner';
@@ -10,9 +10,12 @@ import TuneIcon from '@mui/icons-material/Tune';
 import AppsIcon from '@mui/icons-material/Apps';
 import { notify } from '../../tools/CustomToaster';
 import { Link } from 'react-router-dom';
+import userContext from "../../contexts/userContext";
+
 
 function SavedPosts(props) {
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const limit = 10;
   const savedPostsRef = useRef(null);
   const lastScrollTop = useRef(0);

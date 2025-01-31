@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef , useContext } from "react";
 import ProfileCard from "../components/profile/ProfileCard";
 import "../css/ProfilePage.css";
 import { Helmet } from "react-helmet";
@@ -14,12 +14,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import SettingsIcon from '@mui/icons-material/Settings';import SolvedDemands from "../components/profile/SolvedDemands";
 import { Box, IconButton, Modal } from "@mui/material";
 import CustomTooltip from "../components/tools/CustomTooltip";
+import userContext from "../components/contexts/userContext";
+
 
 function ProfilePage() {
   const containerRef = useRef(null);
   const [activeTab, setActiveTab] = useState("Posts");
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const {username} = useParams()
 
   // Fetch profile data
@@ -37,7 +40,7 @@ function ProfilePage() {
     refetch : refetchProfile,
     isFetching: isProfileFetching,
   } = useQuery({
-    queryKey: ["profile", userId],
+    queryKey: ["profile", username],
     queryFn: fetchProfile,
     keepPreviousData: false, 
     staleTime: 0, 

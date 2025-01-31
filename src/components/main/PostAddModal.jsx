@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState , useContext } from "react";
 import { notify, successNotify } from "../tools/CustomToaster";
 import { Modal , Box , IconButton } from "@mui/material";
 import CustomTooltip from "../tools/CustomTooltip";
@@ -11,11 +11,14 @@ import {useNavigate} from 'react-router-dom'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './styles/add-modal.css'
+import userContext from "../contexts/userContext";
+
 
 
 function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setStage}) {
-   const userId=1;
-   const username="arfBassem"
+  const { user } = useContext(userContext);
+  const userId = user.id;
+  const username = user.username ; 
 
    const navigate = useNavigate();
 
@@ -66,7 +69,6 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
           setLoading(false)
           closeAddModal();
           navigate(`/${username}`);
-
           successNotify('Post Published Successfully')
         }
         catch(err)

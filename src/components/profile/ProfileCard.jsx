@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
 import { CardContent, Card } from "@mui/material";
 import "../../css/ProfilePage.css";
 import "../saved/styles/choice.css";
@@ -8,6 +8,7 @@ import CustomTooltip from "../tools/CustomTooltip";
 import SpinnerSpan from "../tools/SpinnerSpan";
 import { notify, successNotify } from "../tools/CustomToaster";
 import axios from "axios";
+import userContext from "../contexts/userContext";
 
 
 function formatNumber(num) {
@@ -46,8 +47,9 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
 
 
   const profileColor = getProfileColor(credit)
-  const myUsername = "arfBassem"
-  const userId = 1
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
+  const myUsername = user.username ;
   const [subLoading , setSubLoading] = useState(false)
   const [isSubscribed , setIsSubscribed] = useState(subscribed)
   const [subsCount , setSubsCount] = useState(subs)

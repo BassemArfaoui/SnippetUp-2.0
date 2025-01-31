@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect , useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -9,9 +9,12 @@ import { notify } from '../../tools/CustomToaster';
 import Spinner from '../../tools/Spinner';
 import CloseIcon from '@mui/icons-material/Close';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import userContext from "../../contexts/userContext";
+
 
 function SavedPostsCollections() {
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
 
   const fetchCollections = async () => {
     const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/collections`);

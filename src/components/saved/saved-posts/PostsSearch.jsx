@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef , useContext } from 'react';
 import axios from 'axios';
 import Post from '../../parts/Post';
 import Spinner from '../../tools/Spinner';
 import '../styles/search-result.css';
 import { notify } from '../../tools/CustomToaster';
+import userContext from "../../contexts/userContext";
+
 
 function PostsSearch({ postsSearch, setShowChoice}) {
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const limit = 10;
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);

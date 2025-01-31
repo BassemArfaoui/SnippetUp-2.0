@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef , useContext } from 'react';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { BiSolidCommentDetail } from 'react-icons/bi';
@@ -13,6 +13,8 @@ import { Modal, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SpinnerSpan from '../tools/SpinnerSpan';
 import { Link } from 'react-router-dom';
+import userContext from "../contexts/userContext";
+
 
 
 
@@ -39,7 +41,8 @@ function Comment(props) {
 
 
     const limit = 3; 
-    const userId = 1;
+    const {user}= useContext(userContext) ;
+    const userId=user.id ;
     const optionsRef = useRef(null)
 
     useEffect(() => {
@@ -441,6 +444,7 @@ function Comment(props) {
                 content={reply.content}
                 time={reply.commented_at}
                 likeCount={reply.like_count}
+                profilePic={reply.profile_pic}
                 dislikeCount={reply.dislike_count}
                 isLiked={reply.liked}
                 isDisliked={reply.disliked}

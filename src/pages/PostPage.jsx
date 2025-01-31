@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Post from '../components/parts/Post';
 import '../css/PostPage.css'
 import Spinner from '../components/tools/Spinner';
 import { Helmet } from 'react-helmet';
+import userContext from "../components/contexts/userContext";
+
 
 
 function PostPage() {
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const { postId } = useParams(); 
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true); 
@@ -60,6 +64,7 @@ function PostPage() {
               isDisliked={false}
               isSaved={false}
               isInterested={false}
+              profilePic={post.profile_pic}
               firstname={post.firstname}
               lastname={post.lastname}
               username={post.username}

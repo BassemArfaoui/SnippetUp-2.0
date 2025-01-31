@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useContext } from 'react';
 import '../css/SavedPage.css';
 import SavedChoice from '../components/saved/SavedChoice';
 import SavedPosts from '../components/saved/saved-posts/SavedPosts';
@@ -16,9 +16,12 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { notify } from '../components/tools/CustomToaster';
 import LoadingSpinner from '../components/tools/LoadingSpinner';
+import userContext from "../components/contexts/userContext";
+
 
 function SavedPage() {
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const [showChoice, setShowChoice] = useState(true);
   const [choice, setChoice] = useState('posts');
   const [isSearching, setIsSearching] = useState('none');

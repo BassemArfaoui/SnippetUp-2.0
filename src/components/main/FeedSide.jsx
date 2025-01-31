@@ -8,10 +8,10 @@ import CustomTooltip from '../tools/CustomTooltip';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import AdsSideBar from '../tools/AdsSideBar';
 
-function FeedSide() {
+function FeedSide({user}) {
   const feedSideRef = useRef(null); 
   const observerRef = useRef(null); 
-  const userId = 1;
+  const userId = user.id;
   const limit = 10;
 
   // Function to fetch posts with pagination

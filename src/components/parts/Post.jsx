@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect,  useRef } from "react";
+import React, { lazy, Suspense, useState, useEffect,  useRef , useContext } from "react";
 import InfoTooltip from "../tools/InfoTooltip";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import "./styles/Post.css";
@@ -38,11 +38,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLocation , Link } from "react-router-dom";
+import userContext from "../contexts/userContext";
+
 
 const CommentSection = lazy(() => import("./CommentSection"));
 
 export default function Post(props) {
-  const userId = 1;
+  const {user}= useContext(userContext) ;
+  const userId=user.id ;
   const profile_pic = props.profilePic ;
 
   const location = useLocation();

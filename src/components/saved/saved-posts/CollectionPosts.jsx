@@ -1,4 +1,4 @@
-  import React, { useEffect, useRef } from 'react';
+  import React, { useEffect, useRef , useContext } from 'react';
   import { useParams, Link } from 'react-router-dom';
   import { useInfiniteQuery } from '@tanstack/react-query';
   import axios from 'axios';
@@ -12,10 +12,13 @@
   import CustomTooltip from '../../tools/CustomTooltip';
   import { notify } from '../../tools/CustomToaster';
   import SpinnerSpan from '../../tools/SpinnerSpan';
+  import userContext from "../../contexts/userContext";
+
 
   function CollectionPosts() {
     const { collection } = useParams();
-    const userId = 1;
+    const {user}= useContext(userContext) ;
+    const userId=user.id ;
     const containerRef = useRef(null);
 
     const fetchCollectionPosts = async ({ pageParam = 1 }) => {

@@ -12,12 +12,12 @@ const Hero = () => {
         Join <span className="text-primary fw-bold">SnippetUp</span>
       </div>
 
-      <p className="mt-2 px-3 text-center fw-bold" style={{fontSize:'19px'}}>
+      <span className="mt-2 px-3 text-center fw-bold" style={{fontSize:'19px'}}>
         <p className="text-center text-dark" style={{maxWidth:'400px'}}>
           The developer's home for sharing, discovering, and collaborating on code
           snippets
         </p>
-      </p>
+      </span>
       <img src={illustration} alt="illustration" style={{width:'260px'}}/>      
     </div>
   );
