@@ -159,12 +159,14 @@ return (
         </h1>
         <div className="d-flex gap-4 me-4 align-items-center position-absolute end-0">
           <CustomTooltip title="Search">
+            <Link to='/search'>
             <h4 id="search">
               <SearchIcon
                 className="mt-1 text-primary"
                 style={{ fontSize: "43px" }}
               />
             </h4>
+            </Link>
           </CustomTooltip>
           <CustomTooltip title="Logout">
             <h4 id="logout" onClick={logoutUser}>

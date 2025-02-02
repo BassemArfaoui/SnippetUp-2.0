@@ -2,6 +2,7 @@
 #todo
 todo.txt
 .hintrc
+/src/components/test
 # dependencies
 /node_modules
 /.pnp

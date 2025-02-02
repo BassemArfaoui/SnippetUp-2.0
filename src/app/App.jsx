@@ -23,6 +23,7 @@ const CollectionPosts = lazy (()=> import("../components/saved/saved-posts/Colle
 const PostPage = lazy (()=> import("../pages/PostPage"))
 const DemandsPage = lazy (()=> import("../pages/DemandsPage"))
 const AuthPage = lazy (()=> import("../pages/AuthPage"))
+const SearchPage = lazy (()=> import("../pages/SearchPage"))
 
 
 
@@ -54,6 +55,7 @@ useEffect(()=>{
               <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
               <Route path="/post/:postId" element={<PostPage />} />
               <Route path="/demands" element={<ProtectedRoute><DemandsPage /></ProtectedRoute>} />
+              <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
               <Route
                 path="/saved/posts/collections"
                 element={<ProtectedRoute><SavedPostsCollections /></ProtectedRoute>}

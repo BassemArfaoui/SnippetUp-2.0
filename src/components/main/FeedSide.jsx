@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import CustomTooltip from '../tools/CustomTooltip';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import AdsSideBar from '../tools/AdsSideBar';
 
 function FeedSide({user}) {
   const feedSideRef = useRef(null); 
@@ -14,7 +13,6 @@ function FeedSide({user}) {
   const userId = user.id;
   const limit = 10;
 
-  // Function to fetch posts with pagination
   const fetchPosts = async ({ pageParam = 1 }) => {
     const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/posts`, {
       params: { limit, page: pageParam },
@@ -22,7 +20,6 @@ function FeedSide({user}) {
     return response.data;
   };
 
-  // useInfiniteQuery hook for infinite scrolling
   const {
     data,
     fetchNextPage,
