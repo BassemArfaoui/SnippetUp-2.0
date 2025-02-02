@@ -72,7 +72,7 @@ function ProfilePage() {
     refetch : refetchPosts,
     error,
   } = useInfiniteQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts" , username],
     queryFn: fetchPosts,
     getNextPageParam: (lastPage, pages) => {
       return lastPage.posts.length === 10 ? pages.length + 1 : undefined;

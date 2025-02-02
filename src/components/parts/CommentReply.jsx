@@ -215,7 +215,7 @@ function CommentReply(props) {
                   {props.fullname}
                 </Link>
 
-                <span className="text-secondary small">
+                <span className="text-secondary small ms-1">
                   ({props.timeSince})
                 </span>
               </span>

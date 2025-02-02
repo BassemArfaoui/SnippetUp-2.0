@@ -147,15 +147,15 @@ function Header()
 return (
   <>
     {location.pathname !== "/login" && (
-      <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative">
+      <header className=" border-bottom border-3 d-flex align-items-center w-100 position-relative ps-1">
         <h1
-          className="ms-3 fw-bold position-absolute text-primary d-flex align-items-center d-flex align-items-center"
+          className="ms-4 fw-bold position-absolute text-primary d-flex align-items-center d-flex align-items-center"
           style={{ fontSize: "36px" }}
         >
           <span className="me-2 my-0">
-            <FaCode style={{ fontSize: "45px" }} />
+            <FaCode style={{ fontSize: "42px" }} />
           </span>
-          <span style={{ fontSize: "35px" }}>SnippetUp</span>
+          <span style={{ fontSize: "32px" }}>SnippetUp</span>
         </h1>
         <div className="d-flex gap-4 me-4 align-items-center position-absolute end-0">
           <CustomTooltip title="Search">

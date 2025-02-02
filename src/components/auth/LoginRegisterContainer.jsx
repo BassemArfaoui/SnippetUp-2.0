@@ -15,7 +15,7 @@ const LoginRegisterContainer = () => {
       </div>
       <div className='container-content'>
         <div className='mt-3'>
-          <LoginRegisterForm  choice={choice} setDisableLogin={setDisableLogin}/>
+          <LoginRegisterForm  choice={choice} setDisableLogin={setDisableLogin} setChoice={setChoice}/>
         </div>
       </div>
     </div>

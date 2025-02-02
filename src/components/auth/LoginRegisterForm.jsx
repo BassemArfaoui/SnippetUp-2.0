@@ -10,13 +10,14 @@ import { IoPerson } from "react-icons/io5";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { notify, successNotify } from "../tools/CustomToaster";
 import axios from "axios";
+import SpinnerSpan from "../tools/SpinnerSpan";
 // import { useNavigate } from "react-router-dom";
 
 
 
 
 
-function LoginRegisterForm({ choice , setDisableLogin }) {
+function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
 
   const navigate = useNavigate() ;
 
@@ -25,6 +26,10 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
   const [registerStage, setRegisterStage] = useState(1);
   const [file,setFile]=useState("");
   const [loginLoading , setLoginLoading] = useState(false)
+  const [registerLoading , setRegisterLoading] = useState(false)
+  const [checkingUsername , setCheckingUsername] = useState(false)
+  const [isUsernameUsed, setIsUsernameUsed] = useState(false)
+
   const [errors, setErrors]=useState(['test'])
 
   const [formData , setformData] = useState(
@@ -124,15 +129,12 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
         !formData.email.trim()
       ) {
         notify("please fill all the fields");
-      } else if (!isValidEmail(formData.email)) {
-        notify("Please enter a valid email");
-      } else if (isEmailUsed(formData.email)) {
-        notify("Email already used");
-      } else if (!isValidPassword(formData.password)) {
-        notify("Password is weak");
-      }
+      } else if (!isValidEmail(formData.email) || isEmailUsed(formData.email) ||!isValidPassword(formData.password) ) {
+        notify("invalid email or password");
+      } 
       else
       {
+        setIsPwdVisible(false)
         setRegisterStage(2)
       }
 
@@ -154,10 +156,71 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
       setFile(e.target.files[0])
     };
 
-    const handleRegister = (e) =>
+    const handleRegister = async (e) =>
     {
       e.preventDefault()
-      alert('register')
+      try
+      {
+        if (!((choice === "register" && registerLoading) ||
+        !formData.username ||
+        !formData.username.trim() ||
+        !isValidUsername(formData.username) ||
+        !formData.firstname ||
+        !formData.firstname.trim() ||
+        !formData.lastname ||
+        !formData.lastname.trim()) && !checkingUsername && !isUsernameUsed) {
+          setRegisterLoading(true);
+          const response = await axios.post(
+            "http://localhost:4000/register",
+            formData
+          );
+          if (response.data.success) {
+            const user = response.data.user;
+            successNotify(
+              `Registred Successfully, Welcome ${response.data.user.firstname} ${response.data.user.lastname} ...`
+            );
+            setRegisterLoading(false);
+            // setRegisterStage(3);
+            setChoice("login");
+          } else {
+            notify("register failed, please verify the entered infos");
+            setRegisterLoading(false);
+          }
+        } else {
+          notify("register failed, please verify the entered infos");
+        }
+      }catch(err)
+      {
+        console.log(err)
+        notify('An unexpected Error occured')
+        setRegisterLoading(false)
+      }
+      
+    }
+
+    const checkUsername = async () =>
+    {
+      try{
+        setCheckingUsername(true)
+        const response = await axios.post('http://localhost:4000/username-used',{username : formData.username}) ;
+        if (!response.data.is_username_used)
+        {
+          setCheckingUsername(false);
+          setIsUsernameUsed(false)
+          
+        }
+        else
+        {
+          setCheckingUsername(false);
+          setIsUsernameUsed(true);
+        }
+        
+      }
+      catch (err)
+      {
+        console.log(err)
+        notify(err.message)
+      }
     }
 
     useEffect(() => {
@@ -166,11 +229,6 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
 
   return (
     <div>
-      {choice==='register' && registerStage===1 && formData.email && !isValidEmail(formData.email) && <div className="small text-danger fw-bold text-center">Invalid Email Format</div>}
-      {choice==='register' && registerStage===1 && formData.password && !isValidPassword(formData.password) && <div className="small text-danger fw-bold text-center">Password is Weak</div>}
-      {choice==='register' && registerStage===2 && formData.username && !isValidUsername(formData.username) && <div className="small text-danger fw-bold text-center">Invalid Username</div>}
-
-
       <form className="d-flex flex-column px-4 pt-3">
         {(choice === "login" ||
           (choice == "register" && registerStage === 1)) && (
@@ -209,6 +267,15 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
                 onChange={handleChange}
               />
             </div>
+            {choice === "register" &&
+              registerStage === 1 &&
+              formData.email &&
+              !isValidEmail(formData.email) && (
+                <div className="small text-danger fw-bold text-start ms-2 mb-2">
+                  Invalid Email Format
+                </div>
+              )}
+
             {/* Password Input */}
             <div
               className={`my-1 py-2 form-control rounded-4 login-input d-flex align-items-center ${
@@ -239,6 +306,15 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
                 onChange={handleChange}
               />
             </div>
+            {choice === "register" &&
+              registerStage === 1 &&
+              formData.password &&
+              !isValidPassword(formData.password) && (
+                <div className="small text-danger fw-bold text-start ms-2">
+                  Password is Weak
+                </div>
+              )}
+
             <p
               className="text-end pe-3 fw-bold"
               style={{
@@ -270,11 +346,19 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
               className="mt-4 mx-5 btn login-btn mb-1 text-capitalize rounded-4 bg-primary py-2 text-light"
               type="submit"
               onClick={handleSubmit}
-              disabled={loginLoading}
-            >
-              {
-                loginLoading ? 'loading ...'  : choice
+              disabled={
+                !formData.email ||
+                !formData.password ||
+                !formData.email.trim() ||
+                !formData.password.trim() ||
+                (choice === "login" && loginLoading) ||
+                (choice === "register" &&
+                  (!isValidEmail(formData.email) ||
+                    isEmailUsed(formData.email) ||
+                    !isValidPassword(formData.password)))
               }
+            >
+              {loginLoading ? "loading ..." : choice}
             </button>
 
             {choice === "login" && (
@@ -340,8 +424,8 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
         {choice == "register" && registerStage === 2 && (
           <>
             <label
-              className="fw-bold mt-0 mb-1 align-self-start ms-2"
-              style={{ fontSize: "18px", color: "#363738" }}
+              className="fw-bold mt-4 mb-3 align-self-center ms-2"
+              style={{ fontSize: "19px", color: "#363738" }}
             >
               Additional Infos :
             </label>
@@ -433,85 +517,68 @@ function LoginRegisterForm({ choice , setDisableLogin }) {
                 value={formData.username}
                 placeholder="Userame :"
                 onFocus={() => handleFocus("username")}
-                onBlur={handleBlur}
+                onBlur={async()=>
+                {
+                  handleBlur();
+                  await checkUsername() ;
+                }}
                 onChange={handleChange}
+
               />
+              {  checkingUsername && 
+                <span
+                  className="d-flex align-items-center me-2"
+                  style={{
+                    fontSize: "22px",
+                    color:
+                      focusedInput === "username"
+                        ? "rgb(88, 166, 211)"
+                        : "rgb(171, 165, 165)",
+                  }}
+                >
+                  <SpinnerSpan spanStyle={{ width: "25px", height: "25px" }} />
+                </span>
+              }
             </div>
-            <label
-              className="fw-bold mt-3 mb-1 align-self-start ms-2"
-              style={{ fontSize: "18px", color: "#363738" }}
-            >
-              Profile Picture :
-            </label>
+            {choice === "register" &&
+              registerStage === 2 &&
+              formData.username &&
+              !isValidUsername(formData.username) && (
+                <div className="small text-danger fw-bold text-start ms-2 ">
+                  Invalid Username
+                </div>
+              )}
 
-            {/* profile_pic Input */}
-            <div
-              className={`my-1 py-2 form-control rounded-4 login-input d-flex align-items-center pe-2 ${
-                file && file.name ? "focused-container" : ""
-              }`}
-            >
-              <span
-                className="d-flex align-items-center me-2"
-                style={{
-                  fontSize: "24px",
-                  color:
-                    file && file.name
-                      ? "rgb(88, 166, 211)"
-                      : "rgb(171, 165, 165)",
-                }}
-              >
-                <IoPersonCircleSharp />
-              </span>
-
-              <input
-                className="login-input-inside form-control d-flex align-items-center d-none"
-                type="file"
-                id="profile_pic"
-                name="profile_pic"
-                style={{ display: "none" }}
-                onFocus={() => handleFocus("profile_pic")}
-                onBlur={handleBlur}
-                onChange={handleFileChange}
-              />
-
-              {/* Custom file input button */}
-              <label
-                htmlFor="profile_pic"
-                className="d-flex py-2 align-items-center cursor-pointer ms-1 w-100 overflow-x-hidden"
-                style={{
-                  fontSize: "18px",
-                  color:
-                    file && file.name
-                      ? "rgb(88, 166, 211)"
-                      : "rgb(171, 165, 165)",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {!file || !file.name ? (
-                  "Click to upload"
-                ) : (
-                  <span className="mb-1" style={{ color: "rgb(88, 166, 211)" }}>
-                    {file.name}
-                  </span>
-                )}
-              </label>
-            </div>
+              {isUsernameUsed && (
+                <div className="small text-danger fw-bold text-start ms-2 ">
+                  Username already used
+                </div>
+              )}
 
             {/*finish button */}
             <button
               className="mt-5 mx-5 btn login-btn mb-1 text-capitalize rounded-4 bg-primary py-2 text-light"
               onClick={handleRegister}
+              disabled={
+                (choice === "register" && registerLoading) ||
+                !formData.username ||
+                !formData.username.trim() ||
+                !isValidUsername(formData.username) ||
+                !formData.firstname ||
+                !formData.firstname.trim() ||
+                !formData.lastname ||
+                !formData.lastname.trim() || checkingUsername || isUsernameUsed
+              }
             >
-              submit
+              {!registerLoading ? "Submit" : "Loading ..."}
             </button>
 
             <button
-              className="mt-2 mb-3 mx-5 btn back-btn mb-1 text-capitalize rounded-4 bg-light text-secondary    border-3 border-secondary"
+              className="mt-2 mb-5 mx-5 btn back-btn mb-1 text-capitalize rounded-4 bg-light text-secondary    border-3 border-secondary"
               onClick={() => {
                 setRegisterStage(1);
               }}
+              disabled={registerLoading}
             >
               Cancel
             </button>
