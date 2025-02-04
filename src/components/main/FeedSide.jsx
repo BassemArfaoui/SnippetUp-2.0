@@ -62,7 +62,6 @@ function FeedSide({user}) {
     };
   }, [fetchNextPage, hasNextPage]);
 
-  // Function to handle the manual scroll down button
   const scroll = () => {
     if (feedSideRef.current) {
       const { scrollTop, clientHeight } = feedSideRef.current;
@@ -70,7 +69,6 @@ function FeedSide({user}) {
     }
   };
 
-  // Keyboard event listener to scroll down
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowDown') {

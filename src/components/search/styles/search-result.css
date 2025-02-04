@@ -1,0 +1,19 @@
+.hit-title
+{
+    font-size: 18px;
+}
+
+.search-result-lang
+{
+    font-size: 14px;
+}
+
+
+.search-result-btn
+{
+    width: 37px !important;
+    height: 37px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

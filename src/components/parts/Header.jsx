@@ -10,7 +10,7 @@ import HandshakeIcon from '@mui/icons-material/Handshake';
 import AddIcon from '@mui/icons-material/Add';
 import CodeIcon from '@mui/icons-material/Code';
 import { FaCode } from "react-icons/fa6";
-
+import SearchModal from "../search/SearchModal";
 import { Link , useLocation  } from "react-router-dom";
 import {useNavigate} from 'react-router-dom'
 import CustomTooltip from "../tools/CustomTooltip";
@@ -33,6 +33,8 @@ function Header()
   const username = user.username || 'profile';
   const [isAdding, setIsAdding] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+
   const[stage,setStage]=useState(1)
   const location = useLocation();
   const navigate = useNavigate();
@@ -159,14 +161,12 @@ return (
         </h1>
         <div className="d-flex gap-4 me-4 align-items-center position-absolute end-0">
           <CustomTooltip title="Search">
-            <Link to='/search'>
-            <h4 id="search">
+            <h4 id="search" style={{cursor:'pointer'}} onClick={()=>{setIsSearchModalOpen(true)}}>
               <SearchIcon
                 className="mt-1 text-primary"
                 style={{ fontSize: "43px" }}
               />
             </h4>
-            </Link>
           </CustomTooltip>
           <CustomTooltip title="Logout">
             <h4 id="logout" onClick={logoutUser}>
@@ -238,7 +238,7 @@ return (
           </span>
         </CustomTooltip>
         <div>
-          <Suspense fallback="test">
+          <Suspense fallback={'loading...'}>
             <PostAddModal
               closeAddModal={closeAddModal}
               openAddModel={openAddModel}
@@ -247,6 +247,10 @@ return (
               setStage={setStage}
             />
           </Suspense>
+
+            <SearchModal isSearchModalOpen={isSearchModalOpen} setIsSearchModalOpen={setIsSearchModalOpen}/>
+
+
         </div>
       </header>
     )}
