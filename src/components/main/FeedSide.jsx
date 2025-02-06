@@ -40,7 +40,6 @@ function FeedSide({user}) {
     refetchOnWindowFocus:false ,
   });
 
-  // Set up Intersection Observer to detect when the loading spinner is in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

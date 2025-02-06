@@ -120,6 +120,12 @@ function ProfilePage() {
     setIsSettingsModalOpen(false);
   }
 
+  const refreshProfilePage = async () =>
+  {
+    await refetchProfile() ;
+    await refetchPosts() ;
+  }
+
 
   return (
     <>
@@ -129,7 +135,10 @@ function ProfilePage() {
       <div ref={containerRef} className="profile-page py-3 pb-2 px-3 ">
         {/* ProfileCard */}
         {isProfileLoading || isProfileFetching ? (
-          <ProfileSkeleton />
+          <div>
+            <ProfileSkeleton />
+            <div className="d-flex justify-content-center mt-5" style={{fontSize:'20px'}}> <SpinnerSpan /> </div>
+          </div>
         ) : isProfileError ? (
           <div>
             <p className="fw-bolder text-danger fs-5 mt-5 text-center mb-4">
@@ -161,6 +170,7 @@ function ProfilePage() {
               posts={profileData.posts_count}
               credit={profileData.credit}
               subscribed={profileData.is_subscribed}
+              refreshProfilePage = {refreshProfilePage}
             />
           )
         )}

@@ -9,6 +9,8 @@ import SpinnerSpan from "../tools/SpinnerSpan";
 import { notify, successNotify } from "../tools/CustomToaster";
 import axios from "axios";
 import userContext from "../contexts/userContext";
+import { IoRefreshCircleSharp } from "react-icons/io5";
+
 
 
 function formatNumber(num) {
@@ -43,7 +45,7 @@ const getProfileColor = (credit) => {
 
 
 
-export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , lastname , username  , profilePicture , posts, subs , credit , subscribed}) {
+export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , lastname , username  , profilePicture , posts, subs , credit , subscribed , refreshProfilePage}) {
 
 
   const profileColor = getProfileColor(credit)
@@ -97,7 +99,7 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
 
   return (
     <div>
-      <Card className=" profile-card w-100  rounded-4">
+      <Card className=" profile-card w-100  rounded-4 position-relative">
         <CardContent className="px-0 pb-0 pt-4 mb-3 pb-3">
           <div className="d-flex flex-column align-items-center text-center pt-0 pb-0">
             <div className="d-flex align-items-center gap-5">
@@ -127,27 +129,38 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
                     >
                       {firstname + " " + lastname}
                     </h2>
-                    {username != myUsername && <span>
-                      {!subLoading ? (
-                        !isSubscribed ? (
-                          <span style={{cursor:'pointer'}} onClick={subscribe}>
-                            <CustomTooltip title="Subscribe" placement="top">
-                              <StarBorderIcon style={{ fontSize: "33px" }} />
-                            </CustomTooltip>
-                          </span>
+                    {username != myUsername && (
+                      <span>
+                        {!subLoading ? (
+                          !isSubscribed ? (
+                            <span
+                              style={{ cursor: "pointer" }}
+                              onClick={subscribe}
+                            >
+                              <CustomTooltip title="Subscribe" placement="top">
+                                <StarBorderIcon style={{ fontSize: "33px" }} />
+                              </CustomTooltip>
+                            </span>
+                          ) : (
+                            <span
+                              style={{ cursor: "pointer" }}
+                              onClick={unsubscribe}
+                            >
+                              <CustomTooltip
+                                title="Unsubscribe"
+                                placement="top"
+                              >
+                                <StarIcon style={{ fontSize: "33px" }} />
+                              </CustomTooltip>
+                            </span>
+                          )
                         ) : (
-                          <span style={{cursor:'pointer'}} onClick={unsubscribe}>
-                            <CustomTooltip title="Unsubscribe" placement="top">
-                              <StarIcon style={{ fontSize: "33px" }} />
-                            </CustomTooltip>
-                          </span>
-                        )
-                      ) : (
-                        <SpinnerSpan
-                          spanStyle={{ width: "25px", height: "25px" }}
-                        />
-                      )}
-                    </span>}
+                          <SpinnerSpan
+                            spanStyle={{ width: "25px", height: "25px" }}
+                          />
+                        )}
+                      </span>
+                    )}
                   </div>
                   <p
                     className="text-start text-secondary  my-0"
@@ -201,8 +214,6 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
                   </div>
                 </div>
               </div>
-
-        
             </div>
 
             {/* Toggle Section */}
@@ -242,6 +253,13 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
             </span>
           </div>
         </div>
+        <span
+          className="position-absolute top-0 start-0 ms-2 mt-2"
+          onClick={refreshProfilePage}
+          style={{cursor:'pointer'}}
+        >
+          <IoRefreshCircleSharp style={{fontSize:'29px'}}/>
+        </span>
       </Card>
     </div>
   );

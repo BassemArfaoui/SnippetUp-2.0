@@ -2,8 +2,8 @@
 {
    border: 2pt solid #0d6efd ;
    border-radius: 18px;
-   width: 90%;
-   max-width: 700px;
+   flex-grow: 1;
+
    height: 55px;
    font-size: 21px;
    padding: 0;
@@ -40,9 +40,11 @@
 
 .search-icon-cont
 {
+   flex-grow: 0;
    border: 2pt solid #0d6efd ;
    height: 55px;
-   width: 55px;
+   width: 55px !important;
+   min-height: 55px;
    border-radius: 20px;
    display: flex ;
    justify-content: center;
@@ -57,3 +59,43 @@
    font-size: 30px;
 }
 
+.ais-Hits-list {
+   list-style: none; 
+   padding: 0;
+   margin: 0;
+ }
+ 
+ .ais-Hits-item {
+   counter-increment: none;
+ }
+ 
+ .search-modal {
+   display: flex;
+   flex-direction: column;
+ }
+ 
+ .search-box-container {
+   position: sticky;
+   top: 0;
+   z-index: 1000;
+   background-color: #1E1E1E;
+   padding: 10px;
+ }
+ 
+ .search-results-container {
+   flex-grow: 1;
+   overflow-y: auto;
+   padding: 10px;
+ }
+ 
+ .ais-InfiniteHits-list {
+   list-style: none;
+   padding: 0;
+ }
+ 
+ .ais-Highlight-highlighted {
+
+  background-color: #c9e6ff;
+  border-radius: 7px;
+}
+ 

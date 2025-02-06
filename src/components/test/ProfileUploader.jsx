@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 const ProfileUploader = () => {
-    const userId = "70";
+    const userId = "85";
     const [file, setFile] = useState(null);
     const [imageUrl, setImageUrl] = useState("");
 

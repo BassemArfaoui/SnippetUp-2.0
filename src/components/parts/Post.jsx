@@ -234,8 +234,8 @@ export default function Post(props) {
         `${process.env.REACT_APP_API_URL}/${userId}/delete-post/${props.id}`
       );
       if (props.refetchPosts() && props.refetchProfile()) {
-        await props.refetchPosts();
         await props.refetchProfile();
+        await props.refetchPosts();
       } else if (location.pathname === "/") {
         await props.refetchFeed();
       }
@@ -1448,6 +1448,7 @@ export default function Post(props) {
               <button
                 className=" btn border-2 border-danger text-danger fw-bold fs-6 lh-base rounded-4"
                 onClick={deletePost}
+                disabled={deleteLoading}
               >
                 {deleteLoading ? (
                   <SpinnerSpan

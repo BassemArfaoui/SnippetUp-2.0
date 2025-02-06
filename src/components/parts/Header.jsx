@@ -93,7 +93,6 @@ function Header()
     const btn = document.querySelectorAll('.menu-btn');
   
     btn.forEach(element => {
-      console.log(element.name , location.pathname)
       if ( element.name == '/' && location.pathname === element.name) 
       {
         element.classList.add('active');

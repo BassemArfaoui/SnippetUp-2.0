@@ -1,53 +1,41 @@
-import React, { useEffect, useState , useContext} from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Post from '../components/parts/Post';
-import '../css/PostPage.css'
+import '../css/PostPage.css';
 import Spinner from '../components/tools/Spinner';
 import { Helmet } from 'react-helmet';
-import userContext from "../components/contexts/userContext";
+import userContext from '../components/contexts/userContext';
+import nodata from '../utils/svg/nodata.svg';
 
-
+const fetchPost = async (postId) => {
+  const response = await axios.get(`${process.env.REACT_APP_API_URL}/post/${postId}`);
+  return response.data;
+};
 
 function PostPage() {
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
-  const { postId } = useParams(); 
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null);
+  const { user } = useContext(userContext);
+  const { postId } = useParams();
+  
+  const { data: post, isLoading, isError } = useQuery({
+    queryKey: ['post', postId],
+    queryFn: () => fetchPost(postId),
+    retry: false,
+  });
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/post/${postId}`);
-        setPost(response.data); 
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setError('Error fetching post data');
-        setLoading(false);
-      }
-    };
-
-    fetchPost();
-  }, [postId]); 
-
-  if (loading) {
-    return <div><Spinner/></div>; 
-  }
-
-  if (error) {
-    return <div>{error}</div>; 
+  if (isLoading) {
+    return <div><Spinner /></div>;
   }
 
   return (
-    <div className='post-container px-3 '>
+    <div className='post-container px-3'>
       <Helmet>
-        <title>{`SnippetUp : ${post.title}`}</title>
+        <title>{`SnippetUp : ${post?.title || 'Post'}`}</title>
       </Helmet>
       <div className='px-4 my-4 mb-5'>
-          {post && (
+        {!isError ? (
+          post && (
             <Post
               key={post.id}
               id={post.id}
@@ -70,7 +58,22 @@ function PostPage() {
               username={post.username}
               githubLink={post.github_link}
             />
-          )}
+          )
+        ) : (
+          <div className='pt-5'>
+            <div className='m-0 p-0 mt-5 text-danger text-center fw-bold' style={{ fontSize: '20px' }}>
+              We Couldn't Load the Requested Post!
+            </div>
+            <div className="d-flex justify-content-center mt-3">
+              <p className="fw-bolder text-secondary m-0 fs-6 mb-4 text-center mb-4" style={{width :'400px'}}>
+                this usually happens because of a connection problem  or the post dont exist or deleted
+              </p>
+            </div>
+            <div className='w-100 d-flex justify-content-center mt-4'>
+              <img src={nodata} alt='no data illustration' style={{ width: '150px' }} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,18 +1,19 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { ContainerFluid, Row, Col } from "react-bootstrap";
 import { Skeleton, Box } from "@mui/material";
 
 function ProfileSkeleton() {
   return (
-    <Container
-      className="pt-4 pb-3 w-100"
+    <div
+      className="pt-4 pb-3 w-100 px-0 mx-0 container-fluid"
       style={{
         backgroundColor: "#1a1a1a",
         borderRadius: "15px",
         color: "#ffffff",
+        width : '100%'
       }}
     >
-      <Row className="mb-4 align-items-center ms-5">
+      <Row className="mb-4 px-0 align-items-center ms-5">
         {/* Left: Avatar Skeleton */}
         <Col xs="auto ms-5 d-flex justify-content-center">
           <Skeleton
@@ -117,7 +118,7 @@ function ProfileSkeleton() {
           }}
         />
       </Box>
-    </Container>
+    </div>
   );
 }
 
