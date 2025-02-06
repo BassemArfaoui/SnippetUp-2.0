@@ -51,35 +51,61 @@ function Header()
     setStage(1)
   }
 
-  //key event useeffect
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.altKey) {
-        switch (event.key) {
-          case "h":
-            navigate("/");
-            break;
-          case "s":
-            navigate("/saved");
-            break;
-          case "p":
-            navigate(`/${username}`);
-            break;
-          case "t":
-            navigate("/settings");
-            break;
-          default:
-            break;
+        if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+          event.preventDefault();
+
+            setIsSearchModalOpen(true);
         }
-      }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    
+
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+        window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [navigate]); 
+}, []);
+
+useEffect(() => {
+  const handleKeyDown = (event) => {
+      if (event.ctrlKey || event.metaKey) {
+          switch (event.key) {
+              case 'h':
+                  event.preventDefault(); 
+                  navigate('/');          
+                  break;
+              case 's':
+                  event.preventDefault();
+                  navigate('/saved');     
+                  break;
+              case 'd':
+                  event.preventDefault();
+                  navigate('/demands');    
+                  break;
+              case 'p':
+                  event.preventDefault();
+                  navigate(`/${username}`);   
+                  break;
+              case 'a':
+                  event.preventDefault();
+                  setIsAddModalOpen(true);
+                  break;
+              default:
+                  break;
+          }
+      }
+  };
+
+  window.addEventListener('keydown', handleKeyDown);
+
+  return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+  };
+}, [navigate , location.pathname]);
+
 
 
   //menu buttons useEffect
@@ -158,20 +184,40 @@ return (
           </span>
           <span style={{ fontSize: "32px" }}>SnippetUp</span>
         </h1>
-        <div className="d-flex gap-4 me-4 align-items-center position-absolute end-0">
+        <div className="d-flex gap-4 me-4 align-items-center justify-content-center position-absolute end-0 my-0 py-0">
           <CustomTooltip title="Search">
-            <h4 id="search" style={{cursor:'pointer'}} onClick={()=>{setIsSearchModalOpen(true)}}>
+            <h4
+              id="search"
+              className="d-flex justify-content-center align-items-center rounded-5 mb-0 position-relative me-3"
+              style={{
+                cursor: "pointer",
+                width: "50px",
+                height: "50px",
+                backgroundColor: isSearchModalOpen ? "#c9e6ff" : "transparent",
+              }}
+              onClick={() => {
+                setIsSearchModalOpen(true);
+              }}
+            >
               <SearchIcon
-                className="mt-1 text-primary"
+                className="m-0 text-primary"
                 style={{ fontSize: "43px" }}
               />
+              {!isSearchModalOpen && (
+                <span
+                  className="p-1 rounded-2 fw-bold bottom-0 end-0"
+                  style={{ backgroundColor: "#c9e6ff", fontSize: "11px" }}
+                >
+                  Ctrl+K
+                </span>
+              )}
             </h4>
           </CustomTooltip>
           <CustomTooltip title="Logout">
-            <h4 id="logout" onClick={logoutUser}>
+            <h4 id="logout" onClick={logoutUser} className="m-0 p-0">
               <LogoutIcon
-                className="mt-1 text-primary"
-                style={{ fontSize: "35px" , cursor:'pointer' }}
+                className="text-primary"
+                style={{ fontSize: "35px", cursor: "pointer" }}
               />
             </h4>
           </CustomTooltip>
@@ -237,7 +283,7 @@ return (
           </span>
         </CustomTooltip>
         <div>
-          <Suspense fallback={'loading...'}>
+          <Suspense fallback={"loading..."}>
             <PostAddModal
               closeAddModal={closeAddModal}
               openAddModel={openAddModel}
@@ -247,9 +293,10 @@ return (
             />
           </Suspense>
 
-            <SearchModal isSearchModalOpen={isSearchModalOpen} setIsSearchModalOpen={setIsSearchModalOpen}/>
-
-
+          <SearchModal
+            isSearchModalOpen={isSearchModalOpen}
+            setIsSearchModalOpen={setIsSearchModalOpen}
+          />
         </div>
       </header>
     )}

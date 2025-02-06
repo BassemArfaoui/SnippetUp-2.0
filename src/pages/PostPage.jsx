@@ -66,7 +66,7 @@ function PostPage() {
             </div>
             <div className="d-flex justify-content-center mt-3">
               <p className="fw-bolder text-secondary m-0 fs-6 mb-4 text-center mb-4" style={{width :'400px'}}>
-                this usually happens because of a connection problem  or the post dont exist or deleted
+                this usually happens because of a connection problem  or the post doesn't exist or deleted
               </p>
             </div>
             <div className='w-100 d-flex justify-content-center mt-4'>

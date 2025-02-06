@@ -1,3 +1,4 @@
+import nodata from '../utils/svg/nodata.svg'
 import { useState, useRef , useContext } from "react";
 import ProfileCard from "../components/profile/ProfileCard";
 import "../css/ProfilePage.css";
@@ -141,10 +142,8 @@ function ProfilePage() {
           </div>
         ) : isProfileError ? (
           <div>
-            <p className="fw-bolder text-danger fs-5 mt-5 text-center mb-4">
-              Couldn't load the profile
-            </p>
-            <div className="d-flex justify-content-center">
+
+            <div className="d-flex justify-content-center mt-4 mb-4">
               <button
                 onClick={() => refetchProfile()}
                 className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center p-3"
@@ -152,6 +151,17 @@ function ProfilePage() {
               >
                 <ReplayIcon />
               </button>
+            </div>
+            <div className='m-0 p-0 mt-2 text-danger text-center fw-bold' style={{ fontSize: '20px' }}>
+              We Couldn't Load the Profile !
+            </div>
+            <div className="d-flex justify-content-center mt-3">
+              <p className="fw-bolder text-secondary m-0 fs-6 mb-4 text-center mb-4" style={{width :'400px'}}>
+                this usually happens because of a connection problem  or the profile doesn't exist or deleted
+              </p>
+            </div>
+            <div className='w-100 d-flex justify-content-center mt-4'>
+              <img src={nodata} alt='no data illustration' style={{ width: '150px' }} />
             </div>
           </div>
         ) : (
