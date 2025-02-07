@@ -45,7 +45,7 @@ useEffect(()=>{
       <QueryClientProvider client={queryClient}>
         <Router>
           <CustomToaster />
-          <NotificationBell />
+          {/* <NotificationBell /> */}
          <Header />
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>

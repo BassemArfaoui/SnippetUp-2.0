@@ -1,27 +1,29 @@
-import React, { useEffect, useRef } from "react";
-import {algoliasearch} from "algoliasearch";
+import React, { useEffect, useRef, useState } from "react";
+import { algoliasearch } from "algoliasearch";
 import {
   InstantSearch,
   SearchBox,
   PoweredBy,
   useInstantSearch,
   useInfiniteHits,
-  Highlight
+  Index
 } from "react-instantsearch";
 import { Modal, Box } from "@mui/material";
-import "./styles/search-modal.css";
 import SpinnerSpan from "../tools/SpinnerSpan";
 import { CiSearch } from "react-icons/ci";
-import SearchResult from "./SearchResult";
-import SearchHistory from "./SearchHistory";
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import PostSearchResult from "./PostSearchResult";
+import UserSearchResult from "./UserSearchResult";
+import PostSearchHistory from "./PostSearchHistory";
+import UserSearchHistory from "./UserSearchHistory";
+import "./styles/search-modal.css";
 
 const algoliaId = process.env.REACT_APP_ALGOLIA_APP_ID;
 const algoliaSearchKey = process.env.REACT_APP_ALGOLIA_SEARCH_KEY;
 const searchClient = algoliasearch(algoliaId, algoliaSearchKey);
 
+
 function CustomInfiniteHits({ hitComponent: HitComponent, setIsSearchModalOpen }) {
-  const { items, isLastPage, showMore, isLoading } = useInfiniteHits();
+  const { items, isLastPage, showMore } = useInfiniteHits();
   const sentinelRef = useRef(null);
 
   useEffect(() => {
@@ -35,16 +37,14 @@ function CustomInfiniteHits({ hitComponent: HitComponent, setIsSearchModalOpen }
           });
         },
         {
-          root: null, 
-          rootMargin: "300px", 
+          root: null,
+          rootMargin: "100px",
           threshold: 0.1,
         }
       );
 
       observer.observe(sentinelRef.current);
-      return () => {
-        observer.disconnect();
-      };
+      return () => observer.disconnect();
     }
   }, [isLastPage, showMore]);
 
@@ -81,40 +81,62 @@ function Icon() {
   );
 }
 
-function Result({ Hit, setIsSearchModalOpen }) {
-  const { uiState } = useInstantSearch();
+
+function PostHit({ hit, setIsSearchModalOpen }) {
   return (
-    <>
-    {(
-        uiState.posts.query ? (
-        <CustomInfiniteHits hitComponent={Hit} setIsSearchModalOpen={setIsSearchModalOpen} />
-      ) : (
-        <SearchHistory setIsSearchModalOpen={setIsSearchModalOpen} />
-      )
-      )}
-    </>
+    <PostSearchResult
+      hit={hit}
+      title={hit.title}
+      language={hit.language}
+      snippet={hit.snippet}
+      id={hit.objectID}
+      setIsSearchModalOpen={setIsSearchModalOpen}
+    />
   );
 }
 
-function SearchModal({ isSearchModalOpen, setIsSearchModalOpen }) {
-  function Hit({ hit, setIsSearchModalOpen }) {
-    return (
-      <SearchResult
-        hit={hit}
-        title={hit.title}
-        language={hit.language}
-        snippet={hit.snippet}
-        id={hit.objectID}
-        setIsSearchModalOpen={setIsSearchModalOpen}
-      />
-    );
+
+function UserHit({ hit, setIsSearchModalOpen }) {
+  return (
+    <UserSearchResult
+      hit={hit}
+      setIsSearchModalOpen={setIsSearchModalOpen}
+      fullname={`${hit.firstname} ${hit.lastname}`}
+      username={hit.username}
+      profile_pic={hit.profile_pic}
+      id={hit.objectID}
+    />
+  );
+}
+
+
+function PostsResults({ setIsSearchModalOpen }) {
+  const { uiState } = useInstantSearch();
+  console.log(uiState)
+  if (!uiState["posts"]?.query && !uiState["posts"]?.query?.trim() && !uiState["users"]?.query && !uiState["users"]?.query?.trim()) {
+    return <PostSearchHistory setIsSearchModalOpen={setIsSearchModalOpen} />;
   }
+  return <CustomInfiniteHits hitComponent={PostHit} setIsSearchModalOpen={setIsSearchModalOpen} />;
+}
+
+function UsersResults({ setIsSearchModalOpen }) {
+  const { uiState } = useInstantSearch();
+  console.log(uiState)
+  if (!uiState["users"]?.query && !uiState["users"]?.query?.trim() && !uiState["posts"]?.query && !uiState["posts"]?.query?.trim()) {
+    return <UserSearchHistory setIsSearchModalOpen={setIsSearchModalOpen} />;
+  }
+  return <CustomInfiniteHits hitComponent={UserHit} setIsSearchModalOpen={setIsSearchModalOpen} />;
+}
+
+
+function SearchModal({ isSearchModalOpen, setIsSearchModalOpen }) {
+  const [activeTab, setActiveTab] = useState("posts"); 
 
   return (
     <Modal
       open={isSearchModalOpen}
-      disableAutoFocus // Disables auto-focus on the modal
-        disableEnforceFocus
+      disableAutoFocus
+      disableEnforceFocus
       onClose={() => setIsSearchModalOpen(false)}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
@@ -140,7 +162,7 @@ function SearchModal({ isSearchModalOpen, setIsSearchModalOpen }) {
       >
         <InstantSearch
           searchClient={searchClient}
-          indexName="posts"
+          indexName="posts" 
           insights
           future={{ preserveSharedStateOnUnmount: true }}
         >
@@ -165,13 +187,68 @@ function SearchModal({ isSearchModalOpen, setIsSearchModalOpen }) {
                 )}
               />
             </div>
-            <div className="d-flex justify-content-end me-3 mt-2">
-              <PoweredBy style={{ width: "120px" }} theme="dark" classNames={{ link: "text-dark" }} />
+            <div className="search-tags-containe d-flex justify-content-center mt-3" >
+              <button
+                className={`fw-bold search-tag ${activeTab === "posts" ? "active" : ""}`}
+                onClick={() => setActiveTab("posts")}
+                style={{
+                  background: activeTab === "posts" ? "#0d6efd" : "#f0f0f0",
+                  color: activeTab === "posts" ? "white" : "black",
+                  border: "none",
+                  padding: "8px 16px",
+                  marginRight: "8px",
+                  cursor: "pointer",
+                  borderRadius: "10px"
+                }}
+              >
+                Posts
+              </button>
+              {/* <button
+                className={` me-2 fw-bold search-tag ${activeTab === "users" ? "active" : ""}`}
+                onClick={() => setActiveTab("demands")}
+                style={{
+                  background: activeTab === "users" ? "#0d6efd" : "#f0f0f0",
+                  color: activeTab === "users" ? "white" : "black",
+                  border: "none",
+                  padding: "8px 16px",
+                  cursor: "pointer",
+                  borderRadius: "10px"
+                }}
+              >
+                Demands
+              </button> */}
+              <button
+                className={`fw-bold search-tag ${activeTab === "users" ? "active" : ""}`}
+                onClick={() => setActiveTab("users")}
+                style={{
+                  background: activeTab === "users" ? "#0d6efd" : "#f0f0f0",
+                  color: activeTab === "users" ? "white" : "black",
+                  border: "none",
+                  padding: "8px 16px",
+                  cursor: "pointer",
+                  borderRadius: "10px"
+                }}
+              >
+                Users
+              </button>
+
+
+
             </div>
           </div>
 
-          <div className="search-results-container px-md-4">
-            <Result Hit={Hit} setIsSearchModalOpen={setIsSearchModalOpen} />
+          {/* Render results based on the active tag */}
+          <div className="search-results-container px-md-4" style={{ marginTop: "10px", flex: 1, overflowY: "auto" }}>
+            {activeTab === "posts" && (
+              <Index indexName="posts">
+                <PostsResults setIsSearchModalOpen={setIsSearchModalOpen} />
+              </Index>
+            )}
+            {activeTab === "users" && (
+              <Index indexName="users">
+                <UsersResults setIsSearchModalOpen={setIsSearchModalOpen} />
+              </Index>
+            )}
           </div>
         </InstantSearch>
       </Box>

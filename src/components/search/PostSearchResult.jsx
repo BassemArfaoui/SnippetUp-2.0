@@ -15,7 +15,7 @@ import { Highlight } from 'react-instantsearch';
 
 
 
-function SearchResult({history ,  hit , title, language, snippet, id, setIsSearchModalOpen ,  handleRemoveFromHistory}) {
+function PostSearchResult({history ,  hit , title, language, snippet, id, setIsSearchModalOpen ,  handleRemoveFromHistory}) {
   const [isCopied, setIsCopied] = useState(false);
   const [isFullScreen, setisFullScreen] = useState(false);
   const { user } = useContext(userContext);
@@ -53,7 +53,7 @@ function SearchResult({history ,  hit , title, language, snippet, id, setIsSearc
       timestamp: currentTimestamp,
     };
 
-    let historyData = JSON.parse(localStorage.getItem("searchHistory")) || {};
+    let historyData = JSON.parse(localStorage.getItem("PostsSearchHistory")) || {};
 
     if (!Array.isArray(historyData[userId])) {
       historyData[userId] = [];
@@ -75,11 +75,11 @@ function SearchResult({history ,  hit , title, language, snippet, id, setIsSearc
     }
 
     historyData[userId] = userHistory;
-    localStorage.setItem("searchHistory", JSON.stringify(historyData));
+    localStorage.setItem("PostsSearchHistory", JSON.stringify(historyData));
   };
 
   const deleteFromHistory = (postId) => {
-    let historyData = JSON.parse(localStorage.getItem("searchHistory")) || {};
+    let historyData = JSON.parse(localStorage.getItem("PostsSearchHistory")) || {};
 
     if (Array.isArray(historyData[userId])) {
       let userHistory = historyData[userId];
@@ -87,7 +87,7 @@ function SearchResult({history ,  hit , title, language, snippet, id, setIsSearc
       userHistory = userHistory.filter((item) => item.id !== postId);
 
       historyData[userId] = userHistory;
-      localStorage.setItem("searchHistory", JSON.stringify(historyData));
+      localStorage.setItem("PostsSearchHistory", JSON.stringify(historyData));
       handleRemoveFromHistory(postId)
     }
   };
@@ -106,7 +106,6 @@ function SearchResult({history ,  hit , title, language, snippet, id, setIsSearc
               <Highlight
                 attribute="title"
                 hit={hit}
-                classNames={{ Highlighted: "bg-danger" }}
               />
             ) : (
               title
@@ -258,4 +257,4 @@ function SearchResult({history ,  hit , title, language, snippet, id, setIsSearc
   );
 }
 
-export default SearchResult;
+export default PostSearchResult;

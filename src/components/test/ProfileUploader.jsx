@@ -4,7 +4,7 @@ import { useState } from "react";
 const ProfileUploader = () => {
     const userId = "86";
     const [file, setFile] = useState(null);
-    const [imageUrl, setImageUrl] = useState("");
+        const [imageUrl, setImageUrl] = useState("");
 
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];

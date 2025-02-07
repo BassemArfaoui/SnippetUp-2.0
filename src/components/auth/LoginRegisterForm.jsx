@@ -7,10 +7,10 @@ import { AiFillGithub } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
-import { IoPersonCircleSharp } from "react-icons/io5";
 import { notify, successNotify } from "../tools/CustomToaster";
 import axios from "axios";
 import SpinnerSpan from "../tools/SpinnerSpan";
+import ProfilePicChanger from "./ProfilePicChanger";
 // import { useNavigate } from "react-router-dom";
 
 
@@ -24,13 +24,12 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
   const [focusedInput, setFocusedInput] = useState("");
   const [isPwdVisible, setIsPwdVisible] = useState(false);
   const [registerStage, setRegisterStage] = useState(1);
-  const [file,setFile]=useState("");
   const [loginLoading , setLoginLoading] = useState(false)
   const [registerLoading , setRegisterLoading] = useState(false)
   const [checkingUsername , setCheckingUsername] = useState(false)
   const [isUsernameUsed, setIsUsernameUsed] = useState(false)
+  const [userId , setUserId]= useState(null)
 
-  const [errors, setErrors]=useState(['test'])
 
   const [formData , setformData] = useState(
     {
@@ -65,7 +64,7 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
   const loginUser=async (loginObj)=>{
     try
     { setLoginLoading(true)
-      const response =await axios.post('http://localhost:4000/login', loginObj);
+      const response =await axios.post(`${process.env.REACT_APP_API_URL}/login`, loginObj);
       if(response.data.success)
       {
         const user=response.data.user;
@@ -81,7 +80,7 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
     }catch(err)
     {
       console.log(err)
-      notify('An unexpected Error occured')
+      notify("We Couldn't Register , Please check the intered infos")
       setLoginLoading(false)
     }
   }
@@ -141,20 +140,9 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
     }
   };
 
-  const passToFinalStage = (e) => {
-    e.preventDefault();
-    setRegisterStage(1);
-  }
 
-  const passToFirstStage = (e) => {
-    e.preventDefault();
-    setRegisterStage(3);
-  }
 
-    // Handle file input change
-    const handleFileChange = (e) => {
-      setFile(e.target.files[0])
-    };
+
 
     const handleRegister = async (e) =>
     {
@@ -171,17 +159,18 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
         !formData.lastname.trim()) && !checkingUsername && !isUsernameUsed) {
           setRegisterLoading(true);
           const response = await axios.post(
-            "http://localhost:4000/register",
+            `${process.env.REACT_APP_API_URL}/register`,
             formData
           );
           if (response.data.success) {
             const user = response.data.user;
+            setUserId(user.id)
             successNotify(
-              `Registred Successfully, Welcome ${response.data.user.firstname} ${response.data.user.lastname} ...`
+              `Registred Successfully, Welcome ${user.firstname} ${user.lastname} ...`
             );
             setRegisterLoading(false);
-            // setRegisterStage(3);
-            setChoice("login");
+            setRegisterStage(3);
+    
           } else {
             notify("register failed, please verify the entered infos");
             setRegisterLoading(false);
@@ -202,7 +191,7 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
     {
       try{
         setCheckingUsername(true)
-        const response = await axios.post('http://localhost:4000/username-used',{username : formData.username}) ;
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/username-used`,{username : formData.username}) ;
         if (!response.data.is_username_used)
         {
           setCheckingUsername(false);
@@ -224,7 +213,7 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
     }
 
     useEffect(() => {
-      if (choice === "register" && registerStage === 2) {setDisableLogin(true)} else {setDisableLogin(false)};
+      if (choice === "register" && registerStage > 1 ) {setDisableLogin(true)} else {setDisableLogin(false)};
     }, [choice, registerStage]);
 
   return (
@@ -582,8 +571,11 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
             >
               Cancel
             </button>
+      
           </>
         )}
+        { (choice == "register" && registerStage === 3) &&
+           <ProfilePicChanger userId={userId} setChoice={setChoice}/>}
       </form>
     </div>
   );

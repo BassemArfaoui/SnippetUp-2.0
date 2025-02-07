@@ -1,4 +1,5 @@
 import nodata from '../utils/svg/nodata.svg'
+import settings from '../utils/svg/settings.svg'
 import { useState, useRef , useContext } from "react";
 import ProfileCard from "../components/profile/ProfileCard";
 import "../css/ProfilePage.css";
@@ -138,11 +139,16 @@ function ProfilePage() {
         {isProfileLoading || isProfileFetching ? (
           <div>
             <ProfileSkeleton />
-            <div className="d-flex justify-content-center mt-5" style={{fontSize:'20px'}}> <SpinnerSpan /> </div>
+            <div
+              className="d-flex justify-content-center mt-5"
+              style={{ fontSize: "20px" }}
+            >
+              {" "}
+              <SpinnerSpan />{" "}
+            </div>
           </div>
         ) : isProfileError ? (
           <div>
-
             <div className="d-flex justify-content-center mt-4 mb-4">
               <button
                 onClick={() => refetchProfile()}
@@ -152,16 +158,27 @@ function ProfilePage() {
                 <ReplayIcon />
               </button>
             </div>
-            <div className='m-0 p-0 mt-2 text-danger text-center fw-bold' style={{ fontSize: '20px' }}>
+            <div
+              className="m-0 p-0 mt-2 text-danger text-center fw-bold"
+              style={{ fontSize: "20px" }}
+            >
               We Couldn't Load the Profile !
             </div>
             <div className="d-flex justify-content-center mt-3">
-              <p className="fw-bolder text-secondary m-0 fs-6 mb-4 text-center mb-4" style={{width :'400px'}}>
-                this usually happens because of a connection problem  or the profile doesn't exist or deleted
+              <p
+                className="fw-bolder text-secondary m-0 fs-6 mb-4 text-center mb-4"
+                style={{ width: "400px" }}
+              >
+                this usually happens because of a connection problem or the
+                profile doesn't exist or deleted
               </p>
             </div>
-            <div className='w-100 d-flex justify-content-center mt-4'>
-              <img src={nodata} alt='no data illustration' style={{ width: '150px' }} />
+            <div className="w-100 d-flex justify-content-center mt-4">
+              <img
+                src={nodata}
+                alt="no data illustration"
+                style={{ width: "150px" }}
+              />
             </div>
           </div>
         ) : (
@@ -180,7 +197,7 @@ function ProfilePage() {
               posts={profileData.posts_count}
               credit={profileData.credit}
               subscribed={profileData.is_subscribed}
-              refreshProfilePage = {refreshProfilePage}
+              refreshProfilePage={refreshProfilePage}
             />
           )
         )}
@@ -267,64 +284,91 @@ function ProfilePage() {
         )}
 
         {/* solved demands */}
-        {activeTab === "Solves" && <SolvedDemands    />}
-
-
+        {activeTab === "Solves" && <SolvedDemands />}
 
         {/* settings button */}
-      <CustomTooltip title="Add Snippet" placement="right">
-        <IconButton id='settings'
-          onClick={openSettings}
-          aria-label="Scroll to End"
-          className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
-          style={{ zIndex: 1050, backgroundColor: '#f8f9fa' }}
-        >
-          <SettingsIcon fontSize="large" className="text-dark" />
-        </IconButton>
-      </CustomTooltip>
-
+        {profileData?.id === userId && (
+          <CustomTooltip title="Add Snippet" placement="right">
+            <IconButton
+              id="settings"
+              onClick={openSettings}
+              aria-label="Scroll to End"
+              className="position-fixed bottom-0 start-0 m-3 mx-4 bg-warning"
+              style={{ zIndex: 1050, backgroundColor: "#f8f9fa" }}
+            >
+              <SettingsIcon fontSize="large" className="text-dark" />
+            </IconButton>
+          </CustomTooltip>
+        )}
 
         {/* Settings Modal */}
         <Modal
-        open={isSettingsModalOpen}
-        onClose={closeSettings}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: '16px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            width: '80%',
-            backgroundColor: '#1E1E1E',
-            color: 'white',
-          }}
+          open={isSettingsModalOpen}
+          onClose={closeSettings}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
         >
-          <IconButton
-            aria-label="close"
-            onClick={closeSettings}
+          <Box
             sx={{
-              position: 'absolute',
-              top: '10px',
-              right: '10px',
-              color: 'white'
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: "16px",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              width: "75%",
+              backgroundColor: "#1E1E1E",
+              color: "white",
             }}
           >
-            <CloseIcon className='fs-2'/>
-          </IconButton>
+            <IconButton
+              aria-label="close"
+              onClick={closeSettings}
+              sx={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                color: "white",
+              }}
+            >
+              <CloseIcon className="fs-2" />
+            </IconButton>
 
-          <h2 id="modal-title" className="snippet-title fw-bold mb-4 text-center">Settings</h2>
-         
-        </Box>
-      </Modal>
+            <h2
+              id="modal-title"
+              className="snippet-title fw-bold mb-4 text-center"
+            >
+              Settings
+            </h2>
+
+            <div
+              className="m-0 p-0 mt-2 text-danger text-center fw-bold"
+              style={{ fontSize: "20px" }}
+            >
+              Settings aren't available for now !
+            </div>
+            <div className="d-flex justify-content-center mt-3">
+              <p
+                className="fw-bolder text-light m-0 fs-6 mb-4 text-center mb-4"
+                style={{ width: "400px" }}
+              >
+                here you will be able to change your profile personal infos , and choose your preferences
+              </p>
+            </div>
+            <div className="w-100 d-flex justify-content-center mt-4 mb-5">
+              <img
+                className='rounded-4'
+                src={settings}
+                alt="settings illustration"
+                style={{ width: "200px" }}
+              />
+            </div>
+          </Box>
+        </Modal>
       </div>
     </>
   );

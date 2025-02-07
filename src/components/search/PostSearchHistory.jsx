@@ -1,5 +1,5 @@
 import React, { useEffect, useState , useContext } from 'react';
-import SearchResult from './SearchResult';
+import PostSearchResult from './PostSearchResult';
 import userContext from "../contexts/userContext";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CustomTooltip from '../tools/CustomTooltip';
@@ -7,7 +7,6 @@ import CustomTooltip from '../tools/CustomTooltip';
 
 export default function SearchHistory({setIsSearchModalOpen}) {
   const [history, setHistory] = useState([]);
-  const [historyLoading , setHistoryLoading] = useState(false) ;
   const {user}= useContext(userContext) ;
   const userId=user.id ;
 
@@ -19,19 +18,18 @@ export default function SearchHistory({setIsSearchModalOpen}) {
 
 
   useEffect(() => {
-    setHistoryLoading(true);
-    const storedHistory = JSON.parse(localStorage.getItem('searchHistory')) || {};
+    const storedHistory = JSON.parse(localStorage.getItem('PostsSearchHistory')) || {};
     setHistory(storedHistory[userId] || [])
-    setHistoryLoading(false);
+
 
   }, []);
 
   const clearHistory = (userId) => {
-    let historyData = JSON.parse(localStorage.getItem("searchHistory")) || {};
+    let historyData = JSON.parse(localStorage.getItem("PostsSearchHistory")) || {};
 
     if (historyData[userId]) {
       delete historyData[userId];
-      localStorage.setItem("searchHistory", JSON.stringify(historyData));
+      localStorage.setItem("PostsSearchHistory", JSON.stringify(historyData));
     }
 
     setHistory([])
@@ -48,11 +46,9 @@ export default function SearchHistory({setIsSearchModalOpen}) {
           <span>History : </span><CustomTooltip title='Clear History' placement='top'><span  onClick={()=>{clearHistory(userId)}} style={{cursor : 'pointer'}}> <HighlightOffIcon /></span></CustomTooltip>
         </p>
       )}
-      {historyLoading ? (
-        "test"
-      ) : history.length > 0 ? (
+      {history.length > 0 ? (
         history.map((item) => (
-          <SearchResult
+          <PostSearchResult
             history
             handleRemoveFromHistory={handleRemoveFromHistory}
             key={item.id}
