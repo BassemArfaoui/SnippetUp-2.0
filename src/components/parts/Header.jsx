@@ -242,8 +242,8 @@ return (
             </Link>
             <li
               id="add-btn"
-              className="add-btn btn bg-warning rounded-circle d-flex justify-content-center align-items-center m-0 "
-              style={{ width: "59px", height: "59px" }}
+              className="add-btn btn rounded-circle d-flex bg-warning justify-content-center align-items-center m-0 border-dark "
+              style={{ width: "59px", height: "59px"  }}
               onClick={openAddModel}
             >
               <AddIcon style={{ fontSize: "52px" }} />

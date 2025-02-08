@@ -187,47 +187,28 @@ function SearchModal({ isSearchModalOpen, setIsSearchModalOpen }) {
                 )}
               />
             </div>
-            <div className="search-tags-containe d-flex justify-content-center mt-3" >
+            <div className="search-tags-container d-flex justify-content-center mt-3" >
               <button
-                className={`fw-bold search-tag ${activeTab === "posts" ? "active" : ""}`}
+                className={`fw-bold left-search-tag ${activeTab === "posts" ? "active" : ""}`}
                 onClick={() => setActiveTab("posts")}
                 style={{
                   background: activeTab === "posts" ? "#0d6efd" : "#f0f0f0",
                   color: activeTab === "posts" ? "white" : "black",
                   border: "none",
-                  padding: "8px 16px",
-                  marginRight: "8px",
                   cursor: "pointer",
-                  borderRadius: "10px"
+
                 }}
               >
                 Posts
               </button>
-              {/* <button
-                className={` me-2 fw-bold search-tag ${activeTab === "users" ? "active" : ""}`}
-                onClick={() => setActiveTab("demands")}
-                style={{
-                  background: activeTab === "users" ? "#0d6efd" : "#f0f0f0",
-                  color: activeTab === "users" ? "white" : "black",
-                  border: "none",
-                  padding: "8px 16px",
-                  cursor: "pointer",
-                  borderRadius: "10px"
-                }}
-              >
-                Demands
-              </button> */}
               <button
-                className={`fw-bold search-tag ${activeTab === "users" ? "active" : ""}`}
+                className={`fw-bold right-search-tag ${activeTab === "users" ? "active" : ""}`}
                 onClick={() => setActiveTab("users")}
                 style={{
                   background: activeTab === "users" ? "#0d6efd" : "#f0f0f0",
                   color: activeTab === "users" ? "white" : "black",
                   border: "none",
-                  padding: "8px 16px",
-                  cursor: "pointer",
-                  borderRadius: "10px"
-                }}
+                  cursor: "pointer",                }}
               >
                 Users
               </button>

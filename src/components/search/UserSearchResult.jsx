@@ -126,7 +126,7 @@ function UserSearchResult({history , hit, setIsSearchModalOpen , id , fullname ,
               style={{ cursor: "pointer" }}
               className="mb-1 me-4"
               onClick={() => {
-                navigateToProfile(hit.username);
+                navigateToProfile(username);
               }}
             >
               <MdOutlineOpenInNew style={{ fontSize: "23px" }} />

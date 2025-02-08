@@ -51,6 +51,7 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
     return passwordRegex.test(password);
   }
 
+ 
   function isValidUsername(username) {
     const usernameRegex = /^[a-zA-Z0-9._-]+$/;
     return usernameRegex.test(username);

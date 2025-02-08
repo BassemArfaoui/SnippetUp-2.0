@@ -99,3 +99,18 @@
   border-radius: 7px;
 }
  
+.left-search-tag , .right-search-tag
+{
+  padding: 5px 15px;
+}
+
+
+.left-search-tag
+{
+  border-radius: 8px 0 0 8px ;
+}
+
+.right-search-tag
+{
+  border-radius: 0 8px 8px 0 ;
+}

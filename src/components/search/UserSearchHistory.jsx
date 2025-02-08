@@ -41,7 +41,7 @@ function UserSearchHistory({setIsSearchModalOpen}) {
     <div className="d-flex flex-column gap-0">
     {history.length > 0 && (
       <p
-        className="fw-bold m-0 p-0 ps-2 pe-2 mb-3 text-warning d-flex justify-content-between"
+        className="fw-bold m-0 p-0 ps-2 pe-2 mb-3 d-flex justify-content-between"
         style={{ fontSize: "22px" }}
       >
         <span>History : </span><CustomTooltip title='Clear History' placement='top'><span  onClick={()=>{clearHistory(userId)}} style={{cursor : 'pointer'}}> <HighlightOffIcon /></span></CustomTooltip>
