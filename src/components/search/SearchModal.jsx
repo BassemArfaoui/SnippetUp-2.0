@@ -112,7 +112,6 @@ function UserHit({ hit, setIsSearchModalOpen }) {
 
 function PostsResults({ setIsSearchModalOpen }) {
   const { uiState } = useInstantSearch();
-  console.log(uiState)
   if (!uiState["posts"]?.query && !uiState["posts"]?.query?.trim() && !uiState["users"]?.query && !uiState["users"]?.query?.trim()) {
     return <PostSearchHistory setIsSearchModalOpen={setIsSearchModalOpen} />;
   }

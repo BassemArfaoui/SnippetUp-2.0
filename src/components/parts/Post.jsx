@@ -233,10 +233,11 @@ export default function Post(props) {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/${userId}/delete-post/${props.id}`
       );
-      if (props.refetchPosts() && props.refetchProfile()) {
-        await props.refetchProfile();
+      if (props.refetchPosts && props.refetchProfile) {
         await props.refetchPosts();
-      } else if (location.pathname === "/") {
+        await props.refetchProfile();}
+        
+      if (location.pathname === "/") {
         await props.refetchFeed();
       }
 
@@ -265,6 +266,7 @@ export default function Post(props) {
       successNotify("Post Deleted Successfully");
     } catch (err) {
       setDeleteLoading(false);
+      console.log(err)
       notify("Couldn't Delete the Post");
     }
   };
@@ -693,7 +695,10 @@ export default function Post(props) {
         {/* Post Header */}
         <div className="d-flex align-items-center justify-content-between mb-0">
           <div className="d-flex align-items-center gap-3">
-            <Link to={`/${props.username}`} className="text-decoration-none text-dark">
+            <Link
+              to={`/${props.username}`}
+              className="text-decoration-none text-dark"
+            >
               <div className="avatar">
                 <img
                   src={profile_pic}
@@ -736,15 +741,12 @@ export default function Post(props) {
                         </span>
                       )
                     ) : (
-                      <span
-                          className="text-light "
-                        >
+                      <span className="text-light ">
                         <SpinnerSpan
                           color="text-primary"
                           spanStyle={{ width: "20px", height: "20px" }}
                         />
-                        </span>
-                  
+                      </span>
                     )}
                   </span>
                 )}
@@ -1371,21 +1373,26 @@ export default function Post(props) {
                   </CustomTooltip>
 
                   <CustomTooltip title="Publish" placement="top">
-                    <IconButton
-                      className="mx-2 mt-0 bg-warning"
-                      style={{ backgroundColor: "#f8f9fa" }}
-                      onClick={() => {}}
-                    >
-                      {!editLoading ? (
+                    {!editLoading ? (
+                      <IconButton
+                        className="mx-2 mt-0 bg-warning"
+                        style={{ backgroundColor: "#f8f9fa" }}
+                        onClick={handleEditSubmit}
+
+                      >
                         <DoneRoundedIcon
                           fontSize="large"
                           className="text-dark fw-bolder"
-                          onClick={handleEditSubmit}
                         />
-                      ) : (
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        className="mx-2 mt-0 bg-warning"
+                        style={{ backgroundColor: "#f8f9fa" }}
+                      >
                         <SpinnerSpan />
-                      )}
-                    </IconButton>
+                      </IconButton>
+                    )}
                   </CustomTooltip>
                 </div>
               </>
