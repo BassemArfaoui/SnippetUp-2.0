@@ -11,6 +11,7 @@ import { notify, successNotify } from "../tools/CustomToaster";
 import axios from "axios";
 import SpinnerSpan from "../tools/SpinnerSpan";
 import ProfilePicChanger from "./ProfilePicChanger";
+import useGoogleAuth from "../../hooks/useGoogleAuth";
 // import { useNavigate } from "react-router-dom";
 
 
@@ -20,6 +21,7 @@ import ProfilePicChanger from "./ProfilePicChanger";
 function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
 
   const navigate = useNavigate() ;
+  const {login , loading  , error } = useGoogleAuth()
 
   const [focusedInput, setFocusedInput] = useState("");
   const [isPwdVisible, setIsPwdVisible] = useState(false);
@@ -389,7 +391,7 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
 
             {/* OAuth Buttons */}
             <div className="mt-0 px-1 mb-5">
-              <button className="oauth-btn w-100 rounded-4 text-secondary d-flex align-items-center justify-content-center gap-2">
+              <button onClick={()=>{login()}} className="oauth-btn w-100 rounded-4 text-secondary d-flex align-items-center justify-content-center gap-2">
                 <span
                   className="p-0 m-0 d-flex align-items-center"
                   style={{ fontSize: "23px" }}

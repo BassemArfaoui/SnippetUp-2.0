@@ -1,12 +1,10 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-# todo
 todo.txt
 .hintrc
-/src/components/test
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage

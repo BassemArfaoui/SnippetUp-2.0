@@ -8,6 +8,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Cor
 import LoadingSpinner from "../components/tools/LoadingSpinner";
 import ProtectedRoute from "../components/tools/ProtectedRoute";
 import NotAuthRoute from "../components/tools/NoAuthRoute";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 
 
@@ -43,6 +45,8 @@ export default function App() {
   }, []);
 
   return (
+    <GoogleOAuthProvider clientId="675057642420-lp56bgvp9pphu20b562vuf6kpndvn75p.apps.googleusercontent.com">
+
     <userContext.Provider value={{ user, setUser }}>
       <QueryClientProvider client={queryClient}>
         <Router>
@@ -50,6 +54,7 @@ export default function App() {
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
               <Route path="/login" element={<NotAuthRoute><AuthPage /></NotAuthRoute>} />
+              <Route path="/test" element={<TestPage />} />
 
               <Route 
                 path="/*" 
@@ -67,7 +72,6 @@ export default function App() {
                       <Route path="/search" element={<SearchPage />} />
                       <Route path="/saved/posts/collections" element={<SavedPostsCollections />} />
                       <Route path="/saved/posts/collection/:collection" element={<CollectionPosts />} />
-                      <Route path="/test" element={<TestPage />} />
                     </Routes>
                   </ProtectedRoute>
                 }
@@ -77,5 +81,6 @@ export default function App() {
         </Router>
       </QueryClientProvider>
     </userContext.Provider>
+    </GoogleOAuthProvider>
   );
 }

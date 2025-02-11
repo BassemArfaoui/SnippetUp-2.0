@@ -1,5 +1,5 @@
 import React from 'react'
-import GoogleLogin from './GoogleLogin.jsx'
+import GoogleLogin from './GoogleLogin'
 
 
 

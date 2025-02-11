@@ -99,7 +99,7 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
 
   return (
     <div>
-      <Card className=" profile-card w-100  rounded-4 position-relative">
+      <Card className=" profile-card w-100 rounded-4 position-relative text-primary" style={{backgroundColor : 'rgb(24, 22, 22)'}}>
         <CardContent className="px-0 pb-0 pt-4 mb-3 pb-3">
           <div className="d-flex flex-column align-items-center text-center pt-0 pb-0">
             <div className="d-flex align-items-center gap-5">
