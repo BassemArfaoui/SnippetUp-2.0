@@ -427,15 +427,6 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
                 </span>
                 <span>{!googleLoading ? 'Continue with Google' : 'Signing in ...'}</span>
               </button>
-              <button className="oauth-btn w-100 rounded-4 my-2 text-secondary d-flex align-items-center justify-content-center gap-2">
-                <span
-                  className="text-dark p-0 m-0 d-flex align-items-center"
-                  style={{ fontSize: "23px" }}
-                >
-                  <AiFillGithub />
-                </span>
-                <span> Continue with Github</span>
-              </button>
             </div>
           </>
         )}
