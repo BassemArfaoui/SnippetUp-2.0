@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./styles/login.css";
+import { auth, provider, signInWithPopup } from "../../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { Divider, Typography} from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
@@ -11,7 +12,6 @@ import { notify, successNotify } from "../tools/CustomToaster";
 import axios from "axios";
 import SpinnerSpan from "../tools/SpinnerSpan";
 import ProfilePicChanger from "./ProfilePicChanger";
-import useGoogleAuth from "../../hooks/useGoogleAuth";
 // import { useNavigate } from "react-router-dom";
 
 
@@ -21,7 +21,6 @@ import useGoogleAuth from "../../hooks/useGoogleAuth";
 function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
 
   const navigate = useNavigate() ;
-  const {login , loading  , error } = useGoogleAuth()
 
   const [focusedInput, setFocusedInput] = useState("");
   const [isPwdVisible, setIsPwdVisible] = useState(false);
@@ -31,6 +30,8 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
   const [checkingUsername , setCheckingUsername] = useState(false)
   const [isUsernameUsed, setIsUsernameUsed] = useState(false)
   const [userId , setUserId]= useState(null)
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [githubLoading, setGithubLoading] = useState(false);
 
 
   const [formData , setformData] = useState(
@@ -42,6 +43,31 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
       username :'' ,
     }
   )
+
+  //oauth
+  
+  const googleLogin = async (e) => {
+    e.preventDefault()
+    try {
+      setGoogleLoading(true);
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/google`, { idToken });
+
+      console.log("JWT Token:", response.data);
+
+      localStorage.setItem("token", JSON.stringify(response.data));
+
+      setGoogleLoading(false);
+      successNotify('logged in successfully')
+     navigate('/') 
+    } catch (error) {
+      notify("Error signing in. Please try again.");
+      setGoogleLoading(false);
+      console.error("Error signing in:", error);
+    }
+  };
 
   function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -83,7 +109,7 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
     }catch(err)
     {
       console.log(err)
-      notify("We Couldn't Register , Please check the intered infos")
+      notify("We Couldn't Login , Try again")
       setLoginLoading(false)
     }
   }
@@ -391,14 +417,15 @@ function LoginRegisterForm({ choice , setDisableLogin , setChoice}) {
 
             {/* OAuth Buttons */}
             <div className="mt-0 px-1 mb-5">
-              <button onClick={()=>{login()}} className="oauth-btn w-100 rounded-4 text-secondary d-flex align-items-center justify-content-center gap-2">
+              <button disabled={googleLoading || githubLoading} onClick={(e)=>{googleLogin(e)}}   className="oauth-btn w-100 rounded-4 text-secondary d-flex align-items-center justify-content-center gap-2">
                 <span
                   className="p-0 m-0 d-flex align-items-center"
                   style={{ fontSize: "23px" }}
+                 
                 >
                   <FcGoogle />
                 </span>
-                <span>Continue with Google</span>
+                <span>{!googleLoading ? 'Continue with Google' : 'Signing in ...'}</span>
               </button>
               <button className="oauth-btn w-100 rounded-4 my-2 text-secondary d-flex align-items-center justify-content-center gap-2">
                 <span

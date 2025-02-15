@@ -1,5 +1,6 @@
 import React from 'react'
-import GoogleLogin from './GoogleLogin'
+
+import LoginWithGoogle from './LoginWithGoogle'
 
 
 
@@ -8,7 +9,7 @@ function TestPage() {
   return (
   <div className=' justify-content-center min-vh-100' style={{backgroundColor :'rgb(193, 239, 240)' , paddingBottom : '200px'}}>
 
-      <GoogleLogin />
+    <LoginWithGoogle />
     </div>
   )
 }
