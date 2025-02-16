@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef , useContext } from 'react';
+import { useState, useEffect, useCallback, useRef , useContext } from 'react';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { BiSolidCommentDetail } from 'react-icons/bi';
 import { FaReply } from 'react-icons/fa';
 import CommentReply from './CommentReply';
-import axios from 'axios';
+import api from '../tools/api';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { CircularProgress, IconButton } from '@mui/material';
 import { notify, successNotify } from '../tools/CustomToaster';
@@ -21,7 +21,6 @@ import userContext from "../contexts/userContext";
 function Comment(props) {
 
     
-    const apiUrl = process.env.REACT_APP_API_URL; 
     const [commentReact, setCommentReact] = useState('none');
     const [likeCount, setLikeCount] = useState(props.likeCount);
     const [dislikeCount, setDislikeCount] = useState(props.dislikeCount);
@@ -53,11 +52,11 @@ function Comment(props) {
       }
     }, [props.isLiked, props.isDisliked]);
 
-    useEffect(() => {
+      useEffect(() => {
       const updateRepliesTotal = async () => {
         try {
-          const response = await axios.get(
-            `${apiUrl}/comments/${props.id}/repliesCount`
+          const response = await api.get(
+            `/comments/${props.id}/repliesCount`
           );
           setRepliesCount(response.data.totalReplies);
         } catch (err) {
@@ -67,8 +66,11 @@ function Comment(props) {
 
       updateRepliesTotal();
       fetchReplies();
-    }, []);
+    }, [props.id]);
 
+
+         
+    
     useEffect(() => {
         const handleClickOutside = (event) => {
           if (optionsRef.current && !optionsRef.current.contains(event.target)) {
@@ -94,8 +96,8 @@ function Comment(props) {
 
       setLoadingReplies(true);
       try {
-        const response = await axios.get(
-          `${apiUrl}/comments/${props.id}/replies`,
+        const response = await api.get(
+          `/comments/${props.id}/replies`,
           {
             params: {
               limit: limit,
@@ -132,7 +134,7 @@ function Comment(props) {
         if (commentReact === "dislike") {
           await undislikeComment();
         }
-        await axios.get(`${apiUrl}/likeComment/${userId}/${props.id}`);
+        await api.get(`/likeComment/${props.id}`);
         setCommentReact("like");
         setLikeCount((prev) => prev + 1);
       } catch (err) {
@@ -142,7 +144,7 @@ function Comment(props) {
 
     const unlikeComment = async () => {
       try {
-        await axios.get(`${apiUrl}/unlikeComment/${userId}/${props.id}`);
+        await api.get(`/unlikeComment/${props.id}`);
         setCommentReact("none");
         setLikeCount((prev) => prev - 1);
       } catch (err) {
@@ -155,7 +157,7 @@ function Comment(props) {
         if (commentReact === "like") {
           await unlikeComment();
         }
-        await axios.get(`${apiUrl}/dislikeComment/${userId}/${props.id}`);
+        await api.get(`/dislikeComment/${props.id}`);
         setCommentReact("dislike");
         setDislikeCount((prev) => prev + 1);
       } catch (err) {
@@ -165,7 +167,7 @@ function Comment(props) {
 
     const undislikeComment = async () => {
       try {
-        await axios.get(`${apiUrl}/undislikeComment/${userId}/${props.id}`);
+        await api.get(`/undislikeComment/${props.id}`);
         setCommentReact("none");
         setDislikeCount((prev) => prev - 1);
       } catch (err) {
@@ -230,7 +232,7 @@ function Comment(props) {
       try
       {
         setDeleteLoading(true);
-        await axios.delete(`${apiUrl}/${props.userId}/delete-comment/${props.id}`);
+        await api.delete(`/delete-comment/${props.id}`);
         props.filterComments(props.id);
         setDeleteLoading(false);
         setIsConfirmModalOpen(false);
@@ -256,7 +258,7 @@ function Comment(props) {
     const editComment = async () => {
       try {
         setEditLoading(true);
-        await axios.put(`${apiUrl}/${props.userId}/edit-comment/${props.id}`, {
+        await api.put(`/edit-comment/${props.id}`, {
           content: commentContent,
         });
         setEditLoading(false);
@@ -461,7 +463,7 @@ function Comment(props) {
             )}
 
             {!loadingReplies &&
-              (!hasMoreReplies || repliesCount - replies.length == 0) && (
+              (!hasMoreReplies || repliesCount - replies.length === 0) && (
                 <div className="d-flex justify-content-center my-3 fw-bold small">
                   <p className="small text-secondary ">No more replies</p>
                 </div>
@@ -474,7 +476,7 @@ function Comment(props) {
                   <IconButton onClick={fetchReplies} aria-label="Load More">
                     <p className="text-primary small fw-bold fs-6">
                       {repliesCount - replies.length} more{" "}
-                      {repliesCount - replies.length != 1 ? "replies" : "reply"}
+                      {repliesCount - replies.length !== 1 ? "replies" : "reply"}
                     </p>
                   </IconButton>
                 </div>

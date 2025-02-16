@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerFluid, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { Skeleton, Box } from "@mui/material";
 
 function ProfileSkeleton() {
@@ -13,6 +13,7 @@ function ProfileSkeleton() {
         width : '100%'
       }}
     >
+
       <Row className="mb-4 px-0 align-items-center ms-5">
         {/* Left: Avatar Skeleton */}
         <Col xs="auto ms-5 d-flex justify-content-center">

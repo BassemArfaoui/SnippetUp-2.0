@@ -1,13 +1,11 @@
-import React , {useEffect, useContext} from 'react'
+import React , {useEffect} from 'react'
 import '../styles/search.css'
-import userContext from "../../contexts/userContext";
 
 
 function SavedPostsSearch(props) {
 
 
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
+
 
     const postsSearchChanged=(e)=>{
         props.setPostsSearch(e.target.value);

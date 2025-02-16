@@ -1,4 +1,4 @@
-import React, { useState , useContext } from 'react'
+import React, {  useContext } from 'react'
 import './styles/choice.css'
 import SavedPostsSearch from './saved-posts/SavedPostsSearch'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';

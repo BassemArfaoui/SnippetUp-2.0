@@ -1,7 +1,7 @@
-import React , {useState,useEffect, useRef , useContext} from 'react'
+import  {useState,useEffect, useRef , useContext} from 'react'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import axios from 'axios';
+import api from '../tools/api';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {  IconButton } from '@mui/material';
 import { Modal, Box } from "@mui/material";
@@ -19,10 +19,6 @@ import userContext from "..//contexts/userContext";
 
 
 function CommentReply(props) {
-
-
-    const apiUrl = process.env.REACT_APP_API_URL; 
-
     const [commentReact,setCommentReact]=useState('none');
     const [likeCount,setLikeCount]=useState(props.likeCount)
     const [dislikeCount,setDislikeCount]=useState(props.dislikeCount)
@@ -93,7 +89,7 @@ function CommentReply(props) {
           if (commentReact === 'dislike') {
               await undislikeComment();
           }
-          await axios.get(`${process.env.REACT_APP_API_URL}/likeComment/${userId}/${props.id}`);
+          await api.get(`/likeComment/${props.id}`);
           setCommentReact('like');
           setLikeCount((prev) => prev + 1);
       } catch (err) {
@@ -103,7 +99,7 @@ function CommentReply(props) {
 
   const unlikeComment = async () => {
       try {
-          await axios.get(`${process.env.REACT_APP_API_URL}/unlikeComment/${userId}/${props.id}`);
+          await api.get(`/unlikeComment/${props.id}`);
           setCommentReact('none');
           setLikeCount((prev) => prev - 1);
       } catch (err) {
@@ -116,7 +112,7 @@ function CommentReply(props) {
           if (commentReact === 'like') {
               await unlikeComment();
           }
-          await axios.get(`${process.env.REACT_APP_API_URL}/dislikeComment/${userId}/${props.id}`);
+          await api.get(`/dislikeComment/${props.id}`);
           setCommentReact('dislike');
           setDislikeCount((prev) => prev + 1);
       } catch (err) {
@@ -126,7 +122,7 @@ function CommentReply(props) {
 
   const undislikeComment = async () => {
       try {
-          await axios.get(`${process.env.REACT_APP_API_URL}/undislikeComment/${userId}/${props.id}`);
+          await api.get(`/undislikeComment/${props.id}`);
           setCommentReact('none');
           setDislikeCount((prev) => prev - 1);
       } catch (err) {
@@ -143,7 +139,7 @@ function CommentReply(props) {
     try
     {
       setDeleteLoading(true);
-      await axios.delete(`${apiUrl}/${props.userId}/delete-reply/${props.id}`);
+      await api.delete(`/delete-reply/${props.id}`);
       await props.refreshComments();
       setDeleteLoading(false);
       setIsConfirmModalOpen(false);
@@ -170,7 +166,7 @@ function CommentReply(props) {
   const editComment = async () => {
     try {
       setEditLoading(true);
-      await axios.put(`${apiUrl}/${props.userId}/edit-comment/${props.id}`, {
+      await api.put(`/edit-comment/${props.id}`, {
         content: replyContent,
       });
       setEditLoading(false);

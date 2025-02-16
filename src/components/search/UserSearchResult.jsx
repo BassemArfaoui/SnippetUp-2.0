@@ -9,6 +9,7 @@ import { Highlight } from "react-instantsearch";
 
 
 
+
 function UserSearchResult({history , hit, setIsSearchModalOpen , id , fullname , username , profile_pic ,handleRemoveFromHistory }) {
   const navigate = useNavigate()
   const { user } = useContext(userContext);

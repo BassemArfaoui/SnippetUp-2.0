@@ -7,7 +7,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import CustomTooltip from "../tools/CustomTooltip";
 import SpinnerSpan from "../tools/SpinnerSpan";
 import { notify, successNotify } from "../tools/CustomToaster";
-import axios from "axios";
+import api from "../tools/api";
 import userContext from "../contexts/userContext";
 import { IoRefreshCircleSharp } from "react-icons/io5";
 
@@ -50,7 +50,6 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
 
   const profileColor = getProfileColor(credit)
   const {user}= useContext(userContext) ;
-  const userId=user.id ;
   const myUsername = user.username ;
   const [subLoading , setSubLoading] = useState(false)
   const [isSubscribed , setIsSubscribed] = useState(subscribed)
@@ -60,8 +59,8 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
   const subscribe = async () => {
     try {
       setSubLoading(true);
-      await axios.get(
-        `${process.env.REACT_APP_API_URL}/interested/${userId}/${uid}`
+      await api.get(
+        `/sub/${uid}`
       );
       setSubsCount(prevCount => prevCount + 1);
       setSubLoading(false);
@@ -79,8 +78,8 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
   const unsubscribe = async () => {
     try {
       setSubLoading(true);
-      await axios.get(
-        `${process.env.REACT_APP_API_URL}/uninterested/${userId}/${uid}`
+      await api.get(
+        `/unsub/${uid}`
       );
       setSubsCount(prevCount => prevCount - 1);
       setSubLoading(false);
@@ -129,7 +128,7 @@ export default function ProfileCard({ uid, activeTab, setActiveTab ,firstname , 
                     >
                       {firstname + " " + lastname}
                     </h2>
-                    {username != myUsername && (
+                    {username !== myUsername && (
                       <span>
                         {!subLoading ? (
                           !isSubscribed ? (

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -6,7 +6,6 @@ import Post from '../components/parts/Post';
 import '../css/PostPage.css';
 import Spinner from '../components/tools/Spinner';
 import { Helmet } from 'react-helmet';
-import userContext from '../components/contexts/userContext';
 import nodata from '../utils/svg/nodata.svg';
 
 const fetchPost = async (postId) => {
@@ -14,8 +13,8 @@ const fetchPost = async (postId) => {
   return response.data;
 };
 
+
 function PostPage() {
-  const { user } = useContext(userContext);
   const { postId } = useParams();
   
   const { data: post, isLoading, isError } = useQuery({

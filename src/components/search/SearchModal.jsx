@@ -3,7 +3,6 @@ import { algoliasearch } from "algoliasearch";
 import {
   InstantSearch,
   SearchBox,
-  PoweredBy,
   useInstantSearch,
   useInfiniteHits,
   Index
@@ -126,6 +125,7 @@ function UsersResults({ setIsSearchModalOpen }) {
   }
   return <CustomInfiniteHits hitComponent={UserHit} setIsSearchModalOpen={setIsSearchModalOpen} />;
 }
+
 
 
 function SearchModal({ isSearchModalOpen, setIsSearchModalOpen }) {

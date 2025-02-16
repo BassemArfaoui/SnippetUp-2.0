@@ -1,20 +1,17 @@
-import React, { useState, useEffect, useCallback , useRef , useContext} from 'react';
+import  { useState, useEffect, useCallback , useRef} from 'react';
 import { Box, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
 import RefreshIcon from '@mui/icons-material/Refresh'; 
-import axios from 'axios';
+import api from '../tools/api';
 import Comment from './Comment';
 import './styles/Comment.css';
 import { notify } from '../tools/CustomToaster';
 import AddComment from './AddComment';
-import userContext from "../contexts/userContext";
 
 
 
 function CommentSection(props) {
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true); 
@@ -35,7 +32,7 @@ function CommentSection(props) {
 
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${props.postId}/${userId}/comments`, {
+      const response = await api.get(`/${props.postId}/comments`, {
         params: {
           page: page,
           limit: limit

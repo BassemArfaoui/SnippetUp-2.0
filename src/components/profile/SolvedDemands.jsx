@@ -1,6 +1,7 @@
 import cooking from '../../utils/svg/cooking.svg'
 
 
+
 function SolvedDemands() {
   return (
     <div className='mb-5'>

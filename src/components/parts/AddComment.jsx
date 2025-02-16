@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import  { useEffect, useState, useRef } from 'react';
 import './styles/AddComment.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { IoSend } from "react-icons/io5";

@@ -6,7 +6,7 @@ import "../css/ProfilePage.css";
 import { Helmet } from "react-helmet";
 import React, { useEffect } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import api from '../components/tools/api';
 import Post from "../components/parts/Post";
 import SpinnerSpan from "../components/tools/SpinnerSpan";
 import ReplayIcon from "@mui/icons-material/Replay";
@@ -29,8 +29,8 @@ function ProfilePage() {
 
   // Fetch profile data
   const fetchProfile = async () => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/profile/${username}?uid=${userId}`
+    const response = await api.get(
+      `/profile/${username}`
     );
     return response.data;
   };
@@ -52,8 +52,8 @@ function ProfilePage() {
   });
 
   const fetchPosts = async ({ pageParam = 1 }) => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/published/posts/${username}?uid=${userId}`,
+    const response = await api.get(
+      `/published-posts/${username}`,
       {
         params: {
           page: pageParam,
@@ -72,7 +72,6 @@ function ProfilePage() {
     isLoading,
     isError,
     refetch : refetchPosts,
-    error,
   } = useInfiniteQuery({
     queryKey: ["posts" , username],
     queryFn: fetchPosts,

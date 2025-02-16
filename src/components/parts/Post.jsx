@@ -28,7 +28,7 @@ import { IoLogoWhatsapp } from "react-icons/io";
 import { FaLink } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import axios from "axios";
+import api from "../tools/api";
 import SpinnerSpan from "../tools/SpinnerSpan";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { driver } from "driver.js";
@@ -178,7 +178,7 @@ export default function Post(props) {
     {
       try{
         setEditLoading(true)
-        await axios.put(`${process.env.REACT_APP_API_URL}/${userId}/edit-post/${props.id}`,{...editData, ...optionalData})
+        await api.put(`/edit-post/${props.id}`,{...editData, ...optionalData})
 
            setSnippetCode(editData.content)
            setSnippetTitle(editData.title)
@@ -230,8 +230,8 @@ export default function Post(props) {
   const deletePost = async () => {
     try {
       setDeleteLoading(true);
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}/${userId}/delete-post/${props.id}`
+      await api.delete(
+        `/delete-post/${props.id}`
       );
       if (props.refetchPosts && props.refetchProfile) {
         await props.refetchPosts();
@@ -280,7 +280,7 @@ export default function Post(props) {
         isReply: is_reply,
         replyToId: reply_to_id,
       };
-      await axios.post(`${process.env.REACT_APP_API_URL}/add/comment`, data);
+      await api.post(`/add-comment`, data);
     } catch (err) {
       console.log(err);
       notify("Couldn't Add the Comment");
@@ -290,8 +290,8 @@ export default function Post(props) {
   const skipCollection = async () => {
     try {
       setIsSaving(true);
-      await axios.get(
-        `${process.env.REACT_APP_API_URL}/save/${userId}/${props.id}`
+      await api.get(
+        `/save/${props.id}`
       );
       setIsSaving(false);
       setIsSaved(true);
@@ -305,8 +305,8 @@ export default function Post(props) {
   const unsaveSnippet = async () => {
     try {
       setIsUnsaving(true);
-      await axios.get(
-        `${process.env.REACT_APP_API_URL}/unsave/${userId}/${props.id}`
+      await api.get(
+        `/unsave/${props.id}`
       );
       setIsUnsaving(false);
       setIsSaved(false);
@@ -356,8 +356,8 @@ export default function Post(props) {
   const subscribe = async () => {
     try {
       setSubLoading(true);
-      await axios.get(
-        `${process.env.REACT_APP_API_URL}/interested/${userId}/${props.posterId}`
+      await api.get(
+        `/sub/${props.posterId}`
       );
       setSubLoading(false);
       setisInterested(true);
@@ -374,8 +374,8 @@ export default function Post(props) {
   const unsubscribe = async () => {
     try {
       setSubLoading(true);
-      await axios.get(
-        `${process.env.REACT_APP_API_URL}/uninterested/${userId}/${props.posterId}`
+      await api.get(
+        `/unsub/${props.posterId}`
       );
       setSubLoading(false);
       setisInterested(false);
@@ -394,8 +394,8 @@ export default function Post(props) {
       if (react === "dislike") {
         await undislikeSnippet();
       }
-      const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/like/${userId}/${props.id}`
+       await api.get(
+        `/like/${props.id}`
       );
       setReact("like");
       setLikeCount((prev) => parseInt(prev) + 1);
@@ -406,8 +406,8 @@ export default function Post(props) {
 
   const unlikeSnippet = async () => {
     try {
-      const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/unlike/${userId}/${props.id}`
+       await api.get(
+        `/unlike/${props.id}`
       );
       setReact("none");
       setLikeCount((prev) => parseInt(prev) - 1);
@@ -422,8 +422,8 @@ export default function Post(props) {
         await unlikeSnippet();
       }
 
-      const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/dislike/${userId}/${props.id}`
+      await api.get(
+        `/dislike/${props.id}`
       );
 
       setReact("dislike");
@@ -435,8 +435,8 @@ export default function Post(props) {
 
   const undislikeSnippet = async () => {
     try {
-      await axios.get(
-        `${process.env.REACT_APP_API_URL}/undislike/${userId}/${props.id}`
+      await api.get(
+        `/undislike/${props.id}`
       );
 
       setReact("none");
@@ -544,8 +544,8 @@ export default function Post(props) {
       try {
         setIsCollectionModalOpen(false);
         setIsSaving(true);
-        await axios.get(
-          `${process.env.REACT_APP_API_URL}/save/${userId}/${props.id}?collection=${collection}`
+        await api.get(
+          `/save/${props.id}?collection=${collection}`
         );
         setIsSaving(false);
         setIsSaved(true);
@@ -718,7 +718,7 @@ export default function Post(props) {
                     {props.firstname + " " + props.lastname}
                   </span>
                 </Link>
-                {props.posterId != userId && !props.refetchProfile && (
+                {props.posterId !== userId && !props.refetchProfile && (
                   <span id="interested-btn" className="ms-3 mb-1">
                     {!subLoading ? (
                       !isInterested ? (
@@ -781,6 +781,7 @@ export default function Post(props) {
                   target="_blank"
                   href={gitHubLink}
                   className="btn btn-outline-light post-btn"
+                  rel="noopener noreferrer"
                 >
                   <GitHubIcon style={{ fontSize: "22px" }} />
                 </a>
@@ -1185,7 +1186,7 @@ export default function Post(props) {
               <div className="d-flex gap-3  justify-content-center align-items-center mt-4">
                 <button
                   className=" btn border-2 border-primary text-primary fw-bold fs-6 lh-base rounded-4"
-                  role="submit"
+                  type="submit"
                 >
                   Add
                 </button>

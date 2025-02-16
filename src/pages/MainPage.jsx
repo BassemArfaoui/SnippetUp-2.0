@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 import userContext from "../components/contexts/userContext";
 
 
+
 function MainPage() {
 
   const {user}=useContext(userContext);

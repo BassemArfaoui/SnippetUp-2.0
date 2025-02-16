@@ -22,6 +22,7 @@ function PostSearchResult({history ,  hit , title, language, snippet, id, setIsS
   const userId = user.id;
   const navigate = useNavigate();
 
+  
   const copyCode = async () => {
     try {
       await navigator.clipboard.writeText(snippet);

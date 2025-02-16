@@ -1,15 +1,13 @@
-import React, { useEffect, useState, useRef , useContext } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState, useRef  } from 'react';
+import api from '../../tools/api';
 import Post from '../../parts/Post';
 import Spinner from '../../tools/Spinner';
 import '../styles/search-result.css';
 import { notify } from '../../tools/CustomToaster';
-import userContext from "../../contexts/userContext";
 
 
 function PostsSearch({ postsSearch, setShowChoice}) {
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
+
   const limit = 10;
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,7 +19,7 @@ function PostsSearch({ postsSearch, setShowChoice}) {
     try {
       console.log(`Loading posts for searchTerm: "${searchTerm}" on page: ${pageNum}`);
       setLoading(true);
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/search-saved-posts`, {
+      const res = await api.get(`/search-saved-posts`, {
         params: { keyword: searchTerm, limit, page: pageNum },
       });
 

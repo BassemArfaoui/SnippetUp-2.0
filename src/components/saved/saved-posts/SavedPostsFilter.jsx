@@ -1,10 +1,10 @@
-import React, { useEffect, useRef , useContext} from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../styles/filter-result.css';
 import Post from '../../parts/Post';
 import CustomTooltip from '../../tools/CustomTooltip';
 import { IconButton } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import userContext from "../../contexts/userContext";
+
 
 
 
@@ -14,8 +14,6 @@ function SavedPostsFilter({ filteredPosts, hasMoreFilteredPosts, loadMoreFiltere
   const containerRef = useRef(null);
   const lastScrollTop = useRef(0);
 
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
 
   // Function to handle scroll
   const handleScroll = () => {

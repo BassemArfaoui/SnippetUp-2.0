@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import axios from 'axios';
 import userContext from '../contexts/userContext';
 import WhiteLoadingSpinner from './WhiteLoadingSpinner';
+import api from './api';
 
 const ProtectedRoute = ({ children }) => {
   const [isAuth, setIsAuth] = useState(null);
@@ -17,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
           if (storedData) {
             const data = JSON.parse(storedData);
             const token = data.token;
-            const response = await axios.get('http://localhost:4000/check/token', {
+            const response = await api.get('/check-token', {
               headers: {
                 'Authorization': `Bearer ${token}`
               }

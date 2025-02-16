@@ -5,6 +5,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CustomTooltip from '../tools/CustomTooltip';
 
 
+
 export default function SearchHistory({setIsSearchModalOpen}) {
   const [history, setHistory] = useState([]);
   const {user}= useContext(userContext) ;
@@ -22,7 +23,7 @@ export default function SearchHistory({setIsSearchModalOpen}) {
     setHistory(storedHistory[userId] || [])
 
 
-  }, []);
+  }, [userId]);
 
   const clearHistory = (userId) => {
     let historyData = JSON.parse(localStorage.getItem("PostsSearchHistory")) || {};

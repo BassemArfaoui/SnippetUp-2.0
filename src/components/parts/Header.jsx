@@ -1,14 +1,12 @@
-import React , {useEffect , lazy , Suspense , useState , useContext} from "react";
+import  {useEffect , lazy , Suspense , useState , useContext} from "react";
 import './styles/Header.css'
 import HomeIcon from '@mui/icons-material/Home';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import PersonIcon from '@mui/icons-material/Person';
-import SettingsIcon from '@mui/icons-material/Settings';
 import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import AddIcon from '@mui/icons-material/Add';
-import CodeIcon from '@mui/icons-material/Code';
 import { FaCode } from "react-icons/fa6";
 import SearchModal from "../search/SearchModal";
 import { Link , useLocation  } from "react-router-dom";
@@ -29,9 +27,7 @@ function Header()
 {
 
   const {user}= useContext(userContext) ;
-  const userId=user.id ;
   const username = user.username || 'profile';
-  const [isAdding, setIsAdding] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
@@ -119,11 +115,11 @@ useEffect(() => {
     const btn = document.querySelectorAll('.menu-btn');
   
     btn.forEach(element => {
-      if ( element.name == '/' && location.pathname === element.name) 
+      if ( element.name === '/' && location.pathname === element.name) 
       {
         element.classList.add('active');
       }
-      else if (location.pathname.startsWith(element.name) && element.name !== '/' || username ===location.pathname) {
+      else if ((location.pathname.startsWith(element.name) && element.name !== '/') || (username === location.pathname)      ) {
         element.classList.add('active');
       } 
       else {

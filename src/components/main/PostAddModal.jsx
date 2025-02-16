@@ -1,4 +1,3 @@
-import React from "react";
 import { useState , useContext } from "react";
 import { notify, successNotify } from "../tools/CustomToaster";
 import { Modal , Box , IconButton } from "@mui/material";
@@ -6,7 +5,7 @@ import CustomTooltip from "../tools/CustomTooltip";
 import CloseIcon from '@mui/icons-material/Close';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import SpinnerSpan from '../tools/SpinnerSpan'
-import axios from 'axios';
+import api from "../tools/api";
 import {useNavigate} from 'react-router-dom'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -17,7 +16,6 @@ import userContext from "../contexts/userContext";
 
 function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setStage}) {
   const { user } = useContext(userContext);
-  const userId = user.id;
   const username = user.username ; 
 
    const navigate = useNavigate();
@@ -49,7 +47,7 @@ function PostAddModal({openAddModel,closeAddModal,isAddModalOpen , stage , setSt
       {
         try{
           setLoading(true)
-          await axios.post(`${process.env.REACT_APP_API_URL}/${userId}/add-post/`,
+          await api.post(`/add-post`,
           {
             ...addData , 
             ...optionalData

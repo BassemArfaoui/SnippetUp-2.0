@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import './styles/Feed.css';
 import Post from '../parts/Post';
-import axios from 'axios';
+import api from '../tools/api';
 import IconButton from '@mui/material/IconButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import CustomTooltip from '../tools/CustomTooltip';
@@ -14,7 +14,7 @@ function FeedSide({user}) {
   const limit = 10;
 
   const fetchPosts = async ({ pageParam = 1 }) => {
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/posts`, {
+    const response = await api.get(`/posts`, {
       params: { limit, page: pageParam },
     });
     return response.data;
@@ -49,17 +49,20 @@ function FeedSide({user}) {
       },
       { threshold: 1.0 }
     );
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
+  
+    const currentRef = observerRef.current;
+  
+    if (currentRef) {
+      observer.observe(currentRef);
     }
-
+  
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);  
       }
     };
   }, [fetchNextPage, hasNextPage]);
+  
 
   const scroll = () => {
     if (feedSideRef.current) {

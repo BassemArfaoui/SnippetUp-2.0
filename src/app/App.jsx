@@ -23,7 +23,6 @@ const CollectionPosts = lazy (()=> import("../components/saved/saved-posts/Colle
 const PostPage = lazy (()=> import("../pages/PostPage"))
 const DemandsPage = lazy (()=> import("../pages/DemandsPage"))
 const AuthPage = lazy (()=> import("../pages/AuthPage"))
-const SearchPage = lazy (()=> import("../pages/SearchPage"))
 const Header =  lazy (()=> import("../components/parts/Header"))
 const TestPage = lazy (()=> import("../components/test/TestPage"))  
 
@@ -34,7 +33,7 @@ const TestPage = lazy (()=> import("../components/test/TestPage"))
 const queryClient = new QueryClient();
 
 export default function App() {
-  const [forceRefetch, setForceRefetch] = useState(false);
+  // const [forceRefetch, setForceRefetch] = useState(false);
   const [user, setUser] = useState({ id: 0, username: '', email: '' });
 
   useEffect(() => {
@@ -55,6 +54,7 @@ export default function App() {
             <Routes>
               <Route path="/login" element={<NotAuthRoute><AuthPage /></NotAuthRoute>} />
               <Route path="/test" element={<TestPage />} />
+              <Route path="/post/:postId" element={<PostPage />} />
 
               <Route 
                 path="/*" 
@@ -62,14 +62,13 @@ export default function App() {
                   
                   <ProtectedRoute>
                     <Header /> 
+                    {/* <NotificationBell/> */}
                     <Routes>
                       <Route path="/" element={<MainPage />} />
                       <Route path="/saved" element={<SavedPage />} />
                       <Route path="/:username" element={<ProfilePage />} />
                       <Route path="/settings" element={<SettingsPage />} />
-                      <Route path="/post/:postId" element={<PostPage />} />
                       <Route path="/demands" element={<DemandsPage />} />
-                      <Route path="/search" element={<SearchPage />} />
                       <Route path="/saved/posts/collections" element={<SavedPostsCollections />} />
                       <Route path="/saved/posts/collection/:collection" element={<CollectionPosts />} />
                     </Routes>

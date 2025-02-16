@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState , useContext } from 'react';
-import axios from 'axios';
+import React, { useEffect, useRef, useState  } from 'react';
+import api from '../../tools/api';
 import Post from '../../parts/Post';
 import Spinner from '../../tools/Spinner';
-import { Modal, Box, IconButton } from '@mui/material';
+import {  IconButton } from '@mui/material';
 import '../styles/saves.css';
 import '../styles/filter.css'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -10,12 +10,9 @@ import TuneIcon from '@mui/icons-material/Tune';
 import AppsIcon from '@mui/icons-material/Apps';
 import { notify } from '../../tools/CustomToaster';
 import { Link } from 'react-router-dom';
-import userContext from "../../contexts/userContext";
 
 
 function SavedPosts(props) {
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
   const limit = 10;
   const savedPostsRef = useRef(null);
   const lastScrollTop = useRef(0);
@@ -31,7 +28,7 @@ function SavedPosts(props) {
   const loadSavedPosts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/saved-posts`, {
+      const res = await api.get(`/saved-posts`, {
         params: { limit, page },
       });
       if (res.data.length < limit) setHasMore(false);

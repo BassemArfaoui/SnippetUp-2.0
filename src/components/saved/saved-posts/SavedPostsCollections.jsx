@@ -1,6 +1,6 @@
 import React, { useEffect , useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import api from '../../tools/api';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import CustomTooltip from '../../tools/CustomTooltip';
@@ -17,7 +17,7 @@ function SavedPostsCollections() {
   const userId=user.id ;
 
   const fetchCollections = async () => {
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/collections`);
+    const response = await api.get(`/collections`);
     return response.data; 
   };
 

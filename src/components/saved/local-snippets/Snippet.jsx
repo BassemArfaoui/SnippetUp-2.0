@@ -14,7 +14,7 @@ import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CodeHighlighter from "../../tools/CodeHighliter";
 import { notify, successNotify } from "../../tools/CustomToaster";
 import SpinnerSpan from "../../tools/SpinnerSpan";
-import axios from "axios";
+import api from "../../tools/api";
 import { useNavigate } from "react-router-dom";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { driver } from "driver.js";
@@ -26,7 +26,6 @@ import userContext from "../../contexts/userContext";
 
 function Snippet(props) {
   const {user}= useContext(userContext) ;
-  const userId=user.id ;
   const username = user.username ;
 
   const navigate = useNavigate()
@@ -155,8 +154,8 @@ function Snippet(props) {
     setIsPosting(true);
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/${userId}/add/post/${props.id}`,
+      await api.post(
+        `/add-post/${props.id}`,
         {
           title: props.title,
           content: props.content,

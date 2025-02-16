@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState , useContext} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import api from '../../tools/api';
 import Snippet from './Snippet';
 import '../styles/saves.css';
 import SpinnerSpan from '../../tools/SpinnerSpan';
@@ -12,7 +12,6 @@ import { Modal, Box, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
-import userContext from "../../contexts/userContext";
 
 
 
@@ -21,8 +20,6 @@ import userContext from "../../contexts/userContext";
 
 
 function SavedLocal({ setShowChoice }) {
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
   const savedLocalRef = useRef(null);
   const lastScrollTop = useRef(0);
   const scrollThreshold = 40;
@@ -79,8 +76,8 @@ function SavedLocal({ setShowChoice }) {
 
   // Fetch snippets using React Query
   const fetchSnippets = async ({ pageParam = 1 }) => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/${userId}/snippets`,
+    const response = await api.get(
+      `/snippets`,
       {
         params: {
           page: pageParam,
@@ -94,7 +91,7 @@ function SavedLocal({ setShowChoice }) {
   const deleteSnippet = useMutation({
     mutationFn: async (id) => {
       setDeletingId(id); 
-      await axios.delete(`${process.env.REACT_APP_API_URL}/${userId}/delete/snippet/${id}`);
+      await api.delete(`/delete-snippet/${id}`);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries(["snippets"]);
@@ -110,7 +107,7 @@ function SavedLocal({ setShowChoice }) {
   const editSnippet = useMutation({
     mutationFn: async ({ id, updatedSnippet }) => {
       setEditingId(id); 
-      await axios.put(`${process.env.REACT_APP_API_URL}/${userId}/edit/snippet/${id}`, updatedSnippet);
+      await api.put(`/edit-snippet/${id}`, updatedSnippet);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries(["snippets"]);
@@ -127,7 +124,7 @@ function SavedLocal({ setShowChoice }) {
     const addSnippet = useMutation({
       mutationFn: async ({newSnippet }) => {
         setIsAdding(true);
-        await axios.post(`${process.env.REACT_APP_API_URL}/${userId}/add/snippet`, newSnippet);
+        await api.post(`/add-snippet`, newSnippet);
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(["snippets"]);

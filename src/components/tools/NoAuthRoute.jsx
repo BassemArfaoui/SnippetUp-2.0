@@ -16,7 +16,7 @@ const NotAuthRoute = ({ children }) => {
           const storedData = localStorage.getItem('token');
           if (storedData) {
             const data = JSON.parse(storedData);
-            const token = data.token;
+            const token = data?.token;
             const response = await axios.get('http://localhost:4000/check/token', {
               headers: {
                 'Authorization': `Bearer ${token}`

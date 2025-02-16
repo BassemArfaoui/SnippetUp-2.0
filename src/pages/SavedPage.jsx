@@ -1,4 +1,4 @@
-import React, { useState , useContext } from 'react';
+import React, { useState } from 'react';
 import '../css/SavedPage.css';
 import SavedChoice from '../components/saved/SavedChoice';
 import SavedPosts from '../components/saved/saved-posts/SavedPosts';
@@ -9,19 +9,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Modal, Box, IconButton } from '@mui/material';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import CustomTooltip from '../components/tools/CustomTooltip';
-import SpinnerSpan from '../components/tools/SpinnerSpan';
 import SavedPostsFilter from '../components/saved/saved-posts/SavedPostsFilter';
 import LocalPostsFilter from '../components/saved/local-snippets/LocalPostsFilter';
-import axios from 'axios';
+import api from '../components/tools/api';
 import { Helmet } from 'react-helmet';
 import { notify } from '../components/tools/CustomToaster';
 import LoadingSpinner from '../components/tools/LoadingSpinner';
-import userContext from "../components/contexts/userContext";
 
 
 function SavedPage() {
-  const {user}= useContext(userContext) ;
-  const userId=user.id ;
+
   const [showChoice, setShowChoice] = useState(true);
   const [choice, setChoice] = useState('posts');
   const [isSearching, setIsSearching] = useState('none');
@@ -68,7 +65,7 @@ function SavedPage() {
     setFilteredPosts([]);
 
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/saved-posts/filter`, {
+      const response = await api.get(`/saved-posts-filter`, {
         params: {
           title: filterTitle,
           language: filterLanguage,
@@ -100,13 +97,12 @@ function SavedPage() {
    
 
   const loadMoreFilteredPosts = async () => {
-    // Increment the page number before making the next request
     setFilterLoading(true);
     const nextPage = filterPage + 1;
     setFilterPage(nextPage);
 
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/saved-posts/filter`, {
+      const response = await api.get(`/saved-posts-filter`, {
         params: {
           title: filterTitle,
           language: filterLanguage,
@@ -119,10 +115,9 @@ function SavedPage() {
       const fetchedPosts = response.data;
 
       if (fetchedPosts.length < 10) {
-        setHasMoreFilteredPosts(false); // no more posts to load
+        setHasMoreFilteredPosts(false); 
       }
 
-      // Append the newly fetched posts to the existing ones
       setFilteredPosts((prevPosts) => [...prevPosts, ...fetchedPosts]);
       setFilterLoading(false);
     } catch (error) {
@@ -299,7 +294,7 @@ function SavedPage() {
           </Box>
         </Modal>
 
-        {filterLoading && filterPage==1 && <LoadingSpinner />}
+        {filterLoading && filterPage===1 && <LoadingSpinner />}
       </>
     </div>
   );

@@ -1,7 +1,7 @@
-  import React, { useEffect, useRef , useContext } from 'react';
+  import React, { useEffect, useRef } from 'react';
   import { useParams, Link } from 'react-router-dom';
   import { useInfiniteQuery } from '@tanstack/react-query';
-  import axios from 'axios';
+  import api from '../../tools/api';
   import Spinner from '../../tools/Spinner';
   import '../styles/collections.css';
   import '../styles/saves.css';
@@ -12,17 +12,14 @@
   import CustomTooltip from '../../tools/CustomTooltip';
   import { notify } from '../../tools/CustomToaster';
   import SpinnerSpan from '../../tools/SpinnerSpan';
-  import userContext from "../../contexts/userContext";
 
 
   function CollectionPosts() {
     const { collection } = useParams();
-    const {user}= useContext(userContext) ;
-    const userId=user.id ;
     const containerRef = useRef(null);
 
     const fetchCollectionPosts = async ({ pageParam = 1 }) => {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${userId}/collection/posts/${collection}`, {
+      const response = await api.get(`/collection/posts/${collection}`, {
         params: {
           page: pageParam,
           limit: 10,
